@@ -31,6 +31,11 @@ app = Flask(__name__)
 @app.route("/head_file/<int:size>/<path:relative_path>")
 def head_file(size: int, relative_path: str):
     """put your code here"""
+    relative_path = '/' + relative_path
+    file = open(relative_path, 'r')
+    result_text = file.read(size)
+    file.close()
+    return f'{relative_path} {size}<br>{result_text}'
 
 
 if __name__ == "__main__":

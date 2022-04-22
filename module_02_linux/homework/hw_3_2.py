@@ -22,16 +22,19 @@ storage = {}
 @app.route("/add/<date>/<int:number>")
 def add(date: str, number: int):
     # put something here
+    pass
 
 
 @app.route("/calculate/<int:year>")
 def calculate_year(year: int):
     # put something here
+    pass
 
 
 @app.route("/calculate/<int:year>/<int:month>")
 def calculate_month(year: int, month: int):
     # put something here
+    pass
 
 
 if __name__ == "__main__":

@@ -25,7 +25,13 @@ def _sizeof_fmt(num, suffix="B"):
 
 def get_summary_rss(ps_output_file_path: str) -> str:
     """put your code here"""
+    used_memory = 0
+    with open(ps_output_file_path, 'r') as system_file:
+        for _ in system_file:
+            temp_line = system_file.readline().split()
+            used_memory += int(temp_line[5])
+        return f'All used memory {_sizeof_fmt(used_memory)}'
 
 
 if __name__ == "__main__":
-    print(get_summary_rss("<place ps aux output file path here>"))
+    print(get_summary_rss("/home/nostrik/PycharmProjects/python_advanced/output_file.txt"))

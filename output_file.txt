@@ -1,0 +1,196 @@
+USER         PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+root           1  0.1  0.2 102020 10196 ?        Ss   12:35   0:07 /sbin/init splash
+root           2  0.0  0.0      0     0 ?        S    12:35   0:00 [kthreadd]
+root           3  0.0  0.0      0     0 ?        I<   12:35   0:00 [rcu_gp]
+root           4  0.0  0.0      0     0 ?        I<   12:35   0:00 [rcu_par_gp]
+root           6  0.0  0.0      0     0 ?        I<   12:35   0:00 [kworker/0:0H-events_highpri]
+root           8  0.0  0.0      0     0 ?        I<   12:35   0:00 [mm_percpu_wq]
+root           9  0.0  0.0      0     0 ?        S    12:35   0:00 [rcu_tasks_rude_]
+root          10  0.0  0.0      0     0 ?        S    12:35   0:00 [rcu_tasks_trace]
+root          11  0.0  0.0      0     0 ?        S    12:35   0:00 [ksoftirqd/0]
+root          12  0.0  0.0      0     0 ?        I    12:35   0:03 [rcu_sched]
+root          13  0.0  0.0      0     0 ?        S    12:35   0:00 [migration/0]
+root          14  0.0  0.0      0     0 ?        S    12:35   0:00 [idle_inject/0]
+root          15  0.0  0.0      0     0 ?        I    12:35   0:01 [kworker/0:1-events]
+root          16  0.0  0.0      0     0 ?        S    12:35   0:00 [cpuhp/0]
+root          17  0.0  0.0      0     0 ?        S    12:35   0:00 [cpuhp/1]
+root          18  0.0  0.0      0     0 ?        S    12:35   0:00 [idle_inject/1]
+root          19  0.0  0.0      0     0 ?        S    12:35   0:00 [migration/1]
+root          20  0.0  0.0      0     0 ?        S    12:35   0:00 [ksoftirqd/1]
+root          22  0.0  0.0      0     0 ?        I<   12:35   0:00 [kworker/1:0H-kblockd]
+root          23  0.0  0.0      0     0 ?        S    12:35   0:00 [kdevtmpfs]
+root          24  0.0  0.0      0     0 ?        I<   12:35   0:00 [netns]
+root          25  0.0  0.0      0     0 ?        I<   12:35   0:00 [inet_frag_wq]
+root          26  0.0  0.0      0     0 ?        S    12:35   0:00 [kauditd]
+root          27  0.0  0.0      0     0 ?        S    12:35   0:00 [khungtaskd]
+root          28  0.0  0.0      0     0 ?        S    12:35   0:00 [oom_reaper]
+root          29  0.0  0.0      0     0 ?        I<   12:35   0:00 [writeback]
+root          30  0.0  0.0      0     0 ?        S    12:35   0:00 [kcompactd0]
+root          31  0.0  0.0      0     0 ?        SN   12:35   0:00 [ksmd]
+root          32  0.0  0.0      0     0 ?        SN   12:35   0:00 [khugepaged]
+root          36  0.0  0.0      0     0 ?        I    12:35   0:03 [kworker/1:1-events]
+root          79  0.0  0.0      0     0 ?        I<   12:35   0:00 [kintegrityd]
+root          80  0.0  0.0      0     0 ?        I<   12:35   0:00 [kblockd]
+root          81  0.0  0.0      0     0 ?        I<   12:35   0:00 [blkcg_punt_bio]
+root          82  0.0  0.0      0     0 ?        I<   12:35   0:00 [tpm_dev_wq]
+root          83  0.0  0.0      0     0 ?        I<   12:35   0:00 [ata_sff]
+root          84  0.0  0.0      0     0 ?        I<   12:35   0:00 [md]
+root          85  0.0  0.0      0     0 ?        I<   12:35   0:00 [edac-poller]
+root          86  0.0  0.0      0     0 ?        I<   12:35   0:00 [devfreq_wq]
+root          87  0.0  0.0      0     0 ?        S    12:35   0:00 [watchdogd]
+root          89  0.0  0.0      0     0 ?        I<   12:35   0:00 [kworker/0:1H-kblockd]
+root          90  0.0  0.0      0     0 ?        S    12:35   0:04 [kswapd0]
+root          91  0.0  0.0      0     0 ?        S    12:35   0:00 [ecryptfs-kthrea]
+root          93  0.0  0.0      0     0 ?        I<   12:35   0:00 [kthrotld]
+root          94  0.0  0.0      0     0 ?        I<   12:35   0:00 [acpi_thermal_pm]
+root          96  0.0  0.0      0     0 ?        S    12:35   0:00 [scsi_eh_0]
+root          97  0.0  0.0      0     0 ?        I<   12:35   0:00 [scsi_tmf_0]
+root          98  0.0  0.0      0     0 ?        S    12:35   0:00 [scsi_eh_1]
+root          99  0.0  0.0      0     0 ?        I<   12:35   0:00 [scsi_tmf_1]
+root         100  0.0  0.0      0     0 ?        I<   12:35   0:00 [vfio-irqfd-clea]
+root         101  0.0  0.0      0     0 ?        I<   12:35   0:00 [mld]
+root         102  0.0  0.0      0     0 ?        I<   12:35   0:00 [ipv6_addrconf]
+root         110  0.0  0.0      0     0 ?        I<   12:35   0:00 [kworker/1:1H-kblockd]
+root         113  0.0  0.0      0     0 ?        I<   12:35   0:00 [kstrp]
+root         116  0.0  0.0      0     0 ?        I<   12:35   0:00 [zswap-shrink]
+root         117  0.0  0.0      0     0 ?        I<   12:35   0:00 [kworker/u5:0]
+root         122  0.0  0.0      0     0 ?        I<   12:35   0:00 [charger_manager]
+root         168  0.0  0.0      0     0 ?        S    12:35   0:00 [scsi_eh_2]
+root         169  0.0  0.0      0     0 ?        I<   12:35   0:00 [scsi_tmf_2]
+root         190  0.0  0.0      0     0 ?        S    12:35   0:00 [jbd2/sda5-8]
+root         191  0.0  0.0      0     0 ?        I<   12:35   0:00 [ext4-rsv-conver]
+root         231  0.0  0.7  68308 25892 ?        S<s  12:35   0:04 /lib/systemd/systemd-journald
+root         252  0.0  0.0      0     0 ?        I<   12:35   0:00 [ipmi-msghandler]
+root         254  0.0  0.0      0     0 ?        I<   12:35   0:00 [ttm_swap]
+root         255  0.0  0.0      0     0 ?        S    12:35   0:01 [irq/18-vmwgfx]
+root         256  0.0  0.0      0     0 ?        S    12:35   0:00 [card0-crtc0]
+root         257  0.0  0.0      0     0 ?        S    12:35   0:00 [card0-crtc1]
+root         259  0.0  0.0      0     0 ?        S    12:35   0:00 [card0-crtc2]
+root         260  0.0  0.0      0     0 ?        S    12:35   0:00 [card0-crtc3]
+root         261  0.0  0.0      0     0 ?        S    12:35   0:00 [card0-crtc4]
+root         262  0.0  0.0      0     0 ?        S    12:35   0:00 [card0-crtc5]
+root         263  0.0  0.0      0     0 ?        S    12:35   0:00 [card0-crtc6]
+root         264  0.0  0.0      0     0 ?        S    12:35   0:00 [card0-crtc7]
+root         277  0.0  0.0      0     0 ?        S<   12:35   0:00 [loop0]
+root         279  0.0  0.0      0     0 ?        S<   12:35   0:00 [loop1]
+root         280  0.0  0.0      0     0 ?        S<   12:35   0:00 [loop2]
+root         282  0.0  0.0      0     0 ?        S<   12:35   0:00 [loop3]
+root         284  0.0  0.0      0     0 ?        S<   12:35   0:00 [loop4]
+root         286  0.0  0.0      0     0 ?        S<   12:35   0:00 [loop5]
+root         287  0.0  0.1  24056  6884 ?        Ss   12:35   0:01 /lib/systemd/systemd-udevd
+root         288  0.0  0.0      0     0 ?        S<   12:35   0:02 [loop6]
+root         289  0.0  0.0      0     0 ?        S<   12:35   0:00 [loop7]
+root         290  0.0  0.0      0     0 ?        S<   12:35   0:00 [loop8]
+root         291  0.0  0.0      0     0 ?        S<   12:35   0:00 [loop9]
+systemd+     570  0.0  0.3  24000 12220 ?        Ss   12:35   0:00 /lib/systemd/systemd-resolved
+systemd+     574  0.0  0.1  90220  5144 ?        Ssl  12:35   0:00 /lib/systemd/systemd-timesyncd
+root         598  0.0  0.2 241916  9252 ?        Ssl  12:35   0:01 /usr/lib/accountsservice/accounts-daemon
+root         599  0.0  0.0   2548   772 ?        Ss   12:35   0:01 /usr/sbin/acpid
+avahi        602  0.0  0.0   8528  3360 ?        Ss   12:35   0:00 avahi-daemon: running [nostrik-VirtualBox.local]
+root         606  0.0  0.0   9424  2888 ?        Ss   12:35   0:00 /usr/sbin/cron -f
+message+     609  0.0  0.1   9796  5668 ?        Ss   12:35   0:02 /usr/bin/dbus-daemon --system --address=systemd: --nofork --nopidfile --systemd-activation --syslog-only
+root         610  0.3  0.5 338712 19480 ?        Ssl  12:35   0:23 /usr/sbin/NetworkManager --no-daemon
+root         616  0.0  0.1  81832  3720 ?        Ssl  12:35   0:00 /usr/sbin/irqbalance --foreground
+root         619  0.0  0.5  39328 19392 ?        Ss   12:35   0:00 /usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers
+root         622  0.1  0.3 239036 11336 ?        Ssl  12:35   0:06 /usr/lib/policykit-1/polkitd --no-debug
+syslog       626  0.0  0.1 224352  4288 ?        Ssl  12:35   0:00 /usr/sbin/rsyslogd -n -iNONE
+root         633  0.0  0.8 874296 29724 ?        Ssl  12:35   0:05 /usr/lib/snapd/snapd
+root         641  0.0  0.1 235612  5892 ?        Ssl  12:35   0:00 /usr/libexec/switcheroo-control
+root         645  0.0  0.2  16776  7168 ?        Ss   12:35   0:01 /lib/systemd/systemd-logind
+root         649  0.0  0.3 395556 13036 ?        Ssl  12:35   0:00 /usr/lib/udisks2/udisksd
+root         651  0.0  0.1  13684  4144 ?        Ss   12:35   0:00 /sbin/wpa_supplicant -u -s -O /run/wpa_supplicant
+avahi        680  0.0  0.0   8348   296 ?        S    12:35   0:00 avahi-daemon: chroot helper
+root         691  0.0  0.2 314460  9500 ?        Ssl  12:35   0:00 /usr/sbin/ModemManager
+root         703  0.0  0.3 178392 11644 ?        Ssl  12:35   0:00 /usr/sbin/cups-browsed
+root         720  0.0  0.6 118028 22036 ?        Ssl  12:35   0:00 /usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal
+root         743  0.0  0.2 239616  8112 ?        Ssl  12:35   0:00 /usr/sbin/gdm3
+whoopsie     767  0.0  0.4 327208 15296 ?        Ssl  12:35   0:00 /usr/bin/whoopsie -f
+root         776  0.0  0.2  28576  7320 ?        Ss   12:35   0:00 /usr/sbin/cupsd -l
+kernoops     780  0.0  0.0  11260   236 ?        Ss   12:35   0:00 /usr/sbin/kerneloops --test
+kernoops     804  0.0  0.0  11260   444 ?        Ss   12:35   0:00 /usr/sbin/kerneloops
+lp           806  0.0  0.1  15332  5532 ?        S    12:35   0:00 /usr/lib/cups/notifier/dbus dbus://
+rtkit        891  0.0  0.0 152936  2832 ?        SNsl 12:35   0:00 /usr/libexec/rtkit-daemon
+root        1020  0.0  0.2 252116  9412 ?        Ssl  12:35   0:00 /usr/lib/upower/upowerd
+colord      1243  0.0  0.4 248984 15868 ?        Ssl  12:36   0:00 /usr/libexec/colord
+root        1263  0.0  0.2 314664  9224 ?        Sl   12:36   0:00 gdm-session-worker [pam/gdm-password]
+nostrik     1274  0.0  0.2  21232 10332 ?        Ss   12:36   0:02 /lib/systemd/systemd --user
+nostrik     1275  0.0  0.0 103300  1724 ?        S    12:36   0:00 (sd-pam)
+nostrik     1280  0.0  0.3 1408804 13668 ?       S<sl 12:36   0:01 /usr/bin/pulseaudio --daemonize=no --log-target=journal
+nostrik     1283  0.0  0.4 658820 15236 ?        SNsl 12:36   0:00 /usr/libexec/tracker-miner-fs
+nostrik     1285  0.0  0.2 240168  7112 ?        Sl   12:36   0:00 /usr/bin/gnome-keyring-daemon --daemonize --login
+nostrik     1289  0.0  0.2  11264  7828 ?        Ss   12:36   0:02 /usr/bin/dbus-daemon --session --address=systemd: --nofork --nopidfile --systemd-activation --syslog-only
+nostrik     1293  0.0  0.2 239704  7200 ?        Ssl  12:36   0:00 /usr/libexec/gvfsd
+nostrik     1299  0.0  0.2 382064  7220 ?        Sl   12:36   0:00 /usr/libexec/gvfsd-fuse /run/user/1000/gvfs -f -o big_writes
+nostrik     1300  0.0  0.1 164020  5992 tty2     Ssl+ 12:36   0:00 /usr/lib/gdm3/gdm-x-session --run-script env GNOME_SHELL_SESSION_MODE=ubuntu /usr/bin/gnome-session --systemd --session=ubuntu
+nostrik     1314  0.0  0.2 317400 10216 ?        Ssl  12:36   0:00 /usr/libexec/gvfs-udisks2-volume-monitor
+nostrik     1323  3.1  3.2 326132 112744 tty2    Sl+  12:36   3:10 /usr/lib/xorg/Xorg vt2 -displayfd 3 -auth /run/user/1000/gdm/Xauthority -background none -noreset -keeptty -verbose 3
+nostrik     1329  0.0  0.1 235880  5624 ?        Ssl  12:36   0:00 /usr/libexec/gvfs-goa-volume-monitor
+nostrik     1333  0.0  0.6 547476 21804 ?        Sl   12:36   0:00 /usr/libexec/goa-daemon
+nostrik     1344  0.0  0.2 318612  9512 ?        Sl   12:36   0:00 /usr/libexec/goa-identity-service
+nostrik     1346  0.0  0.1 237984  6264 ?        Ssl  12:36   0:00 /usr/libexec/gvfs-gphoto2-volume-monitor
+nostrik     1353  0.0  0.2 316728  8380 ?        Ssl  12:36   0:00 /usr/libexec/gvfs-afc-volume-monitor
+nostrik     1359  0.0  0.1 235708  5900 ?        Ssl  12:36   0:00 /usr/libexec/gvfs-mtp-volume-monitor
+nostrik     1368  0.0  0.4 190736 14660 tty2     Sl+  12:36   0:00 /usr/libexec/gnome-session-binary --systemd --systemd --session=ubuntu
+nostrik     1447  0.0  0.0   6040   100 ?        Ss   12:36   0:00 /usr/bin/ssh-agent /usr/bin/im-launch env GNOME_SHELL_SESSION_MODE=ubuntu /usr/bin/gnome-session --systemd --session=ubuntu
+nostrik     1466  0.0  0.2 309768  8584 ?        Ssl  12:36   0:00 /usr/libexec/at-spi-bus-launcher
+nostrik     1471  0.0  0.1   7376  3656 ?        S    12:36   0:00 /usr/bin/dbus-daemon --config-file=/usr/share/defaults/at-spi2/accessibility.conf --nofork --print-address 3
+nostrik     1486  0.0  0.1  90064  3736 ?        Ssl  12:36   0:00 /usr/libexec/gnome-session-ctl --monitor
+nostrik     1493  0.0  0.4 486576 14944 ?        Ssl  12:36   0:00 /usr/libexec/gnome-session-binary --systemd-service --session=ubuntu
+nostrik     1507  5.4  9.9 4244764 349768 ?      Ssl  12:36   5:31 /usr/bin/gnome-shell
+nostrik     1533  0.0  0.2 314844  9272 ?        Sl   12:36   0:05 ibus-daemon --panel disable --xim
+nostrik     1537  0.0  0.2 166560  8288 ?        Sl   12:36   0:00 /usr/libexec/ibus-memconf
+nostrik     1538  0.0  0.7 278068 26176 ?        Sl   12:36   0:04 /usr/libexec/ibus-extension-gtk3
+nostrik     1540  0.0  0.7 200400 24740 ?        Sl   12:36   0:05 /usr/libexec/ibus-x11 --kill-daemon
+nostrik     1542  0.0  0.2 240360  8324 ?        Sl   12:36   0:00 /usr/libexec/ibus-portal
+nostrik     1554  0.0  0.1 162908  5936 ?        Sl   12:36   0:01 /usr/libexec/at-spi2-registryd --use-gnome-session
+nostrik     1558  0.0  0.1 235600  4124 ?        Ssl  12:36   0:00 /usr/libexec/xdg-permission-store
+nostrik     1563  0.0  0.4 581848 14608 ?        Sl   12:36   0:00 /usr/libexec/gnome-shell-calendar-server
+nostrik     1571  0.0  0.5 1004812 19476 ?       Ssl  12:36   0:00 /usr/libexec/evolution-source-registry
+nostrik     1579  0.0  0.5 838772 18792 ?        Ssl  12:36   0:00 /usr/libexec/evolution-calendar-factory
+nostrik     1588  0.0  0.1 156200  5516 ?        Sl   12:36   0:00 /usr/libexec/dconf-service
+nostrik     1592  0.0  0.5 747140 18024 ?        Ssl  12:36   0:00 /usr/libexec/evolution-addressbook-factory
+nostrik     1610  0.0  0.5 2598764 20444 ?       Sl   12:36   0:00 /usr/bin/gjs /usr/share/gnome-shell/org.gnome.Shell.Notifications
+nostrik     1616  0.0  0.2 317552  9768 ?        Sl   12:36   0:00 /usr/libexec/gvfsd-trash --spawner :1.3 /org/gtk/gvfs/exec_spaw/0
+nostrik     1633  0.0  0.2 313888  8316 ?        Ssl  12:36   0:00 /usr/libexec/gsd-a11y-settings
+nostrik     1634  0.0  0.6 422876 22596 ?        Ssl  12:36   0:01 /usr/libexec/gsd-color
+nostrik     1635  0.0  0.4 374328 14340 ?        Ssl  12:36   0:00 /usr/libexec/gsd-datetime
+nostrik     1638  0.0  0.2 314120  8556 ?        Ssl  12:36   0:00 /usr/libexec/gsd-housekeeping
+nostrik     1642  0.0  0.6 348316 21176 ?        Ssl  12:36   0:01 /usr/libexec/gsd-keyboard
+nostrik     1645  0.0  0.6 690500 23284 ?        Ssl  12:36   0:01 /usr/libexec/gsd-media-keys
+nostrik     1646  0.0  0.6 422456 22208 ?        Ssl  12:36   0:01 /usr/libexec/gsd-power
+nostrik     1650  0.0  0.2 248228  9448 ?        Ssl  12:36   0:00 /usr/libexec/gsd-print-notifications
+nostrik     1653  0.0  0.2 166552  8320 ?        Sl   12:36   0:01 /usr/libexec/ibus-engine-simple
+nostrik     1655  0.0  0.1 457104  6040 ?        Ssl  12:36   0:00 /usr/libexec/gsd-rfkill
+nostrik     1656  0.0  0.1 235512  5472 ?        Ssl  12:36   0:00 /usr/libexec/gsd-screensaver-proxy
+nostrik     1661  0.0  0.3 468992 11136 ?        Ssl  12:36   0:00 /usr/libexec/gsd-sharing
+nostrik     1665  0.0  0.2 318052  9308 ?        Ssl  12:36   0:00 /usr/libexec/gsd-smartcard
+nostrik     1671  0.0  0.2 321748  9688 ?        Ssl  12:36   0:00 /usr/libexec/gsd-sound
+nostrik     1678  0.0  0.2 387856  8492 ?        Ssl  12:36   0:00 /usr/libexec/gsd-usb-protection
+nostrik     1686  0.0  0.6 347900 21820 ?        Ssl  12:36   0:01 /usr/libexec/gsd-wacom
+nostrik     1694  0.0  0.2 318244  9196 ?        Ssl  12:36   0:00 /usr/libexec/gsd-wwan
+nostrik     1698  0.0  0.9 640108 33380 ?        Sl   12:36   0:02 /usr/libexec/evolution-data-server/evolution-alarm-notify
+nostrik     1701  0.0  0.6 348940 22516 ?        Ssl  12:36   0:01 /usr/libexec/gsd-xsettings
+nostrik     1720  0.0  0.1 231800  4788 ?        Sl   12:36   0:00 /usr/libexec/gsd-disk-utility-notify
+nostrik     1744  0.0  0.3 342192 13144 ?        Sl   12:36   0:00 /usr/libexec/gsd-printer
+nostrik     1787  0.3  4.8 1108856 171324 ?      Sl   12:36   0:21 /snap/snap-store/558/usr/bin/snap-store --gapplication-service
+nostrik     1803  0.0  0.1 457540  6288 ?        Ssl  12:36   0:00 /usr/libexec/xdg-document-portal
+nostrik     1915  0.0  0.2 462740 10012 ?        Ssl  12:36   0:00 /usr/libexec/xdg-desktop-portal
+nostrik     1919  0.0  0.8 496112 30136 ?        Ssl  12:36   0:02 /usr/libexec/xdg-desktop-portal-gtk
+root        1930  0.1  2.4 464632 85860 ?        Ssl  12:36   0:06 /usr/libexec/fwupd/fwupd
+nostrik     2346  0.0  0.1 162256  6312 ?        Ssl  12:37   0:00 /usr/libexec/gvfsd-metadata
+nostrik     2365  0.0  1.0 423656 35192 ?        Sl   12:37   0:02 update-notifier
+uuidd       3056  0.0  0.0  10604   932 ?        Ss   12:48   0:00 /usr/sbin/uuidd --socket-activation
+nostrik     3061  0.0  0.3 279828 10548 ?        Sl   12:49   0:00 /usr/libexec/gvfsd-http --spawner :1.3 /org/gtk/gvfs/exec_spaw/1
+nostrik     3337  0.0  0.0   2616  1740 ?        S    12:49   0:00 /bin/sh /snap/pycharm-community/276/bin/pycharm.sh
+nostrik     3378 25.2 45.2 4897120 1586164 ?     Sl   12:49  22:14 /snap/pycharm-community/276/jbr/bin/java -classpath /snap/pycharm-community/276/lib/util.jar:/snap/pycharm-community/276/lib/app.jar:/snap/pycharm-community/276/lib/3rd-party-rt.jar:/snap/pycharm-community/276/lib/jna.jar:/snap/pycharm-community/276/lib/platform-statistics-devkit.jar:/snap/pycharm-community/276/lib/jps-model.jar:/snap/pycharm-community/276/lib/rd-core.jar:/snap/pycharm-community/276/lib/rd-framework.jar:/snap/pycharm-community/276/lib/stats.jar:/snap/pycharm-community/276/lib/protobuf.jar:/snap/pycharm-community/276/lib/external-system-rt.jar:/snap/pycharm-community/276/lib/forms_rt.jar:/snap/pycharm-community/276/lib/intellij-test-discovery.jar:/snap/pycharm-community/276/lib/rd-swing.jar:/snap/pycharm-community/276/lib/groovy.jar:/snap/pycharm-community/276/lib/annotations-java5.jar:/snap/pycharm-community/276/lib/byte-buddy-agent.jar:/snap/pycharm-community/276/lib/error-prone-annotations.jar:/snap/pycharm-community/276/lib/externalProcess-rt.jar:/snap/pycharm-community/276/lib/grpc-netty-shaded.jar:/snap/pycharm-community/276/lib/intellij-coverage-agent-1.0.656.jar:/snap/pycharm-community/276/lib/jetbrains-annotations.jar:/snap/pycharm-community/276/lib/jsch-agent.jar:/snap/pycharm-community/276/lib/junit4.jar:/snap/pycharm-community/276/lib/junixsocket-core.jar:/snap/pycharm-community/276/lib/lz4-java.jar:/snap/pycharm-community/276/lib/platform-objectSerializer-annotations.jar:/snap/pycharm-community/276/lib/pty4j.jar:/snap/pycharm-community/276/lib/rd-text.jar:/snap/pycharm-community/276/lib/util_rt.jar:/snap/pycharm-community/276/lib/winp.jar:/snap/pycharm-community/276/lib/dbus-java-3.2.1.jar:/snap/pycharm-community/276/lib/java-utils-1.0.6.jar:/snap/pycharm-community/276/lib/jnr-unixsocket-0.23.jar:/snap/pycharm-community/276/lib/jnr-ffi-2.1.10.jar:/snap/pycharm-community/276/lib/jffi-1.2.19.jar:/snap/pycharm-community/276/lib/jffi-1.2.19-native.jar:/snap/pycharm-community/276/lib/asm-7.1.jar:/snap/pycharm-community/276/lib/asm-commons-7.1.jar:/snap/pycharm-community/276/lib/asm-analysis-7.1.jar:/snap/pycharm-community/276/lib/asm-tree-7.1.jar:/snap/pycharm-community/276/lib/asm-util-7.1.jar:/snap/pycharm-community/276/lib/jnr-a64asm-1.0.0.jar:/snap/pycharm-community/276/lib/jnr-x86asm-1.0.2.jar:/snap/pycharm-community/276/lib/jnr-constants-0.9.12.jar:/snap/pycharm-community/276/lib/jnr-enxio-0.21.jar:/snap/pycharm-community/276/lib/jnr-posix-3.0.50.jar -Xms128m -Xmx750m -XX:ReservedCodeCacheSize=512m -XX:+IgnoreUnrecognizedVMOptions -XX:+UseG1GC -XX:SoftRefLRUPolicyMSPerMB=50 -XX:CICompilerCount=2 -XX:+HeapDumpOnOutOfMemoryError -XX:-OmitStackTraceInFastThrow -ea -Dsun.io.useCanonCaches=false -Djdk.http.auth.tunneling.disabledSchemes="" -Djdk.attach.allowAttachSelf=true -Djdk.module.illegalAccess.silent=true -Dkotlinx.coroutines.debug=off -Dsun.tools.attach.tmp.only=true -Xmx750m -XX:ErrorFile=/home/nostrik/java_error_in_pycharm_%p.log -XX:HeapDumpPath=/home/nostrik/java_error_in_pycharm_.hprof -Djb.vmOptionsFile=/home/nostrik/.config/JetBrains/PyCharmCE2022.1/pycharm64.vmoptions -Djava.system.class.loader=com.intellij.util.lang.PathClassLoader -Didea.strict.classpath=true -Didea.vendor.name=JetBrains -Didea.paths.selector=PyCharmCE2022.1 -Didea.platform.prefix=PyCharmCore -Dsplash=true com.intellij.idea.Main
+nostrik     3425  0.0  0.0   3440  1996 ?        S    12:50   0:03 /snap/pycharm-community/276/bin/fsnotifier
+nostrik     3857  0.0  1.2 681404 45028 ?        SLl  12:54   0:01 /usr/bin/seahorse --gapplication-service
+nostrik     3858  0.1  1.4 814700 50740 ?        Ssl  12:54   0:06 /usr/libexec/gnome-terminal-server
+nostrik     3946  0.0  0.1  10892  5284 pts/0    Ss   12:54   0:00 bash
+nostrik     3957  0.3  0.1  11300  5624 pts/1    Ss+  12:55   0:17 /bin/bash --rcfile /snap/pycharm-community/276/plugins/terminal/jediterm-bash.in -i
+root        5175  0.0  0.0      0     0 ?        I    13:58   0:00 [kworker/u4:2-events_unbound]
+root        5258  0.0  0.0      0     0 ?        I    14:07   0:00 [kworker/u4:0-ext4-rsv-conversion]
+root        5330  0.0  0.0      0     0 ?        I    14:10   0:00 [kworker/1:0-events]
+root        5331  0.0  0.0      0     0 ?        I    14:10   0:00 [kworker/0:2-events]
+root        5392  0.0  0.0      0     0 ?        I    14:15   0:00 [kworker/u4:1-events_power_efficient]
+nostrik     5411  0.0  0.0  11500  3340 pts/0    R+   14:17   0:00 ps aux
