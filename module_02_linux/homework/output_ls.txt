@@ -1,0 +1,12 @@
+total 40
+-rw-rw-r-- 1 nostrik nostrik  848 апр 25 22:29 hw_2_1_max_number.py
+-rw-rw-r-- 1 nostrik nostrik 1971 апр 22 14:42 hw_2_2_ps_aux_rss.py
+-rw-rw-r-- 1 nostrik nostrik  502 апр 21 23:43 hw_2_3_mean_size_ls.py
+-rw-rw-r-- 1 nostrik nostrik 1084 апр 22 16:35 hw_2_4_hello_world_with_day.py
+-rw-rw-r-- 1 nostrik nostrik 1789 апр 22 17:20 hw_3_1.py
+-rw-rw-r-- 1 nostrik nostrik 2403 апр 25 22:29 hw_3_2.py
+-rw-rw-r-- 1 nostrik nostrik 2253 апр 25 22:34 hw_3_3.py
+-rw-rw-r-- 1 nostrik nostrik    0 апр 25 22:39 output_ls.txt
+drwxrwxr-x 2 nostrik nostrik 4096 апр 22 12:48 __pycache__
+-rw-rw-r-- 1 nostrik nostrik  596 апр 21 23:43 README.md
+-rw-rw-r-- 1 nostrik nostrik   62 апр 21 23:43 requirements.txt

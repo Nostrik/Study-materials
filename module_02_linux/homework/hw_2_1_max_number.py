@@ -11,16 +11,11 @@ from flask import Flask
 app = Flask(__name__)
 
 
-@app.route("/max_number/<float:number1>/<float:number2>/<float:number3>")
-def max_number(number1, number2, number3):
+@app.route("/max_number/<path:numbers>")
+def max_number(numbers: str):
     """Put your code here"""
-    if number1 > number2 and number1 > number3:
-        number = number1
-    elif number2 > number3:
-        number = number2
-    else:
-        number = number3
-    return f'Максимальное переданное число <b>{number}</b>'
+    numbers_as_num = (int(it) for it in numbers.split("/"))
+    return f'Максимальное переданное число <b>{max(numbers_as_num)}</b>'
 
 
 if __name__ == "__main__":
