@@ -15,7 +15,7 @@ app = Flask(__name__)
 def max_number(numbers: str):
     """Put your code here"""
     numbers_as_num = (int(it) for it in numbers.split("/"))
-    return f'Максимальное переданное число <b>{max(numbers_as_num)}</b>'
+    return f'Максимальное переданное число <i>{max(numbers_as_num)}</i>'
 
 
 if __name__ == "__main__":

@@ -1,10 +1,10 @@
 import unittest
 
-from module_03_ci_culture_beginning.materials.previous_hw_test.max_number_app import app
+from module_02_linux.homework.hw_2_1_max_number import app
 
 
 class TestMaxNumberApp(unittest.TestCase):
-    def setUp(self):
+    def setUp(self) -> None:
         app.config['TESTING'] = True
         app.config['DEBUG'] = False
         self.app = app.test_client()
