@@ -1,8 +1,15 @@
 from typing import List, Optional
-
+import random
 from flask import Flask, request
 
 app = Flask(__name__)
+
+
+def mul(list_numbers: list) -> int:
+    result = 1
+    for element in list_numbers:
+        result *= element
+    return result
 
 
 @app.route(
@@ -27,6 +34,39 @@ def search():
         f"phone_prefixes={phone_prefixes}, "
         f"protocols={protocols}, "
         f"signal_level={signal_level}"
+    )
+
+
+@app.route(
+    "/numbers/", methods=["GET"]
+)
+def sum_numbers():
+    list_numbers: List[int] = request.args.getlist('number')
+
+    if not list_numbers:
+        return f'kek', 400
+    int_list = list(map(int, list_numbers))
+    return (
+        f'numbers is {list_numbers}: '
+        f'sum is {sum(int_list)}, '
+        f'multiplication is {mul(int_list)}'
+    )
+
+
+@app.route(
+    "/numbersAB/", methods=["GET"]
+)
+def to_do_list_numbers():
+    list_numbers_1: List[int] = request.args.getlist('number1')
+    list_numbers_2: List[int] = request.args.getlist('number2')
+
+    if not list_numbers_1 or not list_numbers_2:
+        return f'Please check the data in URL, kek', 400
+    new_list = (random.choice(list_numbers_1), random.choice(list_numbers_2))
+    return (
+        f'first list is {list_numbers_1} '
+        f'second list is {list_numbers_2} '
+        f'random of lists {new_list}'
     )
 
 
