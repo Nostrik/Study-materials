@@ -35,7 +35,7 @@ def _ps():
         return "Something went wrong", 500
 
     output = result.stdout.decode()
-    return string.Template(f"<pre>${output}</pre>").substitute(output=output)
+    return string.Template(f"<pre>$$'{output}'</pre>").substitute(output=output)
 
 
 if __name__ == "__main__":
