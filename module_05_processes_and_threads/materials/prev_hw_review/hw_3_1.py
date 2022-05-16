@@ -1,6 +1,7 @@
 import shlex
 import string
 import subprocess
+import sys
 from typing import List
 
 from flask import Flask, request
@@ -25,4 +26,5 @@ def _ps():
 
 
 if __name__ == "__main__":
-   app.run(debug=True)
+   port = sys.argv[1]
+   app.run(debug=True, port=port)
