@@ -10,6 +10,7 @@ class MyManager:
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         if exc_type in self.exceptions:
+            print('Exception was skipped')
             return True
         print("Exception {} has been handled".format(exc_type))
         self.file.close()
