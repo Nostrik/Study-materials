@@ -15,6 +15,7 @@ def input_and_check_password():
 
     try:
         hasher = hashlib.md5()
+        logger.debug(f'We are create obj hasher {hasher}!')
 
         hasher.update(password.encode("latin-1"))
 
@@ -29,7 +30,8 @@ def input_and_check_password():
 if __name__ == "__main__":
     logging.basicConfig(level=logging.DEBUG)
     logger.info("Вы пытаетесь аутентифицироваться в Skillbox")
-    count_number: int = 3
+    numbers_cnt = int(input('How try you want password?'))
+    count_number: int = numbers_cnt
     logger.info(f"У вас есть {count_number} попыток")
 
     while count_number > 0:
@@ -37,5 +39,5 @@ if __name__ == "__main__":
             exit(0)
         count_number -= 1
 
-    logger.error("Пользователь трижды ввёл не правильный пароль!")
+    logger.error("Пользователь ввёл не правильный пароль!")
     exit(1)
