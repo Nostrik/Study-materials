@@ -1,4 +1,5 @@
 import csv
+import logging
 from typing import Optional
 
 from flask import Flask
@@ -38,4 +39,9 @@ def handle_exception(e: InternalServerError):
 
 
 if __name__ == "__main__":
-    app.run()
+    logging.basicConfig(
+        level=logging.DEBUG,
+        filename='banking.log',
+        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    )
+    app.run(debug=True)

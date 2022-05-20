@@ -1,6 +1,7 @@
 import heapq
 import json
 import logging
+import time
 from datetime import datetime
 from typing import List
 from flask import Flask, request
@@ -11,29 +12,33 @@ logger = logging.getLogger("sort")
 
 
 def bubble_sort(array: List[int]) -> List[int]:
-    logger.debug(f'start bubble sort at {datetime.now()}')
+    logger.debug(f'start bubble sort {time.time()}')
+    start_time = time.time()
+    time.sleep(2)
     n = len(array)
     for i in range(n):
         for j in range(i + 1, n):
             if array[i] > array[j]:
                 array[i], array[j] = array[j], array[i]
-    logger.debug(f'stop bubble sort at {datetime.now()}')
+    logger.debug(f'stop bubble sort at {time.time()}')
     return array
 
 
 def tim_sort(array: List[int]) -> List[int]:
-    logger.debug(f'start tim sort at {datetime.now()}')
+    logger.debug(f'start tim sort')
+    start_time = time.time()
     array.sort()
-    logger.debug(f'stop tim sort at {datetime.now()}')
+    logger.debug(f'stop tim sort at {time.time() - start_time}')
     return array
 
 
 def heap_sort(array: List[int]) -> List[int]:
-    logger.debug(f'start heap sort at {datetime.now()}')
+    logger.debug(f'start heap sort')
+    start_time = time.time()
     data = []
     for val in array:
         heapq.heappush(data, val)
-    logger.debug(f'stop heap sort at {datetime.now()}')
+    logger.debug(f'stop heap sort at {time.time() - start_time}')
     return [heapq.heappop(data) for _ in range(len(data))]
 
 
@@ -59,8 +64,8 @@ if __name__ == "__main__":
     logger.info("Started sort server")
     app.config["WTF_CSRF_ENABLED"] = False
     app.run(debug=True)
-    array_list = [2, 4, 1]
-    print(bubble_sort(array_list))
-    print(tim_sort(array_list))
-    print(heap_sort(array_list))
+    # array_list = [2, 4, 1]
+    # print(bubble_sort(array_list))
+    # print(tim_sort(array_list))
+    # print(heap_sort(array_list))
 
