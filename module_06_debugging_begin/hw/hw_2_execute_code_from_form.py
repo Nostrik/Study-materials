@@ -12,13 +12,17 @@
 
 import shlex
 import subprocess
-
+import logging
+import sys
+from typing import Optional
 from flask import Flask
 from flask_wtf import FlaskForm
 from wtforms import IntegerField, StringField
 from wtforms.validators import InputRequired
+from werkzeug.exceptions import InternalServerError
 
 app = Flask(__name__)
+logger = logging.getLogger('execute_code_logger')
 
 
 class CodeForm(FlaskForm):
@@ -29,6 +33,7 @@ class CodeForm(FlaskForm):
 def run_python_code_in_subprocess(code: str, timeout: int) -> str:
     command = f'python3 -c "{code}"'
     command = shlex.split(command)
+    logger.debug(command)
     process = subprocess.Popen(
             command,
             stdout=subprocess.PIPE,
@@ -43,16 +48,31 @@ def run_python_code_in_subprocess(code: str, timeout: int) -> str:
 @app.route("/run_code", methods=["POST"])
 def run_code():
     form = CodeForm()
+    logger.debug(form)
     if form.validate_on_submit():
         code = form.code.data
         timeout = form.timeout.data
         stdout = run_python_code_in_subprocess(code=code, timeout=timeout)
         return f"Stdout: {stdout}"
-
+    logger.error(form.errors)
     return f"Bad request. Error = {form.errors}", 400
 
 
+@app.errorhandler(InternalServerError)
+def handle_exception(e: InternalServerError):
+    original: Optional[Exception] = getattr(e, "original_exception", None)
+    if isinstance(original, OSError):
+        logger.exception('OSError)')
+    logger.error('Internal sever error')
+    return 'Internal sever error', 500
+
+
 if __name__ == "__main__":
+    logging.basicConfig(
+        level=logging.DEBUG,
+        filename='exec.log',
+        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    )
     app.config["WTF_CSRF_ENABLED"] = False
 
     app.run(debug=True)

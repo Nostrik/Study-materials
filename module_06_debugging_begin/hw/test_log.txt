@@ -1,0 +1,5 @@
+[Sun, 22 May 2022 17:40:17] INFO [test_code.py.hello_logger:20] Hello info
+[Sun, 22 May 2022 17:40:17] CRITICAL [test_code.py.hello_logger:21] Hello critical
+[Sun, 22 May 2022 17:40:17] WARNING [test_code.py.hello_logger:22] Hello warning
+[Sun, 22 May 2022 17:40:17] DEBUG [test_code.py.hello_logger:23] Hello debug
+[Sun, 22 May 2022 17:40:17] ERROR [test_code.py.hello_logger:24] Rerror message

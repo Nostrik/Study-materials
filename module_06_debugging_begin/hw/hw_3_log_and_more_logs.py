@@ -17,7 +17,24 @@ def log(level: str, message: str) -> None:
 
 Как это сделать? Возможно метод json.dumps поможет вам?
 """
+import json
+import logging
+import time
+
+
+logger = logging.getLogger()
 
 
 def log(level: str, message: str) -> None:
+    data = {'time': time.ctime()[11:19], 'level': level, 'message': message}
+    json_data = json.dumps(data)
+    logger.info(json_data)
     pass
+
+
+if __name__ == '__main__':
+    logging.basicConfig(
+        level=logging.INFO,
+        filename="skillbox_json_messages.log"
+    )
+    log(level='DEBUG', message='App is run')

@@ -14,6 +14,7 @@
 import getpass
 import hashlib
 import logging
+import sys
 
 logger = logging.getLogger("password_checker")
 
@@ -42,7 +43,7 @@ def input_and_check_password():
 if __name__ == "__main__":
     logging.basicConfig(
         level=logging.INFO,
-        stream=open('stderr.txt', 'w', encoding='UTF-8'),
+        stream=sys.stderr,
         format='%(asctime)s - %(message)s', datefmt='%H:%M:%S'
     )
     logger.info("Вы пытаетесь аутентифицироваться в Skillbox")
