@@ -16,7 +16,16 @@
 Покройте функцию логгированием.
 """
 from typing import List
+import random
 
 
 def get_average_salary_corrected(salaries: List[int]) -> float:
-    pass
+    min_val = min(salaries)
+    max_val = max(salaries)
+    truncated_list = [i for i in salaries if min_val < i < max_val]
+    return sum(truncated_list) / len(truncated_list)
+
+
+if __name__ == '__main__':
+    list_salary = [random.randint(100, 1000) for i in range(30)]
+    print(get_average_salary_corrected(list_salary))

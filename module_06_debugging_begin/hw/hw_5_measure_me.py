@@ -4,7 +4,7 @@
 Однако с логами можно делать очень-очень много чего.
 
 Например, ведь верно, что каждая строка лога содержит в себе метку времени.
-Таким образом, правильно организовав логгирование,
+Таким образом, правильно организовав логирование,
     мы можем вести статистику -- какая функция сколько времени выполняется.
 Программа, которую вы видите в файле hw_5_measure_me.py пишет логи в stdout.
 Внутри неё есть функция measure_me,
@@ -15,6 +15,7 @@
 """
 import logging
 import random
+import pprint
 from typing import List
 
 logger = logging.getLogger(__name__)
@@ -67,7 +68,33 @@ def measure_me(nums: List[int]) -> List[List[int]]:
 
 
 if __name__ == "__main__":
-    logging.basicConfig(level="DEBUG")
+    logging.basicConfig(
+        level="DEBUG",
+        filename='hw_5_measure_me.log',
+        format="%(asctime)s - %(funcName)s - %(message)s"
+    )
     for it in range(15):
-        data_line = get_data_line(10 ** 3)
+        data_line = get_data_line(10 ** 2)
         measure_me(data_line)
+
+    print('Анализ логов...')
+    average_list = []
+    start_val = ''
+    stop_val = ''
+    summ = 0
+    with open('hw_5_measure_me.log', 'r') as log_file:
+        for line in log_file:
+            list_line = line.split('-')
+            if list_line[4] == ' Enter measure_me\n':
+                start_val = list_line[2]
+            elif list_line[4] == ' Leave measure_me\n':
+                stop_val = list_line[2]
+            float_stop_val = stop_val[9:15].replace(',', '.')
+            float_start_val = start_val[9:15].replace(',', '.')
+            if float_stop_val != float_start_val and float_start_val != '' \
+                    and float_stop_val != '' and float_stop_val > float_start_val:
+                average_list.append(round(float(float_stop_val) - float(float_start_val), 3))
+    for i in average_list:
+        summ += i
+    result = summ / len(average_list)
+    print('Среднее время выполнения функции measure_me', round(result, 3), 'msec')
