@@ -24,17 +24,20 @@ logger = logging.getLogger("password_checker")
 
 def check_if_password_is_weak(password_string: str) -> bool:
     password_string_low = password_string.lower()
-    with open('../../../../../../usr/share/dict/words', 'r') as words_file:
-        logger.debug('Start analysing password..')
-        for line in words_file:
-            if len(line) > 4:
-                pattern = re.compile(line.rstrip())
-                if pattern.search(password_string_low):
-                    logger.debug('Password is not weak!')
-                    return False
-        else:
-            logger.debug('Good password.')
-            return True
+    try:
+        with open('../../../../../../usr/share/dict/words', 'r') as words_file:
+            logger.debug('Start analysing password..')
+            for line in words_file:
+                if len(line) > 4:
+                    pattern = re.compile(line.rstrip())
+                    if pattern.search(password_string_low):
+                        logger.debug('Password is not weak!')
+                        return False
+            else:
+                logger.debug('Good password.')
+                return True
+    except Exception as error:
+        logger.exception(error)
 
 
 def input_and_check_password():
@@ -63,16 +66,19 @@ def input_and_check_password():
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.DEBUG)
-    # logger.info("Вы пытаетесь аутентифицироваться в Skillbox")
-    # count_number: int = 3
-    # logger.info(f"У вас есть {count_number} попыток")
-    #
-    # while count_number > 0:
-    #     if input_and_check_password():
-    #         exit(0)
-    #     count_number -= 1
-    #
-    # logger.error("Пользователь трижды ввёл не правильный пароль!")
-    # exit(1)
+
     assert check_if_password_is_weak('yOungd') == False
-    print(check_if_password_is_weak('yOungd'))
+    assert check_if_password_is_weak('ggg') == True
+
+    logger.info("Вы пытаетесь аутентифицироваться в Skillbox")
+    count_number: int = 3
+    logger.info(f"У вас есть {count_number} попыток")
+
+    while count_number > 0:
+        if input_and_check_password():
+            exit(0)
+        count_number -= 1
+
+    logger.error("Пользователь трижды ввёл не правильный пароль!")
+    exit(1)
+
