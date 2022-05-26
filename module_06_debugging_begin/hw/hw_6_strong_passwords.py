@@ -25,7 +25,7 @@ logger = logging.getLogger("password_checker")
 def check_if_password_is_weak(password_string: str) -> bool:
     password_string_low = password_string.lower()
     try:
-        with open('../../../../../../usr/share/dict/words', 'r') as words_file:
+        with open('../../words', 'r') as words_file:
             logger.debug('Start analysing password..')
             for line in words_file:
                 if len(line) > 4:
@@ -66,9 +66,6 @@ def input_and_check_password():
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.DEBUG)
-
-    assert check_if_password_is_weak('yOungd') == False
-    assert check_if_password_is_weak('ggg') == True
 
     logger.info("Вы пытаетесь аутентифицироваться в Skillbox")
     count_number: int = 3
