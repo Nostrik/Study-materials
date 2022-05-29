@@ -66,11 +66,15 @@ def my_t9(input_numbers: str) -> List[str]:
     res = ''
     temp_list = []
     temp_list_2 = []
+    temp_list_3 = []
+    temp_list_4 = []
+    temp_list_with_while = []
+    result_list = []
     for sym_line in input_numbers:
         for s in dictionary[sym_line]:
             result += s
-    print(result)
-    print(len(input_numbers))
+    # print(result)
+    # print(len(input_numbers))
     try:
         with open('../../words', 'r') as words_file:
             for line in words_file:
@@ -78,13 +82,31 @@ def my_t9(input_numbers: str) -> List[str]:
                     temp_list.append(line.rstrip())
     except Exception as er:
         pass
-    cnt_let = len(input_numbers) + 1
-    while cnt_let != 0:
-        pass
-        cnt_let -= 1
+    cnt_let = 1
+    for elem in temp_list:
+        if elem[1] in dictionary[input_numbers[1]]:
+            temp_list_2.append(elem)
+    for elem in temp_list_2:
+        if elem[2] in dictionary[input_numbers[2]]:
+            temp_list_3.append(elem)
+    for elem in temp_list_3:
+        if elem[3] in dictionary[input_numbers[3]]:
+            temp_list_4.append(elem)
+
+    # result_list.append(temp_list)
+    # while cnt_let != len(input_numbers):
+    #     for elem in result_list[cnt_let - 1]:
+    #         if elem[cnt_let] in dictionary[input_numbers[cnt_let]]:
+    #             temp_list_with_while.append(elem)
+    #         result_list.append(temp_list_with_while)
+    #     cnt_let += 1
+
     print('res is ', res)
-    pprint(temp_list)
+    pprint(temp_list_4)
+    print(len(temp_list_4))
+    pprint(result_list)
 
 
 if __name__ == '__main__':
-    my_t9('43556')
+    my_t9('43556')  # hello
+    my_t9('3428466279')  # dictionary
