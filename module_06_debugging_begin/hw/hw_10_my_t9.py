@@ -28,7 +28,54 @@
 где N -- длина цифровой строки.
 """
 from typing import List
+import re
+
+# btn_2 = ['a', 'b', 'c']
+# btn_3 = ['d', 'e', 'f']
+# btn_4 = ['g', 'h', 'i']
+# btn_5 = ['j', 'k', 'l']
+# btn_6 = ['m', 'n', 'o']
+# btn_7 = ['p', 'q', 'r', 's']
+# btn_8 = ['t', 'u', 'v']
+# btn_9 = ['w', 'x', 'y', 'z']
+# dictionary = {
+#     '2': ('a', 'b', 'c'),
+#     '3': ('d', 'e', 'f'),
+#     '4': ('g', 'h', 'i'),
+#     '5': ('j', 'k', 'l'),
+#     '6': ('m', 'n', 'o'),
+#     '7': ('p', 'q', 'r', 's'),
+#     '8': ('t', 'u', 'v'),
+#     '9': ('w', 'x', 'y', 'z')
+# }
 
 
 def my_t9(input_numbers: str) -> List[str]:
-    pass
+    dictionary = {
+        '2': ('a', 'b', 'c'),
+        '3': ('d', 'e', 'f'),
+        '4': ('g', 'h', 'i'),
+        '5': ('j', 'k', 'l'),
+        '6': ('m', 'n', 'o'),
+        '7': ('p', 'q', 'r', 's'),
+        '8': ('t', 'u', 'v'),
+        '9': ('w', 'x', 'y', 'z')
+    }
+    result = ''
+    res = ''
+    for sym_line in input_numbers:
+        for s in dictionary[sym_line]:
+            result += s
+    print(result)
+    try:
+        with open('../../words', 'r') as words_file:
+            for line in words_file:
+                pattern = re.compile(line.rstrip())
+                res = re.match(pattern, result)
+    except Exception as er:
+        pass
+    print('res is ', res)
+
+
+if __name__ == '__main__':
+    my_t9('43556')
