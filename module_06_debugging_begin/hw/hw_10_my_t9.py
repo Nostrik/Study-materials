@@ -29,6 +29,7 @@
 """
 from typing import List
 import re
+from pprint import pprint
 
 # btn_2 = ['a', 'b', 'c']
 # btn_3 = ['d', 'e', 'f']
@@ -63,18 +64,26 @@ def my_t9(input_numbers: str) -> List[str]:
     }
     result = ''
     res = ''
+    temp_list = []
+    temp_list_2 = []
     for sym_line in input_numbers:
         for s in dictionary[sym_line]:
             result += s
     print(result)
+    print(len(input_numbers))
     try:
         with open('../../words', 'r') as words_file:
             for line in words_file:
-                pattern = re.compile(line.rstrip())
-                res = re.match(pattern, result)
+                if len(line) == len(input_numbers) + 1 and line.startswith(dictionary[input_numbers[0]]):
+                    temp_list.append(line.rstrip())
     except Exception as er:
         pass
+    cnt_let = len(input_numbers) + 1
+    while cnt_let != 0:
+        pass
+        cnt_let -= 1
     print('res is ', res)
+    pprint(temp_list)
 
 
 if __name__ == '__main__':
