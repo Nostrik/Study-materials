@@ -1,0 +1,11 @@
+Ваш ответ? Не правильно!
+Шаг 1 пройден
+Для продолжения нажмите ENTER...Вы не готовы...
+Для продолжения нажмите ENTER...Вы не готовы...
+Для продолжения нажмите ENTER...Traceback (most recent call last):
+  File "hw_7_what_went_wrong.py", line 6, in <module>
+    exec(base64.decodebytes(command).decode("utf8"))
+  File "<string>", line 80, in <module>
+  File "<string>", line 76, in what_went_wrong
+  File "<string>", line 36, in func2
+KeyboardInterrupt

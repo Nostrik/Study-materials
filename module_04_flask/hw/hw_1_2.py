@@ -12,7 +12,7 @@ import re
 from flask import Flask
 from flask_wtf import FlaskForm
 from wtforms import IntegerField, StringField
-from wtforms.validators import InputRequired, Email, NumberRange
+from wtforms.validators import InputRequired, Email, NumberRange, Regexp
 
 app = Flask(__name__)
 

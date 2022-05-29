@@ -1,0 +1,3 @@
+ТЕКСТ stdout
+ТЕКСТ stdout
+ТЕКСТ stdout
