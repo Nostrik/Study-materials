@@ -18,6 +18,7 @@ def restore_tree(path_to_log_file: str) -> BinaryTreeNode:
 import itertools
 import logging
 import random
+import re
 from collections import deque
 from dataclasses import dataclass
 from typing import Optional
@@ -72,6 +73,38 @@ def get_tree(max_depth: int, level: int = 1) -> Optional[BinaryTreeNode]:
     return node
 
 
+def restore_tree(path_to_log_file: str):
+    child_list = []
+    parent_list = []
+    root_list = []
+    with open(path_to_log_file, 'r') as log_file:
+        for line in log_file:
+            if line[:4] == 'INFO':
+                try:
+                    find_num = re.search(r'\[[0-9]*\]', line).group(0)
+                except AttributeError:
+                    find_num = re.search(r'\[[0-9]*\]', line)
+                parent_list.append(find_num)
+                print('INFO', find_num)
+            elif line[:4] == 'DEBU':
+                if 'left' in line.split('.')[0]:
+                    side = 'left'
+                elif 'right' in line.split('.')[0]:
+                    side = 'right'
+                try:
+                    res = [re.search(r'\[[0-9]*\]', line).group(0), side,
+                           re.search(r'\[[0-9]*\]', line.split('.')[1]).group(0)]
+                except AttributeError:
+                    res = [re.search(r'\[[0-9]*\]', line), side,
+                           re.search(r'\[[0-9]*\]', line.split('.')[1])]
+                child_list.append(res[2])
+                print('DEBUG', res)
+            else:
+                print('Not log matchings')
+    print(parent_list)
+    print(child_list)
+
+
 if __name__ == "__main__":
     logging.basicConfig(
             level=logging.DEBUG,
@@ -79,6 +112,7 @@ if __name__ == "__main__":
             filename="hw_8_walk_log_4.txt",
     )
 
-    root = get_tree(7)
-
-    walk(root)
+    # root = get_tree(7)
+    # print(root)
+    # walk(root)
+    restore_tree('hw_8_walk_log_1.txt')
