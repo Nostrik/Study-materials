@@ -9,3 +9,5 @@
   File "<string>", line 76, in what_went_wrong
   File "<string>", line 36, in func2
 KeyboardInterrupt
+INFO:__main__:иру 1
+INFO:__main__:иру 2

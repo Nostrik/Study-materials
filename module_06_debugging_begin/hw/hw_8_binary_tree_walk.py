@@ -76,7 +76,6 @@ def get_tree(max_depth: int, level: int = 1) -> Optional[BinaryTreeNode]:
 def restore_tree(path_to_log_file: str):
     child_list = []
     parent_list = []
-    root_list = []
     with open(path_to_log_file, 'r') as log_file:
         for line in log_file:
             if line[:4] == 'INFO':
@@ -85,7 +84,6 @@ def restore_tree(path_to_log_file: str):
                 except AttributeError:
                     find_num = re.search(r'\[[0-9]*\]', line)
                 parent_list.append(find_num)
-                print('INFO', find_num)
             elif line[:4] == 'DEBU':
                 if 'left' in line.split('.')[0]:
                     side = 'left'
@@ -98,11 +96,13 @@ def restore_tree(path_to_log_file: str):
                     res = [re.search(r'\[[0-9]*\]', line), side,
                            re.search(r'\[[0-9]*\]', line.split('.')[1])]
                 child_list.append(res[2])
-                print('DEBUG', res)
             else:
                 print('Not log matchings')
-    print(parent_list)
-    print(child_list)
+    for p in parent_list:
+        for c in child_list:
+            if not p == c:
+                parent_list.remove(c)
+    print('root is', parent_list)
 
 
 if __name__ == "__main__":
