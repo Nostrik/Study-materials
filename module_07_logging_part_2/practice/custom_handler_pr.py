@@ -1,7 +1,8 @@
 import logging
+import sys
 
 
-class CustomFileHandler(logging.Handler):
+class CustomHandlerPr(logging.Handler):
 
     def __init__(self, file_name, mode='a'):
         super().__init__()
@@ -9,9 +10,10 @@ class CustomFileHandler(logging.Handler):
         self.mode = mode
 
     def emit(self, record: logging.LogRecord) -> None:
-        message = self.format(record)
-        with open(self.file_name, mode=self.mode) as f:
-            f.write(message + '\n')
+        msg = self.format(record)
+        print('my custom handler', msg)
+        with open(self.file_name, self.mode) as kek:
+            kek.write(msg + '\n')
 
 
 dict_config = {
@@ -28,22 +30,21 @@ dict_config = {
             "level": "DEBUG",
             "formatter": "base"
         },
-        "file": {
-            "()": CustomFileHandler,
+        'flow': {
+            "()": CustomHandlerPr,
             "level": "DEBUG",
             "formatter": "base",
-            "file_name": "customlogfile.log",
-            "mode": "a"
+            "file_name": 'pr_log_1.log',
+            "mode": 'a'
         }
     },
     "loggers": {
         "module_logger": {
             "level": "DEBUG",
-            "handlers": ["file", "console"],
-            # "propagate": False,
+            "handlers": ["flow", 'console'],
+            # "propagate": False
         }
     },
-
     # "filters": {},
     # "root": {} # == "": {}
 }
