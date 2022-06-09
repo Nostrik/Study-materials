@@ -1,11 +1,12 @@
 import logging
+import logging.config
 import flask
-
+from config import config
 from http_utils import get_ip_address
 from subprocess_utils import get_kernel_version
 
-
-logging.basicConfig(level='DEBUG')
+logging.config.dictConfig(config)
+# logging.basicConfig(level='DEBUG')
 logger = logging.getLogger('main')
 
 app = flask.Flask(__name__)
