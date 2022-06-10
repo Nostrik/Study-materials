@@ -1,5 +1,4 @@
 import logging
-import datetime
 
 
 class CustomHandlerForTaskFiveModuleSeven(logging.Handler):
@@ -10,9 +9,6 @@ class CustomHandlerForTaskFiveModuleSeven(logging.Handler):
         self.mode = mode
 
     def emit(self, record: logging.LogRecord) -> None:
-        time_point = datetime.datetime.now()
-        # print(record.__getattribute__())
-        a = record
         msg = self.format(record)
         with open(self.file, mode=self.mode) as log_file:
             log_file.write(msg + '\n')
@@ -38,20 +34,28 @@ config = {
             "formatter": "base",
             "file_name": "task_five_mod_seven.log",
             "mode": "a"
+        },
+        "rotating_time_handler": {
+            "class": "logging.handlers.TimedRotatingFileHandler",
+            "formatter": "base",
+            "filename": "logging_at_10.log",
+            "when": "H",
+            "interval": 10,
+            "backupCount": 0
         }
     },
     "loggers": {
         "main": {
             "level": "DEBUG",
-            "handlers": ["file", "console"]
+            "handlers": ["console", "rotating_time_handler"]
         },
         "http_utils": {
             "level": "INFO",
-            "handlers": ["file", "console"]
+            "handlers": ["console", "rotating_time_handler"]
         },
         "subprocess_utils": {
             "level": "INFO",
-            "handlers": ["file", "console"]
+            "handlers": ["console", "rotating_time_handler"]
         }
     }
 }
