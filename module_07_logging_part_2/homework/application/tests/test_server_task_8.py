@@ -7,7 +7,6 @@ class TestLogHandler(unittest.TestCase):
     def setUp(self) -> None:
         app.config['TESTING'] = True
         app.config['DEBUG'] = True
-        # app.config['PORT'] = 5000
         self.app_server = app.test_client()
         self.base_url = '/log-entry'
 
@@ -17,3 +16,7 @@ class TestLogHandler(unittest.TestCase):
         code = response.status_code
         response_text = response.data.decode()
         self.assertTrue(simple_msg in response_text)
+
+    def test_handler(self):
+        run_handler = main(0)
+        pass

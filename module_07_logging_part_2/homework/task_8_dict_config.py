@@ -12,13 +12,7 @@ class CustomHandlerForTask8(logging.Handler):
 
     def emit(self, record: logging.LogRecord) -> None:
         msg = self.format(record)
-        request = requests.post("http://localhost:5000/log-entry", data={"msg": msg})
-        print(request.status_code)
-        print(request.text)
-        command_str = f'curl -X POST {self.server} --data"msg={msg}"'
-        command = shlex.split(command_str)
-        print(command_str)
-        proc = subprocess.Popen()
+        proc = subprocess.Popen([f'curl -X POST {self.server} --data "msg={msg}"'], shell=True, stdout=subprocess.PIPE)
 
 
 d_config = {
