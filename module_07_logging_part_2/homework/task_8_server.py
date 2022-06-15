@@ -6,9 +6,13 @@ app = Flask(__name__)
 
 @app.route("/log-entry", methods=["POST"])
 def accept_log_entry():
-    msg = request.form.getlist
-    print(msg)
-    return f'you test msg is {msg}'
+    msg = request.form.get('msg')
+    return f'{msg}'
+
+
+@app.route("/query-example")
+def query_example():
+    return "Query example"
 
 
 if __name__ == '__main__':
