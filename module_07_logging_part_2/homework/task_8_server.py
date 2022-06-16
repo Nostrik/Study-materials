@@ -7,8 +7,8 @@ logger = logging.getLogger('server_logger')
 logging.basicConfig()
 logger.setLevel('DEBUG')
 handler = logging.FileHandler('task_8_log_ser.log', mode='w')
-formatter = logging.Formatter(fmt="(levelname)s | %(name)s | %(asctime)s | %(lineno)d | %(message)s |")
-handler.setFormatter(formatter)
+# formatter = logging.Formatter(fmt="(levelname)s | %(name)s | %(asctime)s | %(lineno)d | %(message)s |")
+# handler.setFormatter(formatter)
 logger.addHandler(handler)
 
 
@@ -16,6 +16,7 @@ logger.addHandler(handler)
 def accept_log_entry():
     msg = request.form.get('msg')
     logger.debug(msg)
+    print('logger.debug(msg)')
     return f'{msg}'
 
 

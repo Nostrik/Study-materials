@@ -19,6 +19,7 @@ class TestLogHandler(unittest.TestCase):
 
     def test_handler_debug_level(self):
         run_handler = main(0)
+        # response = self.app_server.post(self.base_url, data={"msg": 'simple_msg'})
         with open('task_8_log_ser.log', 'r') as log_file:
             text = log_file.read()
         # self.assertTrue('DEBUG' in text)
@@ -46,3 +47,7 @@ class TestLogHandler(unittest.TestCase):
     #     with open('task_8_log_ser.log', 'r') as log_file:
     #         text = log_file.read()
     #     self.assertTrue('WARNING' in text)
+
+
+if __name__ == '__main__':
+    unittest.main()
