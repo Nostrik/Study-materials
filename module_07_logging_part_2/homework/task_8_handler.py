@@ -23,6 +23,9 @@ def main(cnt):
 
 
 if __name__ == '__main__':
-    while True:
-        val = int(input(' '))
-        main(val)
+    # while True:
+        # val = int(input(' '))
+    main(0)
+    main(1)
+    main(2)
+    main(3)

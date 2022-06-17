@@ -13,6 +13,8 @@ class CustomHandlerForTask8(logging.Handler):
     def emit(self, record: logging.LogRecord) -> None:
         msg = self.format(record)
         proc = subprocess.Popen([f'curl -X POST {self.server} --data "msg={msg}"'], shell=True, stdout=subprocess.PIPE)
+        # proc = subprocess.call([f'curl -X POST {self.server} --data "msg=test"'], shell=True)
+        # request = requests.post(self.server, data={'msg': msg})
 
 
 d_config = {
