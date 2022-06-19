@@ -9,7 +9,7 @@ logger.setLevel('DEBUG')
 handler = logging.FileHandler('task_8_log_ser.log', mode='w')
 # formatter = logging.Formatter(fmt="(levelname)s | %(name)s | %(asctime)s | %(lineno)d | %(message)s |")
 # handler.setFormatter(formatter)
-logger.addHandler(handler)
+# logger.addHandler(handler)
 
 
 @app.route("/log-entry", methods=["POST"])
