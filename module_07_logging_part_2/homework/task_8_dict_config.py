@@ -1,20 +1,28 @@
 import logging
-import requests
+import sys
 import shlex
 import subprocess
 
 
 class CustomHandlerForTask8(logging.Handler):
 
-    def __init__(self):
+    def __init__(self, base_url):
         super().__init__()
-        self.server = "http://localhost:5000/log-entry"
+        self.base_url = base_url
 
     def emit(self, record: logging.LogRecord) -> None:
         msg = self.format(record)
         # proc = subprocess.Popen([f'curl -X POST {self.server} --data "msg={msg}"'], shell=True, stdout=subprocess.PIPE)
         # proc = subprocess.call([f'curl -X POST {self.server} --data "msg=test"'], shell=True)
-        request = requests.post(self.server, data={'msg': msg})
+        # request = requests.post(self.server, data={'msg': msg})
+        command = f'curl -X POST {self.base_url} --data "message={msg}"'
+        command = shlex.split(command)
+        process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        process.wait()
+        if process.returncode == 0:
+            print('Send', msg, file=sys.stderr)
+        else:
+            print('Send error', file=sys.stderr)
 
 
 d_config = {
@@ -34,7 +42,8 @@ d_config = {
         "server_pusher": {
             "()": CustomHandlerForTask8,
             "level": "DEBUG",
-            "formatter": "base"
+            "formatter": "base",
+            "base_url": "http://localhost:5000/log-entry"
         }
     },
     "loggers": {

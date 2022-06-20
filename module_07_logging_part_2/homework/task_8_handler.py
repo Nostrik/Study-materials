@@ -7,25 +7,13 @@ logging.config.dictConfig(d_config)
 logger = logging.getLogger('task_8_logger')
 
 
-def main(cnt):
-    if cnt == 0:
-        logger.debug("debug_test")
-    elif cnt == 1:
-        logger.info("info_test")
-    elif cnt == 2:
-        logger.error("error_test")
-    elif cnt == 3:
-        logger.critical("critical_error")
-    elif cnt == 4:
-        logger.warning("warning_error")
-    else:
-        exit(0)
+def main():
+    logger.debug("debug_test")
+    logger.info("info_test")
+    logger.error("error_test")
+    logger.critical("critical_error")
+    logger.warning("warning_error")
 
 
 if __name__ == '__main__':
-    # while True:
-        # val = int(input(' '))
-    main(0)
-    main(1)
-    main(2)
-    main(3)
+    main()
