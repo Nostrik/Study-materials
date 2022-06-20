@@ -1,23 +1,26 @@
-import logging
-from flask import Flask, request
+from flask import Flask
+from flask_wtf import FlaskForm
+from wtforms import StringField
+from wtforms.validators import InputRequired
 
 
 app = Flask(__name__)
-# logger = logging.getLogger('server_logger')
-# logging.basicConfig()
-# logger.setLevel('DEBUG')
-# handler = logging.FileHandler('task_8_log_ser.log', mode='w')
-# formatter = logging.Formatter(fmt="(levelname)s | %(name)s | %(asctime)s | %(lineno)d | %(message)s |")
-# handler.setFormatter(formatter)
-# logger.addHandler(handler)
+
+
+class GetMsgForm(FlaskForm):
+    msg = StringField(validators=[InputRequired()])
 
 
 @app.route("/log-entry", methods=["POST"])
 def accept_log_entry():
-    msg = request.form.get('msg')
-    with open('task_8_log_ser.log', mode='a') as file:
-        file.write(f'{msg} \n')
-    return f'{msg}'
+    form = GetMsgForm()
+
+    if form.validate_on_submit():
+        message = form.msg.data,
+        with open('task_8_log_ser.log', mode='a') as file:
+            file.write(f'{message} \n')
+        return f'{message}', 200
+    return 'Cannot process form', 400
 
 
 @app.route("/query-example")
