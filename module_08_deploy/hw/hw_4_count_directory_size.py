@@ -11,9 +11,22 @@
     функция должна выкинуть исключение ValueError с красивым описание ошибки
 """
 
+import os
 from pathlib import Path
 from typing import Union
 
 
 def calculate_directory_size(directory_path: Union[str, Path] = ".") -> int:
-    pass
+    size_cnt = 0
+    path_items = os.listdir(directory_path)
+    for item in path_items:
+        print(os.path.isfile(os.path.join(directory_path, item)))
+        new_path_temp = os.path.join(directory_path, item)
+        if os.path.isfile(new_path_temp):
+            size_cnt += os.path.getsize(new_path_temp)
+    return size_cnt
+
+
+if __name__ == "__main__":
+    test_path = '/home/nostrik/Documents'
+    print(calculate_directory_size(test_path))
