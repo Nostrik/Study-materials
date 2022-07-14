@@ -14,19 +14,22 @@
 import os
 from pathlib import Path
 from typing import Union
+size_cnt = 0
 
 
 def calculate_directory_size(directory_path: Union[str, Path] = ".") -> int:
-    size_cnt = 0
-    path_items = os.listdir(directory_path)
-    for item in path_items:
-        print(os.path.isfile(os.path.join(directory_path, item)))
-        new_path_temp = os.path.join(directory_path, item)
-        if os.path.isfile(new_path_temp):
-            size_cnt += os.path.getsize(new_path_temp)
-    return size_cnt
+    global size_cnt
+    for i_elem in os.listdir(directory_path):
+        path = os.path.join(directory_path, i_elem)
+        if os.path.isdir(path):
+            calculate_directory_size(path)
+        else:
+            size_cnt += os.path.getsize(path)
+    return f'directory_size is {size_cnt}'
 
 
 if __name__ == "__main__":
-    test_path = '/home/nostrik/Documents'
+    test_path = '/home/nostrik/Downloads'
+    pathlib_obj = Path('home', 'nostrik', 'Downloads')
     print(calculate_directory_size(test_path))
+    print(calculate_directory_size(pathlib_obj))
