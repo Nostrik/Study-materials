@@ -19,17 +19,19 @@ size_cnt = 0
 
 def calculate_directory_size(directory_path: Union[str, Path] = ".") -> int:
     global size_cnt
-    for i_elem in os.listdir(directory_path):
-        path = os.path.join(directory_path, i_elem)
-        if os.path.isdir(path):
-            calculate_directory_size(path)
-        else:
-            size_cnt += os.path.getsize(path)
+    try:
+        for i_elem in os.listdir(directory_path):
+            path = os.path.join(directory_path, i_elem)
+            if os.path.isdir(path):
+                calculate_directory_size(path)
+            else:
+                size_cnt += os.path.getsize(path)
+    except FileNotFoundError:
+        raise ValueError("Несуществующий путь или НЕ директория")
     return f'directory_size is {size_cnt}'
 
 
 if __name__ == "__main__":
     test_path = '/home/nostrik/Downloads'
-    pathlib_obj = Path('home', 'nostrik', 'Downloads')
-    print(calculate_directory_size(test_path))
-    print(calculate_directory_size(pathlib_obj))
+    test2_path = '/Users/maksimfalev/Documents'
+    print(calculate_directory_size(test2_path))
