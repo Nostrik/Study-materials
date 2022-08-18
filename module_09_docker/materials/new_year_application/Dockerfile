@@ -1,4 +1,3 @@
-# FROM test_app
 FROM python:3.7.9-slim-stretch
 
 RUN mkdir /app
