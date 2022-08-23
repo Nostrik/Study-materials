@@ -1,5 +1,7 @@
 FROM python:3.7.9-slim-stretch
 
+ENV TERM xterm
+
 RUN mkdir /app
 
 RUN mkdir /app/static
