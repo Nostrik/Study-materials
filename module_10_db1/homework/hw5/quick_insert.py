@@ -1,10 +1,22 @@
+import functools
 from typing import Union
 
 Number = Union[int, float, complex]
 
 
 def find_insert_position(array: list[Number], number: Number) -> int:
-    pass
+    position = 0
+    if len(array) < 1:
+        raise ValueError
+    while True:
+        array.insert(position, number)
+        sort_list = array.copy()
+        sort_list.sort()
+        if functools.reduce(lambda x, y: x and y, map(lambda p, q: p == q, array, sort_list)):
+            break
+        array.pop(position)
+        position += 1
+    return position
 
 
 if __name__ == '__main__':
