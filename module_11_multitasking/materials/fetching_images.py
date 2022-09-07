@@ -6,7 +6,7 @@ import multiprocessing
 
 import requests
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 
@@ -32,13 +32,13 @@ def load_images_sequential():
 def load_images_multithreading():
     start = time.time()
     threads = []
-    for i in range(10):
+    for i in range(100):
         thread = threading.Thread(target=get_image, args=(URL, OUT_PATH.format(i)))
         thread.start()
-        threads.append(thread)
+        # threads.append(thread)
 
-    for thread in threads:
-        thread.join()
+    # for thread in threads:
+    #     thread.join()
 
     logger.info('Done in {:.4}'.format(time.time() - start))
 
@@ -46,21 +46,24 @@ def load_images_multithreading():
 def load_images_multiprocessing():
     start = time.time()
     procs = []
-    for i in range(10):
+    for i in range(1000):
         proc = multiprocessing.Process(
             target=get_image,
             args=(URL, OUT_PATH.format(i)),
         )
         proc.start()
-        procs.append(proc)
+        logger.debug(f"[Process number {i} started]")
+        # print(f"[Process number {i} started]")
+        # procs.append(proc)
 
-    for proc in procs:
-        proc.join()
+    # for proc in procs:
+    #     proc.join()
 
-    logger.info('Done in {:.4}'.format(time.time() - start))
+    logger.info('       Done in {:.4}'.format(time.time() - start))
 
 
 if __name__ == '__main__':
     if not os.path.exists('./temp'):
         os.mkdir('./temp')
     load_images_multiprocessing()
+    # load_images_multithreading()
