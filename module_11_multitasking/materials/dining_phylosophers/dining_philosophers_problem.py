@@ -37,6 +37,7 @@ class Philosopher(threading.Thread):
         time.sleep(random.randint(1, 5))
         logger.info(f'Philosopher {self.getName()} finishes eating and leaves to think.')
 
+
 def main():
     forks = [threading.Lock() for n in range(5)]  # initialising array of semaphore i.e forks
 

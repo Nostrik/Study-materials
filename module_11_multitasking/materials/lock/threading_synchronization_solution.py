@@ -16,8 +16,8 @@ def worker_one():
             COUNTER += 1
 
             print(f'Worker one incremented counter to {COUNTER}')
-            sleep_time = random.randint(0, 1)
-            time.sleep(sleep_time)
+            # sleep_time = random.randint(0, 1)
+            # time.sleep(sleep_time)
 
 
 def worker_two():
@@ -27,8 +27,8 @@ def worker_two():
             COUNTER -= 1
 
             print(f'Worker two decremented counter to {COUNTER}')
-            sleep_time = random.randint(0, 1)
-            time.sleep(sleep_time)
+            # sleep_time = random.randint(0, 1)
+            # time.sleep(sleep_time)
 
 
 def main():
@@ -40,6 +40,7 @@ def main():
     thread_1.join()
     thread_2.join()
     print('Execution time {:.4}'.format(time.time() - start))
+
 
 if __name__ == '__main__':
     main()
