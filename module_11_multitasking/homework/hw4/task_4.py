@@ -4,9 +4,30 @@ import threading
 import time
 
 TOTAL_TICKETS = 10
+AVAILABLE_TICKET = 10
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+
+class Director(threading.Thread):
+    def __init__(self, semaphore: threading.Semaphore):
+        super(Director, self).__init__()
+        self.lock = semaphore
+        logger.info('Director started work')
+
+    def run(self):
+        global TOTAL_TICKETS, AVAILABLE_TICKET
+        while TOTAL_TICKETS:
+            if AVAILABLE_TICKET < 4:
+                with self.lock:
+                    tickets_to_print = 10 - (AVAILABLE_TICKET % 10)
+                    if tickets_to_print > TOTAL_TICKETS:
+                        tickets_to_print = TOTAL_TICKETS
+                    AVAILABLE_TICKET += tickets_to_print
+                    TOTAL_TICKETS -= tickets_to_print
+                    logger.info(f'Director put {tickets_to_print} new tickets')
+        logger.info('Director stops work, not more tickets left.')
 
 
 class Seller(threading.Thread):
@@ -36,7 +57,9 @@ class Seller(threading.Thread):
 
 def main():
     semaphore = threading.Semaphore()
-    sellers = []
+    director = Director(semaphore=semaphore)
+    director.start()
+    sellers = [director]
     for _ in range(4):
         seller = Seller(semaphore)
         seller.start()
