@@ -6,7 +6,7 @@ from multiprocessing.pool import ThreadPool
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-list_numbers = range(1, 1000)
+list_numbers = [x for x in range(1, 1000)]
 
 
 def sum_fact(numbers: list):
@@ -41,6 +41,6 @@ def run_with_processpool():
 
 
 if __name__ == "__main__":
-    run_sequential_approach()
+    # run_sequential_approach()
     run_with_threadpool()
     # run_with_processpool()
