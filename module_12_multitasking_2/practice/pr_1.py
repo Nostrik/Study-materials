@@ -6,7 +6,7 @@ from multiprocessing.pool import ThreadPool
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-list_numbers = [x for x in range(1, 1000)]
+list_numbers = list(range(1, 10000))
 
 
 def sum_fact(numbers: list):
