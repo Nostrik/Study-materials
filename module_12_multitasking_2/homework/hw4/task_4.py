@@ -1,20 +1,29 @@
 import logging
-import multiprocessing
 import threading
 import requests
 import time
-from multiprocessing.pool import ThreadPool
-from multiprocessing import Pool
 
 
+temp_log_file = "temp_log.txt"
 logging.basicConfig(
-    filename="task_4.log",
+    filename=temp_log_file,
     level=logging.INFO,
     format="<%(threadName)s> - <%(message)s>"
 )
 logger = logging.getLogger(__name__)
 date_url = "https://showcase.api.linx.twenty57.net/UnixTime/fromunix"
 list_urls = [date_url] * 10
+buffer_list = []
+sem = threading.BoundedSemaphore()
+threading_list = []
+
+
+def clean_temp_file():
+    """
+    Clearing the log buffer file
+    """
+    file = open(temp_log_file, 'w')
+    file.close()
 
 
 def work_func():
@@ -23,23 +32,21 @@ def work_func():
     Writes a message log within 20 seconds.
     """
     url = date_url
-    from_time = str(time.time())[:10]
-    request = requests.get(url, params={'timestamp': from_time})
-    time_start = time.time()
-    current_time = 0
     log_data_list = []
-    while current_time - time_start < 5:
-        # logger.info(request.text)
-        log_data_list.append(request.text)
-        current_time = time.time()
+    cnt_requests = 0
+    while cnt_requests != 5:
+        from_time = str(time.time())[:10]
+        request = requests.get(url, params={'timestamp': from_time})
+        log_data_list.append(request.text[1:20])
+        time.sleep(1)
+        cnt_requests += 1
     for i_log in log_data_list:
         logger.info(i_log)
 
 
-if __name__ == "__main__":
-    for i_thread in range(10):
-        thread = threading.Thread(target=work_func)
-        thread.start()
-        print(f"Thread number {i_thread} started")
-        time.sleep(0.5)
-    exit(0)
+clean_temp_file()
+for i_thread in range(2):
+    thread = threading.Thread(target=work_func)
+    thread.start()
+    print(f"Thread number {i_thread} started")
+    time.sleep(0.5)
