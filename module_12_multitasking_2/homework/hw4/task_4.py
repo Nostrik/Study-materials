@@ -37,14 +37,9 @@ def work_func():
 
 
 if __name__ == "__main__":
-    # pool = ThreadPool(processes=10)
-    # result = pool.map(work_func, list_urls)
-    # pool.close()
-    # pool.join()
     for i_thread in range(10):
         thread = threading.Thread(target=work_func)
         thread.start()
-        thread.join()
         print(f"Thread number {i_thread} started")
         time.sleep(0.5)
     exit(0)
