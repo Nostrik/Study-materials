@@ -28,7 +28,6 @@ def clean_temp_file():
 
 def work_func():
     """
-    The function returns the current time using unix time stamp, converting it to human readable format.
     Writes a message log within 20 seconds.
     """
     url = date_url
@@ -36,16 +35,28 @@ def work_func():
     cnt_requests = 0
     while cnt_requests != 5:
         from_time = str(time.time())[:10]
-        request = requests.get(url, params={'timestamp': from_time})
-        log_data_list.append(request.text[1:20])
+        # request = requests.get(url, params={'timestamp': from_time})
+        # log_data_list.append(request.text[1:20])
+        log_data_list.append(from_time)
         time.sleep(1)
         cnt_requests += 1
     for i_log in log_data_list:
         logger.info(i_log)
 
 
+def stamp_to_human(string: str) -> str:
+    """
+    Function to convert date format from unix to human readable
+    """
+    request = requests.get(date_url, params={'timestamp': string})
+    if request.status_code == 200:
+        return request.text
+    else:
+        print("Service UnixTime is avaliable..")
+
+
 clean_temp_file()
-for i_thread in range(2):
+for i_thread in range(3):
     thread = threading.Thread(target=work_func)
     thread.start()
     print(f"Thread number {i_thread} started")
