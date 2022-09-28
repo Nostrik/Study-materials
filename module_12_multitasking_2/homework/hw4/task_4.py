@@ -34,7 +34,7 @@ def work_func():
     log_data_list = []
     cnt_requests = 0
     while cnt_requests != 5:
-        from_time = str(time.time())[:10]
+        from_time = str(time.time())
         # request = requests.get(url, params={'timestamp': from_time})
         # log_data_list.append(request.text[1:20])
         log_data_list.append(from_time)
@@ -48,6 +48,7 @@ def stamp_to_human(string: str) -> str:
     """
     Function to convert date format from unix to human readable
     """
+    print("logger, string - ", string)
     request = requests.get(date_url, params={'timestamp': string})
     if request.status_code == 200:
         return request.text
@@ -55,9 +56,10 @@ def stamp_to_human(string: str) -> str:
         print("Service UnixTime is avaliable..")
 
 
-clean_temp_file()
-for i_thread in range(3):
-    thread = threading.Thread(target=work_func)
-    thread.start()
-    print(f"Thread number {i_thread} started")
-    time.sleep(0.5)
+if __name__ == "__main__":
+    clean_temp_file()
+    for i_thread in range(3):
+        thread = threading.Thread(target=work_func)
+        thread.start()
+        print(f"Thread number {i_thread} started")
+        time.sleep(0.5)

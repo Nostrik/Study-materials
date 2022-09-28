@@ -18,9 +18,12 @@ def final(material: list) -> list:
     Creating a sorted list with a human readable date and time
     """
     result_list = []
-    for element in material:
-        human_date_time = stamp_to_human(element[26:36])
-        result_list.append(element[:25] + human_date_time)
+    try:
+        for element in material:
+            human_date_time = stamp_to_human(element[14:24])
+            result_list.append(element[:25] + human_date_time)
+    except Exception as er:
+        print('Some problem with request;', er)
     return result_list
 
 
@@ -32,7 +35,7 @@ if __name__ == "__main__":
     print("You can start sort temp file")
     sort_temp_file()
     pprint(tmp_list)
-    # sort_temp_list = sorted(tmp_list, key=lambda d: d[26:36])
-    # pprint(sort_temp_list)
-    # print("Start date/time conversion...")
-    # print(final(sort_temp_list))
+    sort_temp_list = sorted(tmp_list, key=lambda d: d[14:24])
+    pprint(sort_temp_list)
+    print("Start date/time conversion...")
+    print(final(sort_temp_list))
