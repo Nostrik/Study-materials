@@ -11,6 +11,8 @@ def sort_temp_file():
     for line in file:
         tmp_list.append(line.rstrip())
     # sorted(tmp_list, key=lambda d: d[14:33])
+    sort_temp_list = sorted(tmp_list, key=lambda d: d[14:24])
+    return sort_temp_list
 
 
 def final(material: list) -> list:
@@ -33,9 +35,8 @@ if __name__ == "__main__":
     proc = subprocess.Popen(['python', 'task_4.py'])
     proc.wait()
     print("You can start sort temp file")
-    sort_temp_file()
-    pprint(tmp_list)
-    sort_temp_list = sorted(tmp_list, key=lambda d: d[14:24])
-    pprint(sort_temp_list)
-    print("Start date/time conversion...")
-    print(final(sort_temp_list))
+    # pprint(tmp_list)
+    final_list = sort_temp_file()
+    pprint(final_list)
+    # print("Start date/time conversion...")
+    # print(final(sort_temp_list))

@@ -34,7 +34,7 @@ def work_func():
     log_data_list = []
     cnt_requests = 0
     while cnt_requests != 5:
-        from_time = str(time.time())
+        from_time = str(time.time())[:10]
         # request = requests.get(url, params={'timestamp': from_time})
         # log_data_list.append(request.text[1:20])
         log_data_list.append(from_time)
@@ -58,7 +58,7 @@ def stamp_to_human(string: str) -> str:
 
 if __name__ == "__main__":
     clean_temp_file()
-    for i_thread in range(3):
+    for i_thread in range(2):
         thread = threading.Thread(target=work_func)
         thread.start()
         print(f"Thread number {i_thread} started")
