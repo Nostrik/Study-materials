@@ -1,42 +1,65 @@
+# import threading
+from queue import Queue
 import time
+import ntplib
+import datetime as dt
 import threading
-import queue
-import logging
+import multiprocessing
+
+# def thread_time_decorator(thread):
+#     @wraps(thread)
+#     def wrapper(*args, **kwargs):
+#         start = time.perf_counter()
+#         thread(*args, **kwargs)
+#         end = time.perf_counter()
+#         threading.current_thread().thread_duration = end - start
+#     return wrapper
+
+THREADS_AMOUNT = 3
+THREADS_WORK_TIME = 5
 
 
-logging.basicConfig(
-    filename="log4.log",
-    level=logging.INFO,
-    format="<%(threadName)s> - <%(message)s>"
-)
-logger = logging.getLogger(__name__)
+def worker2(queue):
+    ev = threading.Event()
+    thr = threading.Thread(target=worker, args=(ev, queue))
+    thr.start()
+    thr.join(THREADS_WORK_TIME)
+    ev.set()
 
 
-def worker(q: queue.Queue, lc: threading.Lock):
-    # тут данные кладем в очередь
+def worker(e, queue):
+    while True:
+        # беру дату с ntp сервера, но они блочат запросы если брать слишком много/сликом часто.
+        c = ntplib.NTPClient()
+        response = c.request('pool.ntp.org')
+
+        # print(f"finished {multiprocessing.current_process().name}/{threading.current_thread().name}-{dt.datetime.fromtimestamp(response.tx_time)} ")
+        queue.put(f"finished {multiprocessing.current_process().name}/{threading.current_thread().name}-{dt.datetime.fromtimestamp(response.tx_time)} ")
+        time.sleep(2)
+        if e.is_set():
+            break
 
 
-def writer(q: queue.Queue, lc: threading.Lock, ev: threading.Event):
-    # тут данные сортирвем и достаем из очереди и записываем в файл
+def main():
+
+    q = Queue()
+
+    threads = [threading.Timer(1, function=worker2, args=(q,)) for _ in range(THREADS_AMOUNT)]
+    for thread in threads:
+        thread.start()
+
+    for thread in threads:
+        thread.join()
+
+    li = list(q.queue)
+    # это впихнуть в файл:
+    print(sorted(li, key=lambda d: d[-26]))
+
+    # while not q.empty():
+    #     print(q.get())
+
+    # q.join()
 
 
 if __name__ == '__main__':
-    start = time.time()
-    lock = threading.Lock()
-    event = threading.Event()
-    buffer = queue.Queue()
-    writer_thread = threading.Thread(target=writer, args=(buffer, lock, event,))
-    writer_thread.start()
-    threads = []
-
-    for i in range(1, 11):
-        thread = threading.Timer(i, function=worker, args=(buffer, lock,))
-        thread.start()
-        threads.append(thread)
-
-    for t in threads:
-        t.join()
-    event.set()
-
-    end = time.time()
-    logger.info(f'Finished in {end - start}')
+    main()
