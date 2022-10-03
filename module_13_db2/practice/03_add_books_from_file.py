@@ -8,10 +8,30 @@
 При написании insert запроса, пожалуйста, используйте параметризованные SQL запросы.
 """
 import sqlite3
+import csv
+
+
+class AddingBook:
+    def __init__(self, book_name: str, author: str, publish_year: str, isbn: str) -> None:
+        self.book_name = book_name
+        self.author = author
+        self.publish_year = publish_year
+        self.isbn = isbn
 
 
 def add_books_from_file(c: sqlite3.Cursor, file_name: str) -> None:
-    ...
+    with open(file_name) as csvfile:
+        csv_obj = csv.reader(csvfile, delimiter=',')
+        for row in csv_obj:
+            print(row)
+            book = AddingBook(row[1], row[2], row[3], row[0])
+            c.execute(
+                """
+                INSERT INTO 'table_books' (book_name, author, publish_year, isbn) VALUES
+                    (?, ?, ?, ?)
+                """,
+                (book.book_name, book.author, book.publish_year, book.isbn)
+            )
 
 
 if __name__ == "__main__":

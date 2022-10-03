@@ -11,9 +11,17 @@
 """
 import sqlite3
 
+sql_request = """
+SELECT COUNT(*)
+    FROM 'table_green_future'
+    WHERE action = 'отнесли мешки на завод'
+"""
+
 
 def get_number_of_lucky_days(c: sqlite3.Cursor, month_number: int) -> float:
-    ...
+    c.execute(sql_request, (month_number,))
+    request_result, *_ = c.fetchone()
+    return request_result
 
 
 if __name__ == "__main__":
