@@ -16,6 +16,21 @@ SELECT COUNT(*)
     FROM 'table_green_future'
     WHERE action = 'отнесли мешки на завод'
 """
+full_sql_request = """
+SELECT 
+  count(*) 
+FROM 
+  (
+    SELECT 
+      action 
+    FROM 
+      table_green_future 
+    WHERE 
+      date = '2021-?-01'
+  ) 
+WHERE 
+  action = 'отнесли мешки на завод'
+"""
 
 
 def get_number_of_lucky_days(c: sqlite3.Cursor, month_number: int) -> float:
