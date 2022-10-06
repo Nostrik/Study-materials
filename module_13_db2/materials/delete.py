@@ -1,7 +1,8 @@
 import sqlite3
 
 delete_request = """
-DELETE FROM `table_stars`;
+DELETE FROM `table_stars`
+    WhERE name LIKE 'А%';
 """
 
 if __name__ == "__main__":

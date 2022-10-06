@@ -12,13 +12,8 @@
 import sqlite3
 
 sql_request = """
-SELECT COUNT(*)
-    FROM 'table_green_future'
-    WHERE action = 'отнесли мешки на завод'
-"""
-full_sql_request = """
 SELECT 
-  count(*) 
+  COUNT(*) 
 FROM 
   (
     SELECT 
@@ -26,7 +21,7 @@ FROM
     FROM 
       table_green_future 
     WHERE 
-      date = '2021-?-01'
+      strftime('%m', date) = ?
   ) 
 WHERE 
   action = 'отнесли мешки на завод'
@@ -36,6 +31,7 @@ WHERE
 def get_number_of_lucky_days(c: sqlite3.Cursor, month_number: int) -> float:
     c.execute(sql_request, (month_number,))
     request_result, *_ = c.fetchone()
+    print(request_result)
     return request_result
 
 
@@ -43,6 +39,6 @@ if __name__ == "__main__":
     with sqlite3.connect("practise.db") as conn:
         cursor = conn.cursor()
 
-        percent_of_lucky_days = get_number_of_lucky_days(cursor, 12)
+        percent_of_lucky_days = get_number_of_lucky_days(cursor, '12')
 
         print(f"В декабре у ребят было {percent_of_lucky_days:.02f}% удачных дня!")
