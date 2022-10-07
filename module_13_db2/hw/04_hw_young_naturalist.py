@@ -17,17 +17,31 @@
 import datetime
 import sqlite3
 
+sql_insert_request = """
+INSERT INTO 'table_birds' (brd_name, date) VALUES 
+    (?, ?)
+"""
+sql_select_request = """
+SELECT count(*) FROM 'table_birds'
+    WHERE brd_name = ?
+"""
+
 
 def log_bird(
         c: sqlite3.Cursor,
         bird_name: str,
         date_time: str,
 ) -> None:
-    ...
+    c.execute(sql_insert_request, (bird_name, date_time))
 
 
 def check_if_such_bird_already_seen(c: sqlite3.Cursor, bird_name: str) -> bool:
-    ...
+    c.execute(sql_select_request, (bird_name, ))
+    result = c.fetchone()
+    if result != 0:
+        return True
+    else:
+        return False
 
 
 if __name__ == "__main__":
