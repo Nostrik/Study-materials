@@ -31,30 +31,25 @@ def generate_test_data(c: sqlite3.Cursor, number_of_groups: int) -> None:
         countries_file = countries.readlines()
     with open("commands.txt", "r") as commands:
         commands_file = commands.readlines()
-    # count = 1
-    # for i in range(number_of_groups * 4):
-    #     row = [
-    #         count,  # "номер команды"
-    #         random.choice(commands_file),  # "название"
-    #         random.choice(countries_file),  # "страна"
-    #         random.choice(commands_power)  # "сила команды"
-    #     ]
-    #     c.execute("INSERT INTO 'uefa_commands' VALUES (?, ?, ?, ?)", (row[0], row[1], row[2], row[3]))
-    #     count += 1
-
-
-    n = 0  # n += 4
-    g = 1  # group number
-    rows2 = [
-        (1 + n, random.choice(commands_file), random.choice(countries_file), commands_power[0]),
-        (2 + n, random.choice(commands_file), random.choice(countries_file), commands_power[1]),
-        (3 + n, random.choice(commands_file), random.choice(countries_file), commands_power[1]),
-        (4 + n, random.choice(commands_file), random.choice(countries_file), commands_power[2]),
-    ]
-    c.executemany("SELECT INTO 'uefa_commands' VALUES (?, ?, ?, ?)", rows2)
-    n += 4
-    # c.executemany("INSERT INTO 'uefa_draw' VALUES (?, ?)", (row2[0], g))
-    # g += 1
+    group = 1
+    n = 1
+    for i in range(number_of_groups):
+        rows = [
+            (n, random.choice(commands_file), random.choice(countries_file), commands_power[0]),
+            (n+1, random.choice(commands_file), random.choice(countries_file), commands_power[1]),
+            (n+2, random.choice(commands_file), random.choice(countries_file), commands_power[1]),
+            (n+3, random.choice(commands_file), random.choice(countries_file), commands_power[2]),
+        ]
+        rows2 = [
+            (n, n, group),
+            (n+1, n+1, group),
+            (n+2, n+2, group),
+            (n+3, n+3, group)
+        ]
+        c.executemany("INSERT INTO 'uefa_commands' VALUES (?, ?, ?, ?)", rows)
+        n += 4
+        c.executemany("INSERT INTO 'uefa_draw' VALUES (? ,?, ?)", rows2)
+        group += 1
 
 
 if __name__ == "__main__":
