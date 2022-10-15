@@ -1,11 +1,12 @@
 from flask import Flask, render_template
+from typing import List
 
 from models import init_db, get_all_books, DATA
 
 app: Flask = Flask(__name__)
 
 
-def _get_html_table_for_books(books: list[dict]) -> str:
+def _get_html_table_for_books(books: List[dict]) -> str:
     table = """
 <table>
     <thead>

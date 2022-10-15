@@ -1,7 +1,7 @@
 import sqlite3
-from typing import Any, Optional
+from typing import Any, Optional, List
 
-DATA: list[dict] = [
+DATA: List[dict] = [
     {'id': 0, 'title': 'A Byte of Python', 'author': 'Swaroop C. H.'},
     {'id': 1, 'title': 'Moby-Dick; or, The Whale', 'author': 'Herman Melville'},
     {'id': 3, 'title': 'War and Peace', 'author': 'Leo Tolstoy'},
@@ -19,7 +19,7 @@ class Book:
         return getattr(self, item)
 
 
-def init_db(initial_records: list[dict]) -> None:
+def init_db(initial_records: List[dict]) -> None:
     with sqlite3.connect('table_books.db') as conn:
         cursor: sqlite3.Cursor = conn.cursor()
         cursor.execute(
@@ -36,7 +36,7 @@ def init_db(initial_records: list[dict]) -> None:
                 CREATE TABLE `table_books` (
                     id INTEGER PRIMARY KEY AUTOINCREMENT, 
                     title, 
-                    author, 
+                    author
                 )
                 """
             )
@@ -52,7 +52,7 @@ def init_db(initial_records: list[dict]) -> None:
             )
 
 
-def get_all_books() -> list[Book]:
+def get_all_books() -> List[Book]:
     with sqlite3.connect('table_books.db') as conn:
         cursor: sqlite3.Cursor = conn.cursor()
         cursor.execute(
