@@ -1,9 +1,11 @@
 from flask import Flask, render_template
 from typing import List
-
-from models import init_db, get_all_books, DATA
+import logging
+from models import init_db, get_all_books, DATA, get_book_by_author
 
 app: Flask = Flask(__name__)
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__)
 
 
 def _get_html_table_for_books(books: List[dict]) -> str:
@@ -40,6 +42,12 @@ def all_books() -> str:
 @app.route('/books/form')
 def get_books_form() -> str:
     return render_template('add_book.html')
+
+
+@app.route('/books/<author_name>')
+def get_book_by(author_name):
+    logger.debug('TEST MSG')
+    return render_template('index.html', books=get_book_by_author(author_name))
 
 
 if __name__ == '__main__':

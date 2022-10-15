@@ -61,3 +61,16 @@ def get_all_books() -> List[Book]:
             """
         )
         return [Book(*row) for row in cursor.fetchall()]
+
+
+def get_book_by_author(name) -> List[Book]:
+    with sqlite3.connect('table_books.db') as conn:
+        cursor: sqlite3.Cursor = conn.cursor()
+        cursor.execute(
+            """
+            SELECT * from `table_books`
+            WHERE author = ?
+            """, (name, )
+        )
+        res = [Book(*row) for row in cursor.fetchall()]
+        return res
