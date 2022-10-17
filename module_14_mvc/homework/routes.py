@@ -8,7 +8,7 @@ from wtforms.validators import InputRequired
 
 app: Flask = Flask(__name__)
 logging.basicConfig(level=logging.DEBUG)
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('[from routes]')
 
 
 class AddBookForm(FlaskForm):
@@ -68,14 +68,14 @@ def get_books_form():
 
 @app.route('/books/<author_name>')
 def get_book_by(author_name):
-    logger.debug('TEST MSG')
+    logger.debug('[ENDPOINT IS][/books/<author_name>]')
     return render_template('show_books_by.html', books=get_book_by_author(author_name))
 
 
-@app.route('/books/<id>')
+@app.route('/books/id/<id_book>')
 def book_id(id_book):
-    logger.debug(f'book_id is - {id_book}')
-    return render_template()
+    logger.debug(f'[ENDPOINT IS][/books/id/<id_book>] - book_id is - {id_book}')
+    return render_template('show_books_by.html', books=get_book_by_id(id_book))
 
 
 if __name__ == '__main__':

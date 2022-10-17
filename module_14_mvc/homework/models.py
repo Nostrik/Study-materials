@@ -99,13 +99,14 @@ def get_book_by_author(name) -> List[Book]:
 def get_book_by_id(book_id):
     with sqlite3.connect('table_books.db') as conn:
         cursor: sqlite3.Cursor = conn.cursor()
+        logger.debug(f'book id is - {book_id}')
         cursor.execute(
             """
             SELECT * FROM `table_books`
             WHERE id = ?
             """, (book_id, )
         )
-        return [Book(*row) for row in cursor.fetchall()]
+        return [increment_views_count(Book(*row)) for row in cursor.fetchall()]
 
 
 def increment_views_count(book_obj):
