@@ -3,16 +3,16 @@
 {% block content %}
 <body>
 <div class="form-style-10">
-    <form action="/books/author" method="post">
+    <form action="/books/id" method="post">
         {{ form.csrf_token }}
 <!--        <div class="section"><span>1</span>Book title</div>-->
 <!--        <div class="inner-wrap">-->
 <!--            <label>Book title<input type="text" name="book_title"/></label>-->
 <!--        </div>-->
 
-        <div class="section"><span>0</span>Author full name</div>
+        <div class="section"><span>0</span>Book ID</div>
         <div class="inner-wrap">
-            <label>Author full name<input type="text" name="author_name"/></label>
+            <label>Book ID<input type="text" name="book_id"/></label>
         </div>
 
         <div class="button-section">

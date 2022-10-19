@@ -68,7 +68,8 @@ def get_all_books() -> list[Book]:
             """
         )
         # result = [Book(*row) for row in cursor.fetchall()]
-        result = [increment_views_count(Book(*row)) for row in cursor.fetchall()]
+        result = [Book(*row) for row in cursor.fetchall()]
+        update_karma(result)
         return result
 
 
@@ -78,8 +79,8 @@ def add_new_book(book_title, author_name):
         cursor.execute(
             """
             INSERT INTO `table_books`
-            (title, author) VALUES (?, ?);
-            """, (book_title, author_name)
+            (title, author, views_cnt) VALUES (?, ?, ?);
+            """, (book_title, author_name, 0)
         )
 
 
@@ -93,6 +94,7 @@ def get_book_by_author(name) -> List[Book]:
             """, (name, )
         )
         res = [Book(*row) for row in cursor.fetchall()]
+        update_karma(res)
         return res
 
 
@@ -106,28 +108,19 @@ def get_book_by_id(book_id):
             WHERE id = ?
             """, (book_id, )
         )
-        return [increment_views_count(Book(*row)) for row in cursor.fetchall()]
+        res = [Book(*row) for row in cursor.fetchall()]
+        update_karma(res)
+        return res
 
 
-def increment_views_count(book_obj):
-    with sqlite3.connect('table_books.db') as conn:
-        cursor: sqlite3.Cursor = conn.cursor()
-        cursor.execute(
-            """
-            SELECT views_cnt FROM `table_books`
-            WHERE id = ?
-            """, (book_obj.id, )
-        )
-        value = cursor.fetchone()
-        logger.debug(f'value is - {value[0]}')
-        int_value = int(value[0])
-        int_value += 1
-        cursor.execute(
-            """
-            UPDATE `table_books`
-            SET views_cnt = ?
-            WHERE id = ?
-            """, (book_obj.id, str(int_value))
-        )
-    return book_obj
-
+def update_karma(books: List[Book]) -> None:
+    update_karma_query = """
+    UPDATE `table_books`
+        SET views_cnt = ?
+        WHERE id = ?;
+    """
+    with sqlite3.connect("table_books.db") as conn:
+        cursor = conn.cursor()
+        for book in books:
+            new_karma = book.views_cnt + 1
+            cursor.execute(update_karma_query, (new_karma, book.id))

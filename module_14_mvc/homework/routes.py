@@ -11,37 +11,21 @@ logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger('[from routes]')
 
 
-class AddBookForm(FlaskForm):
+class BookForm(FlaskForm):
     book_title = StringField(validators=[InputRequired()])
     author_name = StringField(validators=[InputRequired()])
 
 
-def _get_html_table_for_books(books: list[dict]) -> str:
-    table = """
-<table>
-    <thead>
-    <tr>
-        <th>ID</td>
-        <th>Title</td>
-        <th>Author</td>
-    </tr>
-    </thead>
-    <tbody>
-        {books_rows}
-    </tbody>
-</table>
-"""
-    rows: str = ''
-    for book in books:
-        rows += '<tr><td>{id}</tb><td>{title}</tb><td>{author}</tb></tr>'.format(
-            id=book['id'], title=book['title'], author=book['author'],
-        )
-    return table.format(books_rows=rows)
+class SearchAuthorForm(FlaskForm):
+    author_name = StringField(validators=[InputRequired()])
+
+
+class SearchIdForm(FlaskForm):
+    book_id = StringField(validators=[InputRequired()])
 
 
 @app.route('/books')
 def all_books() -> str:
-    # logger.debug(f'------>  {get_all_books()}')
     return render_template(
         'index.html',
         books=get_all_books(),
@@ -50,7 +34,7 @@ def all_books() -> str:
 
 @app.route('/books/form', methods=['GET', 'POST'])
 def get_books_form():
-    add_form = AddBookForm()
+    add_form = BookForm()
     if request.method == 'POST':
         if add_form.validate_on_submit():
             # title = request.form.get('book_title')
@@ -63,22 +47,38 @@ def get_books_form():
             add_new_book(title, author)
             return f'Book added successful'
         return f"Invalid input, {add_form.errors}", 400
-    return render_template('add_book.html')
+    return render_template('add_book.html', form=add_form)
 
 
-@app.route('/books/<author_name>')
-def get_book_by(author_name):
-    logger.debug('[ENDPOINT IS][/books/<author_name>]')
-    return render_template('show_books_by.html', books=get_book_by_author(author_name))
+@app.route('/books/author', methods=['GET', 'POST'])
+def get_book_by():
+    form = SearchAuthorForm()
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            author_name = form.author_name.data
+            logger.debug(f'f[POST][/books/<author_name>] - author_name is - {author_name}')
+            books = get_book_by_author(author_name)
+            return render_template('show_books_by.html', books=books, form=form)
+        return f"Invalid input, {form.errors}", 400
+    logger.debug('[GET][/books/<author_name>]')
+    return render_template('show_books_by.html', form=form)
 
 
-@app.route('/books/id/<id_book>')
-def book_id(id_book):
-    logger.debug(f'[ENDPOINT IS][/books/id/<id_book>] - book_id is - {id_book}')
-    return render_template('show_books_by.html', books=get_book_by_id(id_book))
+@app.route('/books/id', methods=['GET', 'POST'])
+def book_id():
+    form = SearchIdForm()
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            book = form.book_id.data
+            logger.debug(f'[ENDPOINT IS][/books/id/<id_book>] - book_id is - {book}')
+            books = get_book_by_id(book)
+            return render_template('show_book_by_id.html', books=books, form=form)
+        return f"Invalid input, {form.errors}", 400
+    return render_template('show_book_by_id.html', form=form)
 
 
 if __name__ == '__main__':
     init_db(DATA)
-    app.config["WTF_CSRF_ENABLED"] = False
+    app.config["SECRET_KEY"] = '123654789aaa'
+    # app.config["WTF_CSRF_ENABLED"] = False
     app.run(debug=True)
