@@ -1,4 +1,6 @@
+import json
 from flask import Flask, request
+from typing import Optional
 
 app = Flask(__name__)
 
@@ -6,6 +8,25 @@ app = Flask(__name__)
 @app.route("/")
 def hello_world():
     return "<p>Hello, World!</p>"
+
+
+@app.route('/room')
+def get_room() -> tuple[str, int]:
+    guest_num: Optional[str] = request.args.get('guestsNum')
+    if guest_num:
+        guest_num: int = int(guest_num)
+        rooms: list[Room] = get_rooms(guest_num)
+        data: dict = {
+            "properties": {
+                "rooms": rooms
+            }
+        }
+    else:
+        rooms: list[Room] = get_rooms()
+        data: dict = {
+            "rooms": rooms
+        }
+    return json.dumps(data, cls=RoomEncoder), 200
 
 
 @app.route("/add-room", methods=["GET", "POST"])
