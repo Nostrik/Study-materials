@@ -1,20 +1,9 @@
 import json
 from flask import Flask, request
 from typing import Optional
-from hw_models import init_db, DATA
+from hw_models import init_db, DATA, Room, get_rooms, RoomEncoder
 
 app = Flask(__name__)
-
-
-# def get_rooms():
-#     result = [{
-#     "roomId": room.room_id,
-#     "floor": room.floor,
-#     "guestNum": room.guests_num,
-#     "beds": room.beds,
-#     "price": room.price,
-#     }for room in all_free_rooms]
-#     return
 
 
 @app.route("/")
@@ -22,23 +11,23 @@ def hello_world():
     return "<p>Hello, World!</p>"
 
 
-# @app.route('/room')
-# def get_room() -> tuple[str, int]:
-#     guest_num: Optional[str] = request.args.get('guestsNum')
-#     if guest_num:
-#         guest_num: int = int(guest_num)
-#         rooms: list[Room] = get_rooms(guest_num)
-#         data: dict = {
-#             "properties": {
-#                 "rooms": rooms
-#             }
-#         }
-#     else:
-#         rooms: list[Room] = get_rooms()
-#         data: dict = {
-#             "rooms": rooms
-#         }
-#     return json.dumps(data, cls=RoomEncoder), 200
+@app.route('/room')
+def get_room() -> tuple[str, int]:
+    guest_num: Optional[str] = request.args.get('guestNum')
+    if guest_num:
+        guest_num: int = int(guest_num)
+        rooms: list[Room] = get_rooms(guest_num)
+        data: dict = {
+            "properties": {
+                "rooms": rooms
+            }
+        }
+    else:
+        rooms: list[Room] = get_rooms()
+        data: dict = {
+            "rooms": rooms
+        }
+    return json.dumps(data, cls=RoomEncoder), 200
 
 
 @app.route("/add-room", methods=["GET", "POST"])

@@ -1,6 +1,7 @@
 import sqlite3
 import logging
 import random
+import json
 from typing import Any, Optional, List
 
 
@@ -18,6 +19,11 @@ DATA: list[dict] = [
 
 
 class Room:
+    # room_id: int = 0
+    # floor: int = 0
+    # guests_num: int = 0
+    # beds: int = 0
+    # price: int = 0
     def __init__(self, roomid: int, floor: int, guestnum: int, beds: int, price: int) -> None:
         self.room_id: int = roomid
         self.floor: int = floor
@@ -27,6 +33,11 @@ class Room:
 
     def __getitem__(self, item) -> Any:
         return getattr(self, item)
+
+
+class RoomEncoder(json.JSONEncoder):
+    def default(self, obj):
+        return [obj.room_id, obj.floor, obj.guests_num, obj.beds, obj.price]
 
 
 def init_db(initial_records: List[dict]) -> None:
@@ -62,3 +73,48 @@ def init_db(initial_records: List[dict]) -> None:
                 ]
             )
             logger.debug('table_rooms has been created..')
+
+
+# def get_rooms(guest_num: int = 0):
+#     if guest_num == 0:
+#         with sqlite3.connect('table_rooms.bd') as conn:
+#             cursor: sqlite3.Cursor = conn.cursor()
+#             cursor.execute(
+#                 """
+#                 SELECT * FROM `table_rooms`
+#                 """
+#             )
+#             result = cursor.fetchall()
+#     else:
+#         with sqlite3.connect('table_rooms.bd') as conn:
+#             cursor: sqlite3.Cursor = conn.cursor()
+#             cursor.execute(
+#                 """
+#                 SELECT * FROM `table_rooms`
+#                 WHERE guest_num = ?
+#                 """, (str(guest_num), )
+#             )
+#             result = cursor.fetchall()
+#
+#     return [Room(*row) for row in result]
+
+
+def get_rooms(guest_num: int = 0):
+    with sqlite3.connect('table_rooms.bd') as conn:
+        cursor: sqlite3.Cursor = conn.cursor()
+        if guest_num == 0:
+            cursor.execute(
+                """
+                SELECT * FROM `table_rooms`
+                """
+            )
+            result = cursor.fetchall()
+        else:
+            cursor.execute(
+                """
+                SELECT * FROM `table_rooms`
+                WHERE guest_num = ?
+                """, (str(guest_num),)
+            )
+            result = cursor.fetchall()
+    return [Room(*row) for row in result]

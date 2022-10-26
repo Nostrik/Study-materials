@@ -26,9 +26,11 @@ class SearchIdForm(FlaskForm):
 
 @app.route('/books')
 def all_books() -> str:
+    param = get_all_books()
+    logger.debug(f'get all books() -> {param}')
     return render_template(
         'index.html',
-        books=get_all_books(),
+        books=param,
     )
 
 
