@@ -10,26 +10,23 @@ logger = logging.getLogger('[from hw_models]')
 
 DATA: list[dict] = [
     {'room_id': 0, 'floor': random.randint(1, 5), 'guest_num': random.randint(1, 40), 'beds': random.randint(1, 3),
-     'price': random.randint(1500, 4000)},
+     'price': random.randint(1500, 4000), 'date_in': 0, 'date_out': 0},
     {'room_id': 1, 'floor': random.randint(1, 5), 'guest_num': random.randint(1, 40), 'beds': random.randint(1, 3),
-     'price': random.randint(1500, 4000)},
+     'price': random.randint(1500, 4000), 'date_in': 0, 'date_out': 0},
     {'room_id': 2, 'floor': random.randint(1, 5), 'guest_num': random.randint(1, 40), 'beds': random.randint(1, 3),
-     'price': random.randint(1500, 4000)},
+     'price': random.randint(1500, 4000), 'date_in': 0, 'date_out': 0},
 ]
 
 
 class Room:
-    # room_id: int = 0
-    # floor: int = 0
-    # guests_num: int = 0
-    # beds: int = 0
-    # price: int = 0
-    def __init__(self, roomid: int, floor: int, guestnum: int, beds: int, price: int) -> None:
+    def __init__(self, roomid: int, floor: int, guestnum: int, beds: int, price: int, date_in: int, date_out: int) -> None:
         self.room_id: int = roomid
         self.floor: int = floor
         self.guests_num: int = guestnum
         self.beds: int = beds
         self.price: int = price
+        self.date_in: int = date_in
+        self.date_out: int = date_out
 
     def __getitem__(self, item) -> Any:
         return getattr(self, item)
@@ -37,7 +34,9 @@ class Room:
 
 class RoomEncoder(json.JSONEncoder):
     def default(self, obj):
-        return [obj.room_id, obj.floor, obj.guests_num, obj.beds, obj.price]
+        if isinstance(obj, Room):
+            return obj.__dict__
+        return json.JSONEncoder.default(self, obj)
 
 
 def init_db(initial_records: List[dict]) -> None:
@@ -59,44 +58,23 @@ def init_db(initial_records: List[dict]) -> None:
                     floor,
                     guest_num,
                     beds,
-                    price
+                    price,
+                    date_in,
+                    date_out
                 )
                 """
             )
             cursor.executemany(
                 """
                 INSERT INTO `table_rooms`
-                (room_id, floor, guest_num, beds, price) VALUES (?, ?, ?, ?, ?)
+                (room_id, floor, guest_num, beds, price, date_in, date_out) VALUES (?, ?, ?, ?, ?, ?, ?)
                 """, [
-                    (item['room_id'], item['floor'], item['guest_num'], item['beds'], item['price'])
+                    (item['room_id'], item['floor'], item['guest_num'], item['beds'], item['price'], item['date_in'],
+                     item['date_out'])
                     for item in initial_records
                 ]
             )
             logger.debug('table_rooms has been created..')
-
-
-# def get_rooms(guest_num: int = 0):
-#     if guest_num == 0:
-#         with sqlite3.connect('table_rooms.bd') as conn:
-#             cursor: sqlite3.Cursor = conn.cursor()
-#             cursor.execute(
-#                 """
-#                 SELECT * FROM `table_rooms`
-#                 """
-#             )
-#             result = cursor.fetchall()
-#     else:
-#         with sqlite3.connect('table_rooms.bd') as conn:
-#             cursor: sqlite3.Cursor = conn.cursor()
-#             cursor.execute(
-#                 """
-#                 SELECT * FROM `table_rooms`
-#                 WHERE guest_num = ?
-#                 """, (str(guest_num), )
-#             )
-#             result = cursor.fetchall()
-#
-#     return [Room(*row) for row in result]
 
 
 def get_rooms(guest_num: int = 0):

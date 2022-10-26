@@ -38,7 +38,7 @@ def add_room():
 
 
 @app.route("/GetRoom", methods=["GET"])
-def get_room():
+def g_room():
     return "GetRoom worked", 200
 
 
