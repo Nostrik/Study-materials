@@ -1,9 +1,12 @@
 import json
+import logging
 from flask import Flask, request
 from typing import Optional
-from hw_models import init_db, DATA, Room, get_rooms, RoomEncoder
+from hw_models import init_db, DATA, Room, get_rooms, RoomEncoder, add_room
 
 app = Flask(__name__)
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger('[from hw_API]')
 
 
 @app.route("/")
@@ -15,6 +18,7 @@ def hello_world():
 def get_room() -> tuple[str, int]:
     guest_num: Optional[str] = request.args.get('guestNum')
     if guest_num:
+        logger.debug(f'/room where guest_num == {guest_num}')
         guest_num: int = int(guest_num)
         rooms: list[Room] = get_rooms(guest_num)
         data: dict = {
@@ -23,6 +27,7 @@ def get_room() -> tuple[str, int]:
             }
         }
     else:
+        logger.debug('guest_num is None')
         rooms: list[Room] = get_rooms()
         data: dict = {
             "rooms": rooms
@@ -31,15 +36,56 @@ def get_room() -> tuple[str, int]:
 
 
 @app.route("/add-room", methods=["GET", "POST"])
-def add_room():
+def add_room_p():
     if request.method == "POST":
+        add_room(DATA[1])
         return "<p>add-room POST</p>"
     return "<p>add-room GET</p>", 200
 
 
-@app.route("/GetRoom", methods=["GET"])
-def g_room():
-    return "GetRoom worked", 200
+# @app.route("/GetRoom", methods=["GET"])
+# def g_room():
+#     data: dict = {
+#         "properties": {
+#             "rooms": {
+#                 "items": {
+#                     "$id": "#/properties/rooms/items",
+#                     "anyOf": [
+#                         {
+#                             "type": "object",
+#                             "required": [
+#                                 "roomId",
+#                                 "floor",
+#                                 "guestNum",
+#                                 "beds",
+#                                 "price"
+#                             ],
+#                             "properties": {
+#                                 "roomId": {
+#                                     "type": "integer"
+#                                 },
+#                                 "floor": {
+#                                     "type": "integer"
+#                                 },
+#                                 "guestNum": {
+#                                     "type": "integer"
+#                                 },
+#                                 "beds": {
+#                                     "type": "integer"
+#                                 },
+#                                 "price": {
+#                                     "type": "integer"
+#                                 }
+#                             }
+#                         }
+#                     ]
+#                 }
+#             }
+#         }
+#     }
+#     response = json.dumps(data)
+#     logger.debug(f'[g_room] -> {response}')
+#     return data
 
 
 @app.route("/booking", methods=["GET", "POST"])

@@ -9,20 +9,21 @@ logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger('[from hw_models]')
 
 DATA: list[dict] = [
-    {'room_id': 0, 'floor': random.randint(1, 5), 'guest_num': random.randint(1, 40), 'beds': random.randint(1, 3),
+    {'floor': random.randint(1, 5), 'guestNum': 2, 'beds': random.randint(1, 3),
      'price': random.randint(1500, 4000), 'date_in': 0, 'date_out': 0},
-    {'room_id': 1, 'floor': random.randint(1, 5), 'guest_num': random.randint(1, 40), 'beds': random.randint(1, 3),
+    {'floor': random.randint(1, 5), 'guestNum': random.randint(1, 40), 'beds': random.randint(1, 3),
      'price': random.randint(1500, 4000), 'date_in': 0, 'date_out': 0},
-    {'room_id': 2, 'floor': random.randint(1, 5), 'guest_num': random.randint(1, 40), 'beds': random.randint(1, 3),
+    {'floor': random.randint(1, 5), 'guestNum': random.randint(1, 40), 'beds': random.randint(1, 3),
      'price': random.randint(1500, 4000), 'date_in': 0, 'date_out': 0},
 ]
 
 
 class Room:
-    def __init__(self, roomid: int, floor: int, guestnum: int, beds: int, price: int, date_in: int, date_out: int) -> None:
-        self.room_id: int = roomid
+    def __init__(self, room_id: int, floor: int, guestnum: int, beds: int, price: int, date_in: int,
+                 date_out: int) -> None:
+        self.roomId: int = room_id
         self.floor: int = floor
-        self.guests_num: int = guestnum
+        self.guestsNum: int = guestnum
         self.beds: int = beds
         self.price: int = price
         self.date_in: int = date_in
@@ -53,10 +54,9 @@ def init_db(initial_records: List[dict]) -> None:
             cursor.executescript(
                 """
                 CREATE TABLE `table_rooms` (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    room_id,
+                    roomId INTEGER PRIMARY KEY AUTOINCREMENT,
                     floor,
-                    guest_num,
+                    guestNum,
                     beds,
                     price,
                     date_in,
@@ -67,9 +67,9 @@ def init_db(initial_records: List[dict]) -> None:
             cursor.executemany(
                 """
                 INSERT INTO `table_rooms`
-                (room_id, floor, guest_num, beds, price, date_in, date_out) VALUES (?, ?, ?, ?, ?, ?, ?)
+                (floor, guestNum, beds, price, date_in, date_out) VALUES (?, ?, ?, ?, ?, ?)
                 """, [
-                    (item['room_id'], item['floor'], item['guest_num'], item['beds'], item['price'], item['date_in'],
+                    (item['floor'], item['guestNum'], item['beds'], item['price'], item['date_in'],
                      item['date_out'])
                     for item in initial_records
                 ]
@@ -86,13 +86,27 @@ def get_rooms(guest_num: int = 0):
                 SELECT * FROM `table_rooms`
                 """
             )
-            result = cursor.fetchall()
+            tmp_result = cursor.fetchall()
         else:
             cursor.execute(
                 """
                 SELECT * FROM `table_rooms`
-                WHERE guest_num = ?
-                """, (str(guest_num),)
+                WHERE guestNum = ?
+                """, (guest_num,)
             )
-            result = cursor.fetchall()
-    return [Room(*row) for row in result]
+            tmp_result = cursor.fetchall()
+    logger.debug(f'[get_rooms] -> {tmp_result}')
+    result = [Room(*row) for row in tmp_result]
+    return result
+
+
+def add_room(new_room: dict):
+    with sqlite3.connect('table_rooms.bd') as conn:
+        cursor: sqlite3.Cursor = conn.cursor()
+        cursor.execute(
+            """
+            INSERT INTO `table_rooms`
+            (floor, guestNum, beds, price, date_in, date_out) VALUES (?, ?, ?, ?, ?, ?)
+            """, (new_room['floor'], new_room['guestNum'], new_room['beds'], new_room['price'], new_room['date_in'],
+                  new_room['date_out'])
+        )
