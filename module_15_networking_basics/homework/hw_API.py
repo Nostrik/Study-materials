@@ -14,9 +14,9 @@ def hello_world():
     return "<p>Hello, World!</p>"
 
 
-@app.route('/room')
+@app.route('/room', methods=["GET", "POST"])
 def get_room() -> tuple[str, int]:
-    guest_num: Optional[str] = request.args.get('guestNum')
+    guest_num: Optional[str] = request.args.get('guestsNum')
     if guest_num:
         logger.debug(f'/room where guest_num == {guest_num}')
         guest_num: int = int(guest_num)
@@ -34,6 +34,7 @@ def get_room() -> tuple[str, int]:
             "rooms": rooms
         }
     return json.dumps(data, cls=RoomEncoder), 200
+# https://isotropic.co/how-to-fix-cannot-read-property-0-of-undefined-in-js/
 
 
 @app.route("/add-room", methods=["GET", "POST"])
@@ -42,51 +43,6 @@ def add_room_p():
         add_room(DATA[1])
         return "<p>add-room POST</p>"
     return "<p>add-room GET</p>", 200
-
-
-# @app.route("/GetRoom", methods=["GET"])
-# def g_room():
-#     data: dict = {
-#         "properties": {
-#             "rooms": {
-#                 "items": {
-#                     "$id": "#/properties/rooms/items",
-#                     "anyOf": [
-#                         {
-#                             "type": "object",
-#                             "required": [
-#                                 "roomId",
-#                                 "floor",
-#                                 "guestNum",
-#                                 "beds",
-#                                 "price"
-#                             ],
-#                             "properties": {
-#                                 "roomId": {
-#                                     "type": "integer"
-#                                 },
-#                                 "floor": {
-#                                     "type": "integer"
-#                                 },
-#                                 "guestNum": {
-#                                     "type": "integer"
-#                                 },
-#                                 "beds": {
-#                                     "type": "integer"
-#                                 },
-#                                 "price": {
-#                                     "type": "integer"
-#                                 }
-#                             }
-#                         }
-#                     ]
-#                 }
-#             }
-#         }
-#     }
-#     response = json.dumps(data)
-#     logger.debug(f'[g_room] -> {response}')
-#     return data
 
 
 @app.route("/booking", methods=["GET", "POST"])
