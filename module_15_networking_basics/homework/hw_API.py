@@ -1,6 +1,6 @@
 import json
 import logging
-from flask import Flask, request
+from flask import Flask, request, jsonify
 from typing import Optional
 from hw_models import init_db, DATA, Room, get_rooms, RoomEncoder, add_room
 
@@ -15,7 +15,7 @@ def hello_world():
 
 
 @app.route('/room', methods=["GET", "POST"])
-def get_room() -> tuple[str, int]:
+def get_room():
     guest_num: Optional[str] = request.args.get('guestsNum')
     if guest_num:
         logger.debug(f'/room where guest_num == {guest_num}')
@@ -26,6 +26,7 @@ def get_room() -> tuple[str, int]:
                 "rooms": rooms
             }
         }
+        # return jsonify(data)
     else:
         logger.debug('guest_num is None')
         rooms: list[Room] = get_rooms()

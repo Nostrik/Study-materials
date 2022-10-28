@@ -87,6 +87,7 @@ def get_rooms(guest_num: int = 0):
                 """
             )
             tmp_result = cursor.fetchall()
+            # tmp_result = [Room(*row) for row in cursor.fetchall()]
         else:
             cursor.execute(
                 """
@@ -95,8 +96,10 @@ def get_rooms(guest_num: int = 0):
                 """, (guest_num,)
             )
             tmp_result = cursor.fetchall()
+            # tmp_result = [json.dumps(Room(*row), cls=RoomEncoder) for row in cursor.fetchall()]
     logger.debug(f'[get_rooms] -> {tmp_result}')
     result = [Room(*row) for row in tmp_result]
+    # result = tmp_result
     return result
 
 
