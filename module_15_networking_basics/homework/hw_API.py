@@ -14,7 +14,7 @@ def hello_world():
     return "<p>Hello, World!</p>"
 
 
-@app.route('/room', methods=["GET", "POST"])
+@app.route('/room')
 def get_room():
     guest_num: Optional[str] = request.args.get('guestsNum')
     if guest_num:
@@ -26,7 +26,9 @@ def get_room():
                 "rooms": rooms
             }
         }
-        # return jsonify(data)
+        # data: dict = {
+        #     "rooms": rooms
+        # }
     else:
         logger.debug('guest_num is None')
         rooms: list[Room] = get_rooms()
@@ -42,7 +44,7 @@ def get_room():
 def add_room_p():
     if request.method == "POST":
         add_room(DATA[1])
-        return "<p>add-room POST</p>"
+        return "<p>add-room POST</p>", 200
     return "<p>add-room GET</p>", 200
 
 
