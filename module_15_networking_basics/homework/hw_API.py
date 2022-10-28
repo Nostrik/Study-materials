@@ -29,6 +29,7 @@ def get_room() -> tuple[str, int]:
     else:
         logger.debug('guest_num is None')
         rooms: list[Room] = get_rooms()
+
         data: dict = {
             "rooms": rooms
         }
