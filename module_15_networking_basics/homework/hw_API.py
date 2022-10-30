@@ -6,7 +6,7 @@ from hw_models import init_db, DATA, Room, get_rooms, RoomEncoder, add_room
 
 app = Flask(__name__)
 logging.basicConfig(level=logging.DEBUG)
-logger = logging.getLogger('[from hw_API]')
+logger = logging.getLogger('[hw_API]')
 
 
 @app.route("/")
@@ -20,15 +20,12 @@ def get_room():
     if guest_num:
         logger.debug(f'/room where guest_num == {guest_num}')
         guest_num: int = int(guest_num)
-        rooms: list[Room] = get_rooms(guest_num)
+        rooms = get_rooms(guest_num)
         data: dict = {
             "properties": {
                 "rooms": rooms
             }
         }
-        # data: dict = {
-        #     "rooms": rooms
-        # }
     else:
         logger.debug('guest_num is None')
         rooms: list[Room] = get_rooms()
@@ -37,7 +34,6 @@ def get_room():
             "rooms": rooms
         }
     return json.dumps(data, cls=RoomEncoder), 200
-# https://isotropic.co/how-to-fix-cannot-read-property-0-of-undefined-in-js/
 
 
 @app.route("/add-room", methods=["GET", "POST"])
@@ -48,9 +44,13 @@ def add_room_p():
     return "<p>add-room GET</p>", 200
 
 
-@app.route("/booking", methods=["GET", "POST"])
+@app.route("/booking", methods=["POST"])
 def booking():
-    return "<p>booking endpoint</p>", 200
+    if request.method == 'POST':
+        a = request.args.get('roomId')
+        b = request.args.get('firstName')
+        logger.debug(f'booking -> {b}')
+        return "<p>booking POST</p>", 200
 
 
 if __name__ == "__main__":

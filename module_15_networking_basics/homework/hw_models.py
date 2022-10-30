@@ -6,7 +6,7 @@ from typing import Any, Optional, List
 
 
 logging.basicConfig(level=logging.DEBUG)
-logger = logging.getLogger('[from hw_models]')
+logger = logging.getLogger('[hw_models]')
 
 DATA: list[dict] = [
     {'floor': random.randint(1, 5), 'guestNum': 2, 'beds': random.randint(1, 3),
@@ -86,8 +86,6 @@ def get_rooms(guest_num: int = 0):
                 SELECT * FROM `table_rooms`
                 """
             )
-            tmp_result = cursor.fetchall()
-            # tmp_result = [Room(*row) for row in cursor.fetchall()]
         else:
             cursor.execute(
                 """
@@ -95,12 +93,7 @@ def get_rooms(guest_num: int = 0):
                 WHERE guestNum = ?
                 """, (guest_num,)
             )
-            tmp_result = cursor.fetchall()
-            # tmp_result = [json.dumps(Room(*row), cls=RoomEncoder) for row in cursor.fetchall()]
-    logger.debug(f'[get_rooms] -> {tmp_result}')
-    result = [Room(*row) for row in tmp_result]
-    # result = tmp_result
-    return result
+        return [Room(*row) for row in cursor.fetchall()]
 
 
 def add_room(new_room: dict):
