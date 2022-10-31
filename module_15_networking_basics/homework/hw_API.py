@@ -1,8 +1,8 @@
 import json
 import logging
-from flask import Flask, request, jsonify
+from flask import Flask, request, make_response
 from typing import Optional
-from hw_models import init_db, DATA, Room, get_rooms, RoomEncoder, add_room
+from hw_models import init_db, DATA, Room, get_rooms, RoomEncoder, add_room, book_room
 
 app = Flask(__name__)
 logging.basicConfig(level=logging.DEBUG)
@@ -46,11 +46,18 @@ def add_room_p():
 
 @app.route("/booking", methods=["POST"])
 def booking():
-    if request.method == 'POST':
-        a = request.args.get('roomId')
-        b = request.args.get('firstName')
-        logger.debug(f'booking -> {b}')
-        return "<p>booking POST</p>", 200
+    # logger.debug(type(c))
+    # if request.method == 'POST':
+    #     # logger.debug(f'booking -> {c["roomId"]}')
+    #     return f"<p>booking POST {a, b}</p>", 200
+    # if book_room(request.json):
+    #     return make_response('Booking successful', 200)
+    # return make_response('Room is already booked', 409)
+    data: dict = {
+        "rooms": book_room(request.json)
+    }
+    result = json.dumps(data, cls=RoomEncoder)
+    return result
 
 
 if __name__ == "__main__":

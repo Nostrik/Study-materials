@@ -106,3 +106,20 @@ def add_room(new_room: dict):
             """, (new_room['floor'], new_room['guestNum'], new_room['beds'], new_room['price'], new_room['date_in'],
                   new_room['date_out'])
         )
+
+
+def book_room(booking_info):
+    date_in = booking_info['bookingDates']['checkIn']
+    date_out = booking_info['bookingDates']['checkOut']
+    name = booking_info['firstName']
+    surname = booking_info['lastName']
+    room = booking_info['roomId']
+    with sqlite3.connect('table_rooms.bd') as conn:
+        cursor: sqlite3.Cursor = conn.cursor()
+        cursor.execute(
+            """
+            SELECT * FROM `table_rooms`
+            WHERE roomID = ?
+            """, (room, )
+        )
+        return [Room(*row) for row in cursor.fetchall()]
