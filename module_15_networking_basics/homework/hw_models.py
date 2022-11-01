@@ -114,6 +114,23 @@ def book_room(booking_info):
     name = booking_info['firstName']
     surname = booking_info['lastName']
     room = booking_info['roomId']
+    # with sqlite3.connect('table_rooms.bd') as conn:
+    #     cursor: sqlite3.Cursor = conn.cursor()
+    #     cursor.execute(
+    #         """
+    #         SELECT * FROM `table_rooms`
+    #         WHERE roomID = ?
+    #         """, (room, )
+    #     )
+    #     return [Room(*row) for row in cursor.fetchall()]
+    with sqlite3.connect('table_rooms.bd') as conn:
+        cursor: sqlite3.Cursor = conn.cursor()
+        cursor.execute(
+            """
+            INSERT INTO `table_rooms`
+            (floor, guestNum, beds, price, date_in, date_out) VALUES (?, ?, ?, ?, ?, ?)
+            """, (7, 2, 2, 100500, date_in, date_out)
+        )
     with sqlite3.connect('table_rooms.bd') as conn:
         cursor: sqlite3.Cursor = conn.cursor()
         cursor.execute(

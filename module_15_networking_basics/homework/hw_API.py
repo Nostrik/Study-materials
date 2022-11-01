@@ -51,13 +51,15 @@ def booking():
     #     # logger.debug(f'booking -> {c["roomId"]}')
     #     return f"<p>booking POST {a, b}</p>", 200
     # if book_room(request.json):
-    #     return make_response('Booking successful', 200)
+    a = book_room(request.json)
+    return json.dumps(a, cls=RoomEncoder)
     # return make_response('Room is already booked', 409)
-    data: dict = {
-        "rooms": book_room(request.json)
-    }
-    result = json.dumps(data, cls=RoomEncoder)
-    return result
+    # data: dict = {
+    #     "rooms": book_room(request.json)
+    # }
+    # result = json.dumps(data, cls=RoomEncoder)
+    # logger.debug(f"booking response -> {result}")
+    # return result
 
 
 if __name__ == "__main__":
