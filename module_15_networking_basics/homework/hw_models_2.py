@@ -1,26 +1,16 @@
 import sqlite3
 import logging
-import random
 import json
-from typing import Any, Optional, List
+from typing import Any, Optional
 
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger('[hw_models]')
 
-DATA: list[dict] = [
-    {'floor': random.randint(1, 5), 'guestNum': 2, 'beds': random.randint(1, 3),
-     'price': random.randint(1500, 4000), 'date_in': 0, 'date_out': 0},
-    {'floor': random.randint(1, 5), 'guestNum': random.randint(1, 40), 'beds': random.randint(1, 3),
-     'price': random.randint(1500, 4000), 'date_in': 0, 'date_out': 0},
-    {'floor': random.randint(1, 5), 'guestNum': random.randint(1, 40), 'beds': random.randint(1, 3),
-     'price': random.randint(1500, 4000), 'date_in': 0, 'date_out': 0},
-]
-
 
 class Room:
     def __init__(self, room_id: int, floor: int, guestnum: int, beds: int, price: int, date_in: int,
-                 date_out: int) -> None:
+                 date_out: int, vacant: str) -> None:
         self.roomId: int = room_id
         self.floor: int = floor
         self.guestsNum: int = guestnum
@@ -28,6 +18,7 @@ class Room:
         self.price: int = price
         self.date_in: int = date_in
         self.date_out: int = date_out
+        self.vacant: str = vacant
 
     def __getitem__(self, item) -> Any:
         return getattr(self, item)
@@ -40,7 +31,7 @@ class RoomEncoder(json.JSONEncoder):
         return json.JSONEncoder.default(self, obj)
 
 
-def init_db(initial_records: List[dict]) -> None:
+def init_db() -> None:
     with sqlite3.connect('table_rooms.bd') as conn:
         cursor: sqlite3.Cursor = conn.cursor()
         cursor.execute(
@@ -60,21 +51,11 @@ def init_db(initial_records: List[dict]) -> None:
                     beds,
                     price,
                     date_in,
-                    date_out
+                    date_out,
+                    vacant
                 )
                 """
             )
-            cursor.executemany(
-                """
-                INSERT INTO `table_rooms`
-                (floor, guestNum, beds, price, date_in, date_out) VALUES (?, ?, ?, ?, ?, ?)
-                """, [
-                    (item['floor'], item['guestNum'], item['beds'], item['price'], item['date_in'],
-                     item['date_out'])
-                    for item in initial_records
-                ]
-            )
-            logger.debug('table_rooms has been created..')
 
 
 def get_rooms(guest_num: int = 0):
@@ -97,46 +78,55 @@ def get_rooms(guest_num: int = 0):
 
 
 def add_room(new_room: dict):
+    floor: Optional[str] = new_room['floor']
+    beds: Optional[str] = new_room['beds']
+    guest_num: Optional[str] = new_room['guestNum']
+    price: Optional[str] = new_room['price']
     with sqlite3.connect('table_rooms.bd') as conn:
         cursor: sqlite3.Cursor = conn.cursor()
         cursor.execute(
             """
             INSERT INTO `table_rooms`
-            (floor, guestNum, beds, price, date_in, date_out) VALUES (?, ?, ?, ?, ?, ?)
-            """, (new_room['floor'], new_room['guestNum'], new_room['beds'], new_room['price'], new_room['date_in'],
-                  new_room['date_out'])
+            (floor, guestNum, beds, price) VALUES (?, ?, ?, ?)
+            """, (floor, guest_num, beds, price)
         )
 
 
-def book_room(booking_info):
+def booking_room(booking_info):
     date_in = booking_info['bookingDates']['checkIn']
     date_out = booking_info['bookingDates']['checkOut']
     name = booking_info['firstName']
     surname = booking_info['lastName']
     room = booking_info['roomId']
-    # with sqlite3.connect('table_rooms.bd') as conn:
-    #     cursor: sqlite3.Cursor = conn.cursor()
-    #     cursor.execute(
-    #         """
-    #         SELECT * FROM `table_rooms`
-    #         WHERE roomID = ?
-    #         """, (room, )
-    #     )
-    #     return [Room(*row) for row in cursor.fetchall()]
     with sqlite3.connect('table_rooms.bd') as conn:
         cursor: sqlite3.Cursor = conn.cursor()
         cursor.execute(
             """
-            INSERT INTO `table_rooms`
-            (floor, guestNum, beds, price, date_in, date_out) VALUES (?, ?, ?, ?, ?, ?)
-            """, (7, 2, 2, 100500, date_in, date_out)
+            SELECT vacant FROM `table_rooms`
+            WHERE roomId = ?
+            """, (room, )
         )
+        check = cursor.fetchone()
+        logger.debug(f'check vacant -> {check}')
+        if check[0] == 'false':
+            logger.debug(f'check vacant -> {check, type(check)}')
+            return False
     with sqlite3.connect('table_rooms.bd') as conn:
         cursor: sqlite3.Cursor = conn.cursor()
+        cursor.execute(
+            """
+            UPDATE `table_rooms`
+                SET date_in = ?, date_out = ?, vacant = ?
+                WHERE roomId = ?
+            """, (date_in, date_out, 'false', room)
+        )
+    with sqlite3.connect('table_rooms.bd') as conn:
+        cursor = conn.cursor()
         cursor.execute(
             """
             SELECT * FROM `table_rooms`
-            WHERE roomID = ?
-            """, (room, )
+            WHERE roomId = ?
+            """, (room,)
         )
-        return [Room(*row) for row in cursor.fetchall()]
+        result = cursor.fetchall()
+    return [Room(*row) for row in result]
