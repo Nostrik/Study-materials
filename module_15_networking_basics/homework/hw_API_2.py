@@ -24,7 +24,10 @@ def get_room():
         data: dict = {
             "properties": {
                 "rooms": rooms
-            }
+            },
+            "method": "GET",
+            "url": "{{url}}/booking",
+            "language": "json",
         }
     else:
         logger.debug('guest_num is None')
@@ -39,26 +42,30 @@ def get_room():
 @app.route("/add-room", methods=["POST"])
 def add_room_p():
     add_room(request.json)
-    floor: Optional[str] = request.json['floor']
-    beds: Optional[str] = request.json['beds']
-    guest_num: Optional[str] = request.json['guestNum']
-    price: Optional[str] = request.json['price']
     data: dict = {
         "method": "POST",
         "body": {
             "msg": 'Room added successful'
         },
-        "url": "{{url}}/room?floor={{checkInDate}}&beds={{checkOutDate}}&guestsNum=2",
+        "url": "{{url}}/room?guestNum=2",
         "language": "json"
     }
     # return f'<h3>Room added successful</h3>', 200
-    return
+    return json.dumps(data, cls=RoomEncoder), 200
 
 
 @app.route("/booking", methods=["POST"])
 def book_room():
     answer = booking_room(request.json)
     logger.debug(f'booking answer is -> {answer}')
+    data: dict = {
+        "properties": {
+            "rooms": answer
+        },
+        "method": "GET",
+        "url": "{{url}}/room?checkIn={{checkInDate}}&checkOut={{checkOutDate}}&guestsNum=2",
+        "language": "json",
+    }
     if not answer:
         return "Can't book same room twice", 409
     return json.dumps(answer, cls=RoomEncoder), 200
