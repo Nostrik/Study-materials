@@ -39,7 +39,20 @@ def get_room():
 @app.route("/add-room", methods=["POST"])
 def add_room_p():
     add_room(request.json)
-    return f'<h3>Room added successful</h3>', 200
+    floor: Optional[str] = request.json['floor']
+    beds: Optional[str] = request.json['beds']
+    guest_num: Optional[str] = request.json['guestNum']
+    price: Optional[str] = request.json['price']
+    data: dict = {
+        "method": "POST",
+        "body": {
+            "msg": 'Room added successful'
+        },
+        "url": "{{url}}/room?floor={{checkInDate}}&beds={{checkOutDate}}&guestsNum=2",
+        "language": "json"
+    }
+    # return f'<h3>Room added successful</h3>', 200
+    return
 
 
 @app.route("/booking", methods=["POST"])
