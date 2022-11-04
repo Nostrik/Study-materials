@@ -1,0 +1,258 @@
+{
+	"info": {
+		"_postman_id": "510b6377-04c6-47c2-83dc-de85b5e2a379",
+		"name": "new-hotel-api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "20845008"
+	},
+	"item": [
+		{
+			"name": "add-room",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"console.log(\"new-hotel-api tests start\")\r",
+							"console.log(pm.environment)\r",
+							"\r",
+							"pm.sendRequest(pm.variables.get(\"url\") + '/room', (err, res) => {\r",
+							"    let totalRooms = res.json().rooms.length;\r",
+							"    pm.environment.set('totalRoomsBeforeRequets', totalRooms);\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"console.log(\"new-hotel-api test continue\")\r",
+							"pm.test(\"Status code is 200.\", () => {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.sendRequest(pm.variables.get(\"url\") + '/room', (err, res) => {\r",
+							"    let totalRooms = res.json().rooms.length;\r",
+							"    pm.test(\"Requst should add new room to the service.\", () => {\r",
+							"        pm.expect(totalRooms).to.be.eql(pm.environment.get(\"totalRoomsBeforeRequets\") + 1)\r",
+							"    });\r",
+							"})\r",
+							"\r",
+							"pm.test(\"Body matches string\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"Room added successful\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"floor\": 1,\r\n    \"beds\": 1,\r\n    \"guestNum\": 2,\r\n    \"price\": 1000\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/add-room",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"add-room"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetRoom",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Body matches string\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"roomId\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response schema should match\", function () {\r",
+							"    const schema = {\r",
+							"        \"properties\": {\r",
+							"            \"rooms\": {\r",
+							"                \"items\": {\r",
+							"                    \"$id\": \"#/properties/rooms/items\",\r",
+							"                    \"anyOf\": [\r",
+							"                        {\r",
+							"                            \"type\": \"object\",\r",
+							"                            \"required\": [\r",
+							"                                \"roomId\",\r",
+							"                                \"floor\",\r",
+							"                                \"guestNum\",\r",
+							"                                \"beds\",\r",
+							"                                \"price\"\r",
+							"                            ],\r",
+							"                            \"properties\": {\r",
+							"                                \"roomId\": {\r",
+							"                                    \"type\": \"integer\"\r",
+							"                                },\r",
+							"                                \"floor\": {\r",
+							"                                    \"type\": \"integer\"\r",
+							"                                },\r",
+							"                                \"guestNum\": {\r",
+							"                                    \"type\": \"integer\"\r",
+							"                                },\r",
+							"                                \"beds\": {\r",
+							"                                    \"type\": \"integer\"\r",
+							"                                },\r",
+							"                                \"price\": {\r",
+							"                                    \"type\": \"integer\"\r",
+							"                                }\r",
+							"                            }\r",
+							"                        }\r",
+							"                    ]\r",
+							"                }\r",
+							"            }\r",
+							"        }\r",
+							"    }\r",
+							"    pm.expect(tv4.validate(pm.response.json(), schema)).to.be.true;\r",
+							"});\r",
+							"\r",
+							"const jsonData = pm.response.json();\r",
+							"pm.environment.set(\"roomId\", jsonData.properties.rooms[0].roomId);\r",
+							"pm.environment.set('roomRequest', pm.request)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{url}}/room?checkIn={{checkInDate}}&checkOut={{checkOutDate}}&guestsNum=2",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"room"
+					],
+					"query": [
+						{
+							"key": "checkIn",
+							"value": "{{checkInDate}}"
+						},
+						{
+							"key": "checkOut",
+							"value": "{{checkOutDate}}"
+						},
+						{
+							"key": "guestsNum",
+							"value": "2"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "booking",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"console.log(\"first test START\") // my notes\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"console.log(\"Status code is 200 - has finished\") // my notes\r",
+							"console.log(\"second test START\") // my notes\r",
+							"\r",
+							"pm.sendRequest(pm.environment.get('roomRequest'), function (err, res) {\r",
+							"    pm.test(\"Room resource is still accessible\", () => {\r",
+							"        pm.expect(res.code).to.be.eq(200)\r",
+							"    })\r",
+							"    console.log(\"Room resource is still accessible - has finished\")\r",
+							"\r",
+							"    const responseBody = res.json();\r",
+							"    // console.log(\"value response body done\")\r",
+							"    console.debug(responseBody)\r",
+							"    const isRoomFree = responseBody.properties.rooms.filter((room) => {\r",
+							"        room.roomId == pm.environment.get('roomId');\r",
+							"    }).length != 0;\r",
+							"    \r",
+							"    pm.test(\"Booked room is not accessible anymore\", () => {\r",
+							"        pm.expect(isRoomFree).to.be.false;\r",
+							"    })\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.sendRequest(pm.request, (err, res) => {\r",
+							"    pm.test(\"Can't book same room twice\", () => {\r",
+							"        pm.expect(res.code).to.be.eq(409) // CONFLICT\r",
+							"    })\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"bookingDates\": {\r\n    \"checkIn\": {{checkInDate}},\r\n    \"checkOut\": {{checkOutDate}}\r\n  },\r\n  \"firstName\": \"John\",\r\n  \"lastName\": \"Smith\",\r\n  \"roomId\": {{roomId}}\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/booking",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"booking"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "url",
+			"value": "http://127.0.0.1:5000/"
+		},
+		{
+			"key": "checkInDate",
+			"value": "20210308"
+		},
+		{
+			"key": "checkOutDate",
+			"value": "20210311"
+		}
+	]
+}

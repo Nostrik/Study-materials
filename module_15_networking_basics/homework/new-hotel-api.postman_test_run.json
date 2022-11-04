@@ -1,0 +1,153 @@
+{
+	"id": "f219183e-c814-4ec2-83d4-0968b704def5",
+	"name": "new-hotel-api",
+	"timestamp": "2022-11-04T11:43:54.299Z",
+	"collection_id": "20845008-510b6377-04c6-47c2-83dc-de85b5e2a379",
+	"folder_id": 0,
+	"environment_id": "0",
+	"totalPass": 10,
+	"totalFail": 0,
+	"results": [
+		{
+			"id": "c0977275-6590-48bc-9695-0968eeb8d627",
+			"name": "add-room",
+			"url": "http://127.0.0.1:5000//add-room",
+			"time": 165,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code is 200.": true,
+				"Body matches string": true,
+				"Requst should add new room to the service.": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200.": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Body matches string": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Requst should add new room to the service.": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				165
+			],
+			"allTests": [
+				{
+					"Status code is 200.": true,
+					"Body matches string": true,
+					"Requst should add new room to the service.": true
+				}
+			]
+		},
+		{
+			"id": "3fcca645-ac68-4496-ba44-676ec9dff9d7",
+			"name": "GetRoom",
+			"url": "http://127.0.0.1:5000//room?checkIn=20210308&checkOut=20210311&guestsNum=2",
+			"time": 12,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code is 200": true,
+				"Body matches string": true,
+				"Response schema should match": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Body matches string": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response schema should match": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				12
+			],
+			"allTests": [
+				{
+					"Status code is 200": true,
+					"Body matches string": true,
+					"Response schema should match": true
+				}
+			]
+		},
+		{
+			"id": "916dcd57-1015-4352-8d53-8de1deb7046f",
+			"name": "booking",
+			"url": "http://127.0.0.1:5000//booking",
+			"time": 42,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code is 200": true,
+				"Room resource is still accessible": true,
+				"Booked room is not accessible anymore": true,
+				"Can't book same room twice": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Room resource is still accessible": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Booked room is not accessible anymore": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Can't book same room twice": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				42
+			],
+			"allTests": [
+				{
+					"Status code is 200": true,
+					"Room resource is still accessible": true,
+					"Booked room is not accessible anymore": true,
+					"Can't book same room twice": true
+				}
+			]
+		}
+	],
+	"count": 1,
+	"totalTime": 219,
+	"collection": {
+		"requests": [
+			{
+				"id": "c0977275-6590-48bc-9695-0968eeb8d627",
+				"method": "POST"
+			},
+			{
+				"id": "3fcca645-ac68-4496-ba44-676ec9dff9d7",
+				"method": "GET"
+			},
+			{
+				"id": "916dcd57-1015-4352-8d53-8de1deb7046f",
+				"method": "POST"
+			}
+		]
+	}
+}
