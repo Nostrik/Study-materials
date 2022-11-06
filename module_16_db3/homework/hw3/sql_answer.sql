@@ -1,3 +1,0 @@
---SELECT order_no, purchase_amount, date, full_name
---FROM 'order'
---INNER JOIN customer on customer.customer_id = 'order'.customer_id
