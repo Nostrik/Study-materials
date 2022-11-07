@@ -19,6 +19,15 @@ class BookSchema(Schema):
                 'please use a different title.'.format(title=title)
             )
 
+    @validates('author')
+    def validate_author(self, author: str) -> None:
+        if get_book_by_author(author) is not None:
+            raise ValidationError(
+                'Book with title "{author}" already exists, '
+                'please use a different title.'.format(author=author)
+            )
+
+
     @post_load
     def create_book(self, data: Dict, **kwargs) -> Book:
         return Book(**data)

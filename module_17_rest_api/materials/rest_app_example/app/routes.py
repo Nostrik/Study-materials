@@ -37,6 +37,7 @@ class BookList(Resource):
 
 
 api.add_resource(BookList, '/api/books')
+api.add_resource(BookList, 'api/books/author')
 
 
 if __name__ == '__main__':

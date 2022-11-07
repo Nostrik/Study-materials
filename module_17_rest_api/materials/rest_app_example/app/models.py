@@ -112,3 +112,14 @@ def get_book_by_title(book_title: str) -> Optional[Book]:
         book = cursor.fetchone()
         if book:
             return _get_book_obj_from_row(book)
+
+
+def get_book_by_author(book_author: str) -> Optional[Book]:
+    with sqlite3.connect('table_books.db') as conn:
+        cursor = conn.cursor()
+        cursor.execute(
+            f'SELECT * FROM `{BOOKS_TABLE_NAME}` WHERE author = "%s"' % book_author
+        )
+        book = cursor.fetchone()
+        if book:
+            return _get_book_obj_from_row(book)
