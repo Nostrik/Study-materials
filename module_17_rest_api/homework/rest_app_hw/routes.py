@@ -1,6 +1,7 @@
+import json
 import logging
 from typing import Tuple, List, Dict
-
+from dataclasses import asdict
 from flask import Flask, request
 from flask_restful import Api, Resource
 from marshmallow import ValidationError
@@ -43,33 +44,20 @@ class BookList(Resource):
 
 
 class Book(Resource):
-    def get(self, b_id) -> Tuple[List[Dict], int]:
-        logger.debug(b_id)
-        schema = BookSchema()
-        return schema.dump(get_book_by_id(b_id), many=True), 200
+    def get(self, book_id):
+        logger.debug(book_id)
+        return {'data': [asdict(book) for book in get_book_by_id('1')]}
 
-    def put(self, b_id) -> Tuple[Dict, int]:
+    def put(self, book_id) -> Tuple[Dict, int]:
+        ...
 
-        data = request.json
-        logger.debug(data)
-
-        schema = BookSchema()
-
-        try:
-            book = schema.load(data)
-        except ValidationError as exc:
-            return exc.messages, 400
-
-        book = update_book_by_id(book)
-        return schema.dump(book), 201
-
-    def delete(self, b_id):
-        delete_book_by_id(b_id)
+    def delete(self, book_id):
+        delete_book_by_id(book_id)
         return '', 204
 
 
 api.add_resource(BookList, '/api/books')
-api.add_resource(Book, '/api/books/<id>')
+api.add_resource(Book, '/api/books/<book_id>')
 
 
 if __name__ == '__main__':
