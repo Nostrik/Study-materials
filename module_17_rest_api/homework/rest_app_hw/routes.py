@@ -45,11 +45,21 @@ class BookList(Resource):
 
 class Book(Resource):
     def get(self, book_id):
-        logger.debug(book_id)
-        return {'data': [asdict(book) for book in get_book_by_id('1')]}
+        answ = get_book_by_id(book_id)
+        logger.debug(answ)
+        return answ.__dict__, 201  # AttributeError, если запись не найдена
 
-    def put(self, book_id) -> Tuple[Dict, int]:
-        ...
+    def put(self, book_id):
+        schema = BookSchema()
+        data = request.json
+        logger.debug(data)
+        try:
+            book = schema.load(data)  # как прикрутить book_id к data
+        except ValidationError as er:
+            return er.messages, 400
+        ans = update_book_by_id(book)
+        logger.debug(f'return is {ans}')
+        return ans.__dict__, 201
 
     def delete(self, book_id):
         delete_book_by_id(book_id)

@@ -1,4 +1,5 @@
 import sqlite3
+import logging
 from dataclasses import dataclass
 from typing import List, Optional, Union, Tuple
 
@@ -9,6 +10,9 @@ DATA = [
 ]
 
 BOOKS_TABLE_NAME = 'books'
+logging.basicConfig(level=logging.DEBUG)
+models_logger = logging.getLogger("[models]")
+models_logger.propagate = True
 
 
 @dataclass
@@ -80,6 +84,7 @@ def get_book_by_id(book_id: int) -> Optional[Book]:
 def update_book_by_id(book: Book) -> Book:
     with sqlite3.connect('table_books.db') as conn:
         cursor = conn.cursor()
+        models_logger.debug(f"book.title: {book.title}, book.author: {book.author}, book.id: {book.id}")
         cursor.execute(
             f"""
             UPDATE {BOOKS_TABLE_NAME}
@@ -92,12 +97,13 @@ def update_book_by_id(book: Book) -> Book:
         return book
 
 
-def delete_book_by_id(book_id: int) -> None:
+def delete_book_by_id(book_id: str) -> None:
+    models_logger.debug(f'book_id: {book_id} type: {type(book_id)}')
     with sqlite3.connect('table_books.db') as conn:
         cursor = conn.cursor()
         cursor.execute(
             f"""
-            DELETE {BOOKS_TABLE_NAME}
+            DELETE  FROM {BOOKS_TABLE_NAME}
             WHERE id = ?
             """, (book_id,)
         )

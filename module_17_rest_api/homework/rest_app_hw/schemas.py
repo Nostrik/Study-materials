@@ -2,7 +2,7 @@ from typing import Dict
 
 from marshmallow import Schema, fields, validates, ValidationError, post_load
 
-from models import get_book_by_title, Book, get_book_by_author
+from models import get_book_by_title, Book, get_book_by_author, get_book_by_id
 
 
 class BookSchema(Schema):
@@ -25,6 +25,14 @@ class BookSchema(Schema):
             raise ValidationError(
                 'Book with title "{author}" already exists, '
                 'please use a different title.'.format(author=author)
+            )
+
+    @validates('id')
+    def validate_id(self, book_id: str) -> None:
+        if get_book_by_id(int(book_id)) is not None:
+            raise ValidationError(
+                'Book with id "{id}" already exists, '
+                'please use a different id.'.format(id=book_id)
             )
 
     @post_load
