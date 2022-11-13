@@ -72,12 +72,27 @@ def add_book(book: Book) -> Book:
         return book
 
 
+def add_author(book: Book) -> Book:
+    with sqlite3.connect('table_books.db') as conn:
+        cursor = conn.cursor()
+        cursor.execute(
+            f"""
+            INSERT INTO `{BOOKS_TABLE_NAME}` 
+            (author) VALUES (?)
+            """,
+            (book.author,)
+        )
+        book.id = cursor.lastrowid
+        return book
+
+
 def get_book_by_id(book_id: int) -> Optional[Book]:
     with sqlite3.connect('table_books.db') as conn:
         cursor = conn.cursor()
         cursor.execute(f'SELECT * FROM `{BOOKS_TABLE_NAME}` WHERE id = "%s"' % book_id)
         book = cursor.fetchone()
         if book:
+            models_logger.debug(book)
             return _get_book_obj_from_row(book)
 
 
@@ -106,6 +121,19 @@ def delete_book_by_id(book_id: str) -> None:
             DELETE  FROM {BOOKS_TABLE_NAME}
             WHERE id = ?
             """, (book_id,)
+        )
+        conn.commit()
+
+
+def delete_book_by_author(author: str) -> None:
+    models_logger.debug(f'book_id: {author} type: {type(author)}')
+    with sqlite3.connect('table_books.db') as conn:
+        cursor = conn.cursor()
+        cursor.execute(
+            f"""
+            DELETE  FROM {BOOKS_TABLE_NAME}
+            WHERE author = ?
+            """, (author,)
         )
         conn.commit()
 
