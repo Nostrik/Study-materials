@@ -10,6 +10,7 @@ DATA = [
 ]
 
 BOOKS_TABLE_NAME = 'books'
+AUTHOR_TABLE_NAME = 'authors'
 logging.basicConfig(level=logging.DEBUG)
 models_logger = logging.getLogger("[models]")
 models_logger.propagate = True
@@ -19,6 +20,16 @@ models_logger.propagate = True
 class Book:
     title: str
     author: str
+    id: Optional[int] = None
+
+    def __getitem__(self, item: str) -> Union[int, str]:
+        return getattr(self, item)
+
+
+@dataclass
+class Author:
+    name: str
+    surname: str
     id: Optional[int] = None
 
     def __getitem__(self, item: str) -> Union[int, str]:
@@ -50,12 +61,24 @@ def _get_book_obj_from_row(row: Tuple) -> Book:
     return Book(id=row[0], title=row[1], author=row[2])
 
 
+def _get_author_obj_from_row(row: Tuple) -> Author:
+    return Author(id=row[0], name=row[1], surname=row[2])
+
+
 def get_all_books() -> List[Book]:
     with sqlite3.connect('table_books.db') as conn:
         cursor = conn.cursor()
         cursor.execute(f'SELECT * FROM `{BOOKS_TABLE_NAME}`')
         all_books = cursor.fetchall()
         return [_get_book_obj_from_row(row) for row in all_books]
+
+
+def get_all_authors() -> List[Author]:
+    with sqlite3.connect('table_books.db') as conn:
+        cursor = conn.cursor()
+        cursor.execute(f'SELECT * FROM `{AUTHOR_TABLE_NAME}`')
+        all_authors = cursor.fetchall()
+        return [_get_author_obj_from_row(row) for row in all_authors]
 
 
 def add_book(book: Book) -> Book:
@@ -72,6 +95,26 @@ def add_book(book: Book) -> Book:
         return book
 
 
+def get_or_create_author(author_name: str, author_surname: str) -> Optional[Author]:
+    with sqlite3.connect('table_books.db') as conn:
+        cursor = conn.cursor()
+        cursor.execute(
+            f"SELECT * FROM {AUTHOR_TABLE_NAME} WHERE name = ? AND surname = ?",
+            (author_name, author_surname)
+        )
+        author = cursor.fetchone()
+        if author:
+            return _get_author_obj_from_row(author)
+        else:
+            cursor.execute(
+            f"""
+            INSERT INTO `{AUTHOR_TABLE_NAME}` 
+            (title, author) VALUES (?, ?)
+            """, (author_name, author_surname))
+            author_id = cursor.lastrowid
+            return _get_author_obj_from_row((author_id, author_name, author_surname))
+
+
 def add_author(book: Book) -> Book:
     with sqlite3.connect('table_books.db') as conn:
         cursor = conn.cursor()
@@ -84,6 +127,24 @@ def add_author(book: Book) -> Book:
         )
         book.id = cursor.lastrowid
         return book
+
+
+def get_author_by_name(author_name: str):
+    with sqlite3.connect('table_books.db') as conn:
+        cursor = conn.cursor()
+        cursor.execute(f'SELECT * FROM `{AUTHOR_TABLE_NAME}` WHERE name = "%s"' % author_name)
+        author = cursor.fetchone()
+        if author:
+            return _get_author_obj_from_row(author)
+
+
+def get_author_by_surname(author_surname: str):
+    with sqlite3.connect('table_books.db') as conn:
+        cursor = conn.cursor()
+        cursor.execute(f'SELECT * FROM `{AUTHOR_TABLE_NAME}` WHERE surname = "%s"' % author_surname)
+        author = cursor.fetchone()
+        if author:
+            return _get_author_obj_from_row(author)
 
 
 def get_book_by_id(book_id: int) -> Optional[Book]:

@@ -2,7 +2,8 @@ from typing import Dict
 
 from marshmallow import Schema, fields, validates, ValidationError, post_load
 
-from models import get_book_by_title, Book, get_book_by_author, get_book_by_id
+from models import get_book_by_title, Book, get_book_by_author, get_book_by_id, get_author_by_name, \
+    get_author_by_surname, get_or_create_author, Author
 
 
 class BookSchema(Schema):
@@ -38,3 +39,30 @@ class BookSchema(Schema):
     @post_load
     def create_book(self, data: Dict, **kwargs) -> Book:
         return Book(**data)
+
+
+class AuthorSchema(Schema):
+
+    id = fields.Int(dump_only=True)
+    name = fields.Str(required=True)
+    surname = fields.Str(required=True)
+
+    @validates('name')
+    def validate_title(self, name: str) -> None:
+        if get_author_by_name(name) is not None:
+            raise ValidationError(
+                'Author is "{name}" already exists, '
+                'please use a different title.'.format(name=name)
+            )
+
+    @validates('surname')
+    def validate_title(self, surname: str) -> None:
+        if get_author_by_surname(surname) is not None:
+            raise ValidationError(
+                'Author is "{surname}" already exists, '
+                'please use a different title.'.format(surname=surname)
+            )
+
+    @post_load
+    def get_create_author(self, data: Dict, **kwargs) -> Author:
+        return Author(**data)

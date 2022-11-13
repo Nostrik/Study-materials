@@ -15,8 +15,10 @@ from models import (
     delete_book_by_id,
     get_book_by_author,
     delete_book_by_author,
+    get_or_create_author,
+    get_all_authors,
 )
-from schemas import BookSchema
+from schemas import BookSchema, AuthorSchema
 
 app = Flask(__name__)
 api = Api(app)
@@ -72,32 +74,25 @@ class Book(Resource):
         return '', 204
 
 
-class Author(Resource):
-    def get(self, author):
-        schema = BookSchema()
-        book = get_book_by_author(author)
-        if book:
-            return schema.dump(book)
-        return f'Not found {author}', 404
+class AuthorsList(Resource):
+    def get(self):
+        schema = AuthorSchema()
+        return schema.dump(get_all_authors(), many=True)
 
-    def post(self, author):
-        schema = BookSchema()
+    def post(self):
         data = request.json
+        schema = AuthorSchema()
         try:
-            book = schema.load(data)
+            author = schema.load(data)
         except ValidationError as exc:
             return exc.messages, 400
-        book = add_author(author)
-        return schema.dump(book), 200
-
-    def delete(self, author):
-        delete_book_by_author(author)
-        return '', 204
+        author = get_or_create_author(author.name, author.surname)
+        return schema.dump(author), 201
 
 
 api.add_resource(BookList, '/api/books')
 api.add_resource(Book, '/api/books/<book_id>')
-api.add_resource(Author, '/api/<author>')
+api.add_resource(AuthorsList, '/api/authors')
 
 
 if __name__ == '__main__':
