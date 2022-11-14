@@ -44,4 +44,4 @@ api.add_resource(BookList, '/api/books')
 
 if __name__ == '__main__':
     init_db(initial_records=DATA)
-    app.run('0.0.0.0',debug=True)
+    app.run('0.0.0.0', debug=True)
