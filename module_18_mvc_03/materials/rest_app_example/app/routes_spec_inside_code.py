@@ -91,4 +91,4 @@ api.add_resource(BookList, '/api/books')
 if __name__ == '__main__':
     init_db(initial_records=DATA)
     WSGIRequestHandler.protocol_version = "HTTP/1.1"
-    app.run('0.0.0.0',debug=True)
+    app.run('0.0.0.0', debug=True)

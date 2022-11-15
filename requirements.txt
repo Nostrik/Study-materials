@@ -16,3 +16,5 @@ requests==2.27.1
 urllib3==1.26.9
 Werkzeug==2.0.3
 WTForms==3.0.1
+flasgger~=0.9.5
+apispec~=4.7.1
