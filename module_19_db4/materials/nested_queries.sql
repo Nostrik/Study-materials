@@ -1,3 +1,4 @@
+
 SELECT count(order_no)
 FROM   orders
 WHERE  manager_id = (SELECT manager_id
@@ -11,7 +12,7 @@ FROM orders
 JOIN manager m ON m.manager_id = orders.manager_id
 WHERE m.full_name like 'Семёнов%';
 
-
+--имена всех продавцов, кто не живет в мосвке
 SELECT full_name
 FROM manager
 WHERE city in
@@ -19,7 +20,7 @@ WHERE city in
      FROM manager
      WHERE city != 'Москва' );
 
-
+--имена покупателенй, которые совершили покупку больше чем на 900
 SELECT full_name
 FROM customer
 WHERE customer_id in
@@ -28,7 +29,7 @@ WHERE customer_id in
      WHERE purchase_amount > 900 )
 
 
-
+--номер заказа, имя мэнеджера и имя покупателя, которые проживают в одном городе
 SELECT order_no,
        manager_name,
        customer_name
@@ -45,8 +46,7 @@ INNER JOIN
    FROM customer c) ON cus_id = orders.customer_id
 WHERE c_city == m_city;
 
-
-
+--10 самых проследних продаж с именами менеджеров, где сумма продажи была более 900
 SELECT full_name, date, amount
 FROM manager
 INNER JOIN
@@ -58,7 +58,7 @@ WHERE amount > 900
 ORDER BY date DESC
 LIMIT 10;
 
-
+--все покупатели, у которых инициалы совпадат с инициалами одно из менеджеров
 SELECT full_name
 FROM customer
 WHERE exists
