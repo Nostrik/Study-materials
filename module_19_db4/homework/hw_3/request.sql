@@ -1,7 +1,4 @@
 SELECT avg(grade) as avg_grade,
-assignments_grades.assisgnment_id,
-assignments_grades.student_id,
-assignments.teacher_id,
 students.full_name
 FROM assignments_grades
 JOIN assignments
