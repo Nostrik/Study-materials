@@ -27,3 +27,13 @@ INNER JOIN assignments_grades
 ON assignments.assisgnment_id = assignments_grades.assisgnment_id)
 WHERE DATE > DUE_DATE
 
+SELECT *
+FROM
+(SELECT assignments.due_date as DUE_DATE,
+assignments_grades.date as DATE,
+assignments.group_id as GROUP_ID
+FROM assignments
+INNER JOIN assignments_grades
+ON assignments.assisgnment_id = assignments_grades.assisgnment_id)
+WHERE DATE > DUE_DATE
+
