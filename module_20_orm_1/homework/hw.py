@@ -1,5 +1,7 @@
-from sqlalchemy import Table, create_engine, MetaData, Column, Integer, String, Date, Float, Boolean, DateTime, UniqueConstraint, Index
+from sqlalchemy import Table, create_engine, MetaData, Column, Integer, String, Date, Float, Boolean, DateTime, \
+    UniqueConstraint, Index, Text
 from sqlalchemy.orm import sessionmaker, mapper, declarative_base
+from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy import create_engine
 from flask import Flask, jsonify, abort, request
 
@@ -36,6 +38,9 @@ class Author(Base):
     def __repr__(self):
         return f"The Author is {self.name}, id: {self.id}"
 
+    def to_json(self):
+        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+
 
 class Student(Base):
     __tablename__ = 'students'
@@ -51,6 +56,13 @@ class Student(Base):
     def __repr__(self):
         return f"The student is {self.name}, id: {self.id}"
 
+    def to_json(self):
+        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+
+    @classmethod
+    def get_all_students_who_live_in_a_hostel(cls):
+        ...
+
 
 class ReceiveBook(Base):
     __tablename__ = 'receiving_books'
@@ -61,6 +73,13 @@ class ReceiveBook(Base):
     date_of_issue = Column(DateTime, nullable=False)
     date_of_return = Column(DateTime)
 
+    @hybrid_property
+    def count_date_with_book(self):
+        return self.date_of_return - self.date_of_return
+
+    def to_json(self):
+        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+
 
 @app.before_request
 def before_request_func():
@@ -70,6 +89,12 @@ def before_request_func():
 @app.route('/')
 def hello_world():
     return 'Hello_world'
+
+
+@app.route('/books', methods=['GET'])
+def get_all_books():
+    # get all books from bd
+    ...
 
 
 if __name__ == "__main__":
