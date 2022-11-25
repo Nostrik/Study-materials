@@ -1,8 +1,10 @@
+import logging
 from sqlalchemy import Table, create_engine, MetaData, Column, Integer, String, Date, Float, Boolean, DateTime, \
     UniqueConstraint, Index, Text
 from sqlalchemy.orm import sessionmaker, mapper, declarative_base
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy import create_engine
+from sqlalchemy.exc import NoResultFound, MultipleResultsFound
 from flask import Flask, jsonify, abort, request
 
 app = Flask(__name__)
@@ -10,6 +12,8 @@ engine = create_engine('sqlite:///homework.db')
 Base = declarative_base()
 Session = sessionmaker(bind=engine)
 session = Session()
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger("[hw_main]")
 
 
 class Book(Base):
@@ -60,8 +64,24 @@ class Student(Base):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
     @classmethod
-    def get_all_students_who_live_in_a_hostel(cls):
-        ...
+    def get_students_who_live_in_a_hostel(cls):
+        try:
+            student = session.query(Student).filter(Student.scholarship == True).all()
+            return student
+        except NoResultFound:
+            logger.exception("NoResultFound for students who live in a hostel")
+        except Exception as er:
+            logger.exception(er)
+
+    @classmethod
+    def get_students_where_average_score_more(cls, score: float):
+        try:
+            student = session.query(Student).filter(Student.average_score > score).all()
+            return student
+        except NoResultFound:
+            logger.exception("NoResultFound for students where average score >")
+        except Exception as er:
+            logger.exception(er)
 
 
 class ReceiveBook(Base):
@@ -94,6 +114,24 @@ def hello_world():
 @app.route('/books', methods=['GET'])
 def get_all_books():
     # get all books from bd
+    books = session.query(Book).all()
+    book_list = []
+    for book in books:
+        book_list.append(book.to_json())
+    return jsonify(book_list=book_list), 200
+
+
+@app.route('/debtors', methods=['GET'])
+def get_student_who_keep_book_more_14_days():
+    receive_books = session.query(ReceiveBook).filter((ReceiveBook.date_of_return - ReceiveBook.date_of_issue) > 14)
+    book_list = []
+    for book in receive_books:
+        book_list.append(book.to_json())
+    return jsonify(students_id=book_list), 200
+
+
+@app.route('/students')
+def give_book_to_student():
     ...
 
 

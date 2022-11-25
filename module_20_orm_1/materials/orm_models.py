@@ -29,7 +29,7 @@ if __name__ == "__main__":
             return session.query(User).all()
 
         @classmethod
-        def get_user_by_email(cls, email:str):
+        def get_user_by_email(cls, email: str):
             try:
                 user = session.query(User).filter(User.email == email).one()
                 return user
