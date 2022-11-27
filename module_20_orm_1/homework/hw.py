@@ -1,4 +1,5 @@
 import logging
+from datetime import datetime
 from sqlalchemy import Table, create_engine, MetaData, Column, Integer, String, Date, Float, Boolean, DateTime, \
     UniqueConstraint, Index, Text
 from sqlalchemy.orm import sessionmaker, mapper, declarative_base
@@ -113,7 +114,6 @@ def hello_world():
 
 @app.route('/books', methods=['GET'])
 def get_all_books():
-    # get all books from bd
     books = session.query(Book).all()
     book_list = []
     for book in books:
@@ -130,9 +130,34 @@ def get_student_who_keep_book_more_14_days():
     return jsonify(students_id=book_list), 200
 
 
-@app.route('/students')
+@app.route('/books', methods=['POST'])
 def give_book_to_student():
-    ...
+    id_book = request.form.get('book_id', type=str)
+    id_student = request.form.get('student_id', type=str)
+    date = datetime.now()
+    new_receiving_book = ReceiveBook(
+        book_id=id_book,
+        student_id=id_student,
+        date_of_issue=date.date()
+    )
+    session.add(new_receiving_book)
+    session.commit()
+    return 'Книга успешно выдана', 201
+
+
+@app.route('/books', methods=['PATCH'])
+def return_book_to_the_library():
+    id_book = request.form.get('book_id', type=str)
+    id_student = request.form.get('student_id', type=str)
+    return_date = datetime.now()
+    from sqlalchemy import update
+    try:
+        query = update(ReceiveBook).where(ReceiveBook.book_id == id_book and ReceiveBook.student_id == id_student)\
+            .values(date_of_return=return_date.date())
+        session.execute(query)
+    except NoResultFound:
+        return 'student_id и book_id не найдено', 404
+    return 'Книга спешно возвращена', 201
 
 
 if __name__ == "__main__":
