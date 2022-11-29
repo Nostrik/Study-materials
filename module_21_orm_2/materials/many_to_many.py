@@ -23,3 +23,51 @@ class Parent(Base):
 
     # определение с помощью back_ref
     # children = relationship("Child", secondary=intergration_table, backref="parents")
+
+
+class Child(Base):
+    __tablename__ = 'child'
+    id = Column(Integer, primary_key=True)
+
+    # двунаправленная связь
+    parents = relationship(
+        "Parent",
+        secondary=intergration_table,
+        back_populates="Children"
+    )
+
+
+if __name__ == '__main__':
+    Base.metadata.create_all(bind=engine)
+
+    father = Parent()
+    mother = Parent()
+
+    son = Child()
+    daughter = Child()
+
+    # добавим отцу детей
+    # children - колекция детей
+
+    father.children.extend(son, daughter)
+
+    # обратная ситуация - добавим сын и дочери маму (при двунаправленной связи)
+    son.parents.append(mother)
+    daughter.parents.append(mother)
+
+    session.add(father)
+    session.add(mother)
+    session.add(son)
+    session.add(daughter)
+    session.commit()
+
+    my_parents = session.query(Parent).all()
+    my_children = session.query(Child).all()
+
+    many_to_many_data = session.query(intergration_table).all()
+
+    father.children.remove(daughter)
+    # как себя поведет интеграциоооная таблица?
+    # session.delete(son)
+
+    print("for debug")
