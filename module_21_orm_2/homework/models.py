@@ -3,6 +3,7 @@ from sqlalchemy import Table, create_engine, MetaData, Column, Integer, String, 
     UniqueConstraint, Index, Text, ForeignKey
 from sqlalchemy.orm import sessionmaker, mapper, declarative_base, relationship, backref
 from sqlalchemy.ext.hybrid import hybrid_property
+from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy import create_engine
 from sqlalchemy.exc import NoResultFound
 from datetime import date
@@ -27,7 +28,9 @@ class Book(Base):
     author = relationship("Author", backref=backref(
         "books", cascade="all, delete-orphan", lazy="select"
     ))
-    students = relationship('RecievingBook', back_populates='book')
+    students = relationship('ReceivingBook', back_populates='book')
+
+    # keywords = association_proxy("kw_book", "receive_book")
 
     def __repr__(self):
         return F"The book {self.name}, in count: {self.count}, author_id: {self.author_id}"
@@ -63,6 +66,8 @@ class Student(Base):
 
     books = relationship('ReceivingBook', back_populates='student')
 
+    # keywords = association_proxy("kw_student", "receive_book")
+
     def __repr__(self):
         return f"The student is {self.name}, id: {self.id}"
 
@@ -93,9 +98,8 @@ class Student(Base):
 class ReceiveBook(Base):
     __tablename__ = 'receiving_books'
 
-    id = Column(Integer, primary_key=True)
-    book_id = Column(Integer, nullable=False)
-    student_id = Column(Integer, nullable=False)
+    book_id = Column(Integer, ForeignKey('books.id'), primary_key=True)
+    student_id = Column(Integer, ForeignKey('students.id'), primary_key=True)
     date_of_issue = Column(DateTime, nullable=False)
     date_of_return = Column(DateTime, nullable=True)
 

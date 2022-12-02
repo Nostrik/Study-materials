@@ -1,6 +1,6 @@
 import logging
 from datetime import datetime
-from models import Base, engine, session, Book, ReceiveBook
+from models import Base, engine, session, Book, ReceiveBook, insert_data, Author
 from sqlalchemy.exc import NoResultFound, MultipleResultsFound
 from flask import Flask, jsonify, abort, request
 
@@ -68,4 +68,7 @@ def return_book_to_the_library():
 
 
 if __name__ == "__main__":
+    Base.metadata.create_all(bind=engine)
+    check_exist = session.query(Author).all()
+    # insert_data()
     app.run(debug=True)
