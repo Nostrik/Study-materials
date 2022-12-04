@@ -173,8 +173,6 @@ class Book(Base):
     release_date = Column(Date, nullable=False)
     author_id = Column(Integer, ForeignKey('authors.id'), nullable=False)
 
-    book = Column("book", String(64))
-
     author = relationship("Author", backref=backref("books",
                                                     cascade="all, "
                                                             "delete-orphan",
@@ -199,10 +197,6 @@ class Student(Base):
     email = Column(String(50), nullable=False)
     average_score = Column(Float, nullable=False)
     scholarship = Column(Boolean, nullable=False)
-
-    student_associations = relationship('ReceivingBook', back_populates='students', cascade='all')
-
-    book = association_proxy("student_associations", "book")
 
     books = relationship('ReceivingBook', back_populates='student')
 
@@ -244,9 +238,8 @@ class ReceivingBook(Base):
     date_of_issue = Column(DateTime, default=datetime.now)
     date_of_finish = Column(DateTime, nullable=True)
 
-    student = relationship(Student, back_populates="student_associations")
-    # book = relationship("Book", back_populates="students")
-    book = Column('book', String(30))
+    student = relationship("Student", back_populates="books")
+    book = relationship("Book", back_populates="students")
 
     @hybrid_property
     def count_date_with_book(self):
