@@ -44,8 +44,7 @@ def give_book_to_student():
     date = datetime.now()
     new_receiving_book = ReceiveBook(
         book_id=id_book,
-        student_id=id_student,
-        date_of_issue=date.date()
+        student_id=id_student
     )
     session.add(new_receiving_book)
     session.commit()

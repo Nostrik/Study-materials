@@ -7,13 +7,14 @@ from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy import create_engine
 from sqlalchemy.exc import NoResultFound
 from datetime import date, datetime
+from pprint import pprint
 
-engine = create_engine('sqlite:///homework.db')
+engine = create_engine('sqlite:///homework.db', echo=True)
 Base = declarative_base()
 Session = sessionmaker(bind=engine)
 session = Session()
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger("[models]")
+# logging.basicConfig(level=logging.INFO)
+# logger = logging.getLogger("[models]")
 
 
 # class Book(Base):
@@ -149,6 +150,31 @@ logger = logging.getLogger("[models]")
 #     session.add_all(students)
 #     session.commit()
 
+# example:
+#
+# class Person(Model):
+#     __tablename__ = 'persons'
+#     id = Column(Integer, primary_key=True)
+#     last_name = Column(Text, nullable=False)
+#     groups = association_proxy('group_memberships', 'group')
+#     # Other stuff
+#
+# class Group(Model):
+#     __tablename__ = 'groups'
+#     id = Column(Integer, primary_key=True)
+#     name = Column(Text, nullable=False)
+#     members = association_proxy('group_memberships', 'person')
+#     # Other stuff
+#
+# class GroupMembership(Model):
+#     __tablename__ = 'group_memberships'
+#     id = Column(Integer, primary_key=True)
+#     person_id = Column(Integer, ForeignKey('persons.id'), nullable=False)
+#     group_id = Column(Integer, ForeignKey('groups.id'), nullable=False)
+#     person = relationship('Person', uselist=False, backref=backref('group_memberships', cascade='all, delete-orphan'))
+#     group = relationship('Group', uselist=False, backref=backref('group_memberships', cascade='all, delete-orphan'))
+#     # Other stuff
+
 
 class Author(Base):
     __tablename__ = 'authors'
@@ -171,14 +197,18 @@ class Book(Base):
     name = Column(String(100), nullable=False)
     count = Column(Integer, default=1)
     release_date = Column(Date, nullable=False)
-    author_id = Column(Integer, ForeignKey('authors.id'), nullable=False)
+    author_id = Column(Integer, ForeignKey('authors.id'), nullable=False)  # foreing_key для ссылки на таблицу авторов
 
     author = relationship("Author", backref=backref("books",
                                                     cascade="all, "
                                                             "delete-orphan",
-                                                    lazy="select"))
+                                                    lazy="select"))  # определили связь через обратную ссылку backref,
+    # backref передали параметры cascade, lazy. all, dalete-orphan - смотрим на все каскадные поведения,
+    # lazy=select - подгружаем авторов по запросу
 
-    students = relationship('ReceivingBook', back_populates='book')
+    # students = relationship('ReceivingBook', back_populates='book')
+
+    students = association_proxy('ReceivingBook', 'person')
 
     def __repr__(self):
         return F"The book {self.name}, in count: {self.count}, author_id: {self.author_id}"
@@ -198,7 +228,9 @@ class Student(Base):
     average_score = Column(Float, nullable=False)
     scholarship = Column(Boolean, nullable=False)
 
-    books = relationship('ReceivingBook', back_populates='student')
+    # books = relationship('ReceivingBook', back_populates='student')  # связь student с receiving_book через поле books
+
+    books = association_proxy('ReceivingBook', 'book')
 
     def __repr__(self):
         return f"The student is {self.name}, id: {self.id}"
@@ -238,8 +270,12 @@ class ReceivingBook(Base):
     date_of_issue = Column(DateTime, default=datetime.now)
     date_of_finish = Column(DateTime, nullable=True)
 
-    student = relationship("Student", back_populates="books")
-    book = relationship("Book", back_populates="students")
+    # связь many to many в декларативном стиле
+    # student = relationship("Student", back_populates="books")  # двунаправленная связь со студентами
+    # book = relationship("Book", back_populates="students")  # двунаправленная связь с книгами
+
+    student = relationship('Student', backref=backref('receiving_books', cascade='all, delete-orphan'))
+    book = relationship('Book', backref=backref('receiving_books', cascade='all, delete-orphan'))
 
     @hybrid_property
     def count_date_with_book(self):
@@ -293,3 +329,20 @@ if __name__ == "__main__":
     check_exist = session.query(Author).all()
     if not check_exist:
         insert_data()
+
+    # task 2.1
+    author_query = session.query(Author).all()
+    pprint(author_query)
+    for a_query in author_query:
+        if a_query.id == 2:
+            print(a_query)
+
+    # task 2.2
+    student_id_from_receiving_books = session.query(ReceivingBook).all()
+    book_id_from_receiving_books_by_student_id = []
+    for recieving_book in student_id_from_receiving_books:
+        book_id_from_receiving_books_by_student_id.append(
+            recieving_book.book
+        )
+    print(student_id_from_receiving_books)
+

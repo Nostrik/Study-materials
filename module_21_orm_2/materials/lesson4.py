@@ -115,8 +115,8 @@ def insert_data():
 
 
 def give_me_book():
-    nikita = session.query(Student).filter(Student.name == 'Nik').one()
-    vlad = session.query(Student).filter(Student.name == 'Vlad').one()
+    nikita = session.query(Student).filter(Student.name == 'Nik').one()  # объект первого студента
+    vlad = session.query(Student).filter(Student.name == 'Vlad').one()  # объект второго студента
     books_to_nik = session.query(Book).filter(Author.surname == 'Толстой',
                                               Author.id == Book.author_id).all()
     books_to_vlad = session.query(Book).filter(Book.id.in_([1, 3, 4])).all()
