@@ -1,6 +1,6 @@
 import logging
 from datetime import datetime
-from models import Base, engine, session, Book, ReceiveBook, insert_data, Author
+from models import Base, engine, session, Book, ReceivingBook, insert_data, Author
 from sqlalchemy.exc import NoResultFound, MultipleResultsFound
 from flask import Flask, jsonify, abort, request
 
@@ -22,6 +22,7 @@ def hello_world():
 @app.route('/books', methods=['GET'])
 def get_all_books():
     books = session.query(Book).all()
+    logger.debug(books)
     book_list = []
     for book in books:
         book_list.append(book.to_json())
@@ -30,7 +31,8 @@ def get_all_books():
 
 @app.route('/debtors', methods=['GET'])
 def get_student_who_keep_book_more_14_days():
-    receive_books = session.query(ReceiveBook).filter((ReceiveBook.date_of_return - ReceiveBook.date_of_issue) > 14)
+    receive_books = session.query(ReceivingBook).filter((ReceivingBook.date_of_return - ReceivingBook.date_of_issue)
+                                                        > 14)
     book_list = []
     for book in receive_books:
         book_list.append(book.to_json())
@@ -41,8 +43,7 @@ def get_student_who_keep_book_more_14_days():
 def give_book_to_student():
     id_book = request.form.get('book_id', type=str)
     id_student = request.form.get('student_id', type=str)
-    date = datetime.now()
-    new_receiving_book = ReceiveBook(
+    new_receiving_book = ReceivingBook(
         book_id=id_book,
         student_id=id_student
     )
@@ -58,7 +59,7 @@ def return_book_to_the_library():
     return_date = datetime.now()
     from sqlalchemy import update
     try:
-        query = update(ReceiveBook).where(ReceiveBook.book_id == id_book and ReceiveBook.student_id == id_student)\
+        query = update(ReceivingBook).where(ReceivingBook.book_id == id_book and ReceivingBook.student_id == id_student)\
             .values(date_of_return=return_date.date())
         session.execute(query)
     except NoResultFound:
@@ -69,5 +70,6 @@ def return_book_to_the_library():
 if __name__ == "__main__":
     Base.metadata.create_all(bind=engine)
     check_exist = session.query(Author).all()
-    # insert_data()
+    if not check_exist:
+        insert_data()
     app.run(debug=True)

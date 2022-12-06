@@ -1,7 +1,7 @@
 import logging
 from sqlalchemy import Table, create_engine, MetaData, Column, Integer, String, Date, Float, Boolean, DateTime, \
     UniqueConstraint, Index, Text, ForeignKey
-from sqlalchemy.orm import sessionmaker, mapper, declarative_base, relationship, backref
+from sqlalchemy.orm import sessionmaker, mapper, declarative_base, relationship, backref, joinedload
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy import create_engine
@@ -9,12 +9,12 @@ from sqlalchemy.exc import NoResultFound
 from datetime import date, datetime
 from pprint import pprint
 
-engine = create_engine('sqlite:///homework.db', echo=True)
+engine = create_engine('sqlite:///homework.db', echo=True, connect_args={"check_same_thread": False})
 Base = declarative_base()
 Session = sessionmaker(bind=engine)
 session = Session()
-# logging.basicConfig(level=logging.INFO)
-# logger = logging.getLogger("[models]")
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger("[models]")
 
 
 # class Book(Base):
@@ -331,18 +331,11 @@ if __name__ == "__main__":
         insert_data()
 
     # task 2.1
-    author_query = session.query(Author).all()
-    pprint(author_query)
+    input_author_id = 1
+    author_query = session.query(Author).filter(Author.id != 1).all()
+    # pprint(author_query)
     for a_query in author_query:
-        if a_query.id == 2:
-            print(a_query)
+        print(a_query)
 
     # task 2.2
-    student_id_from_receiving_books = session.query(ReceivingBook).all()
-    book_id_from_receiving_books_by_student_id = []
-    for recieving_book in student_id_from_receiving_books:
-        book_id_from_receiving_books_by_student_id.append(
-            recieving_book.book
-        )
-    print(student_id_from_receiving_books)
-
+    input_student_id = 1
