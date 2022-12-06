@@ -9,7 +9,7 @@ from sqlalchemy.exc import NoResultFound
 from datetime import date, datetime
 from pprint import pprint
 
-engine = create_engine('sqlite:///homework.db', echo=True, connect_args={"check_same_thread": False})
+engine = create_engine('sqlite:///homework.db', echo=False, connect_args={"check_same_thread": False})
 Base = declarative_base()
 Session = sessionmaker(bind=engine)
 session = Session()

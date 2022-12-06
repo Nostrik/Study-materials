@@ -1,7 +1,7 @@
 import logging
 from datetime import datetime
 from models import Base, engine, session, Book, ReceivingBook, insert_data, Author
-from sqlalchemy.exc import NoResultFound, MultipleResultsFound
+from sqlalchemy.exc import NoResultFound, MultipleResultsFound, InvalidRequestError
 from flask import Flask, jsonify, abort, request
 
 app = Flask(__name__)
@@ -47,6 +47,7 @@ def give_book_to_student():
         book_id=id_book,
         student_id=id_student
     )
+    logger.debug(new_receiving_book)
     session.add(new_receiving_book)
     session.commit()
     return 'Книга успешно выдана', 201
@@ -54,14 +55,16 @@ def give_book_to_student():
 
 @app.route('/books', methods=['PATCH'])
 def return_book_to_the_library():
-    id_book = request.form.get('book_id', type=str)
+    id_book = request.form.get('book_id')
     id_student = request.form.get('student_id', type=str)
     return_date = datetime.now()
+    logger.debug(return_date)
     from sqlalchemy import update
     try:
-        query = update(ReceivingBook).where(ReceivingBook.book_id == id_book and ReceivingBook.student_id == id_student)\
-            .values(date_of_return=return_date.date())
-        session.execute(query)
+        query = update(ReceivingBook).where(ReceivingBook.book_id == id_book)\
+            .values(date_of_finish=return_date)
+        query2 = ReceivingBook.update().values(date_of_finish=return_date).where(ReceivingBook.book_id == id_book)
+        session.execute(query2)
     except NoResultFound:
         return 'student_id и book_id не найдено', 404
     return 'Книга успешно возвращена', 201
