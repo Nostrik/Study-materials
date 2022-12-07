@@ -63,8 +63,8 @@ def return_book_to_the_library():
     try:
         query = update(ReceivingBook).where(ReceivingBook.book_id == id_book)\
             .values(date_of_finish=return_date)
-        query2 = ReceivingBook.update().values(date_of_finish=return_date).where(ReceivingBook.book_id == id_book)
-        session.execute(query2)
+        # query2 = ReceivingBook.update().values(date_of_finish=return_date).where(ReceivingBook.book_id == id_book)
+        session.execute(query)
     except NoResultFound:
         return 'student_id и book_id не найдено', 404
     return 'Книга успешно возвращена', 201
