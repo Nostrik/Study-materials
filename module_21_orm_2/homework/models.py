@@ -1,6 +1,6 @@
 import logging
 from sqlalchemy import Table, create_engine, MetaData, Column, Integer, String, Date, Float, Boolean, DateTime, \
-    UniqueConstraint, Index, Text, ForeignKey
+    UniqueConstraint, Index, Text, ForeignKey, func
 from sqlalchemy.orm import sessionmaker, mapper, declarative_base, relationship, backref, joinedload
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.ext.associationproxy import association_proxy
@@ -206,4 +206,35 @@ if __name__ == "__main__":
         print(one_author)
 
     # task 2.3
+    date_mounth = 12
+    all_book_uniq_id_from_receive_table = """
+    SELECT count(*)
+    FROM
+    (SELECT book_id
+    FROM receiving_books
+    where date_of_issue > 12
+    GROUP by book_id)
+    """
+    all_book_from_book_table = """
+    SELECT count(*)
+    FROM books
+    """
+    books_where_date = session.query(ReceivingBook).filter(ReceivingBook.date_of_issue > date_mounth).\
+        group_by(ReceivingBook.book_id).all()
+    print(books_where_date)
+    print(len(books_where_date))
+    all_books = session.query(Book).all()
+    print(len(all_books))
+    avg_books = len(all_books) / len(books_where_date)
+    print(avg_books)
+
+    # task 2.4
+    sql_req = """
+    SELECT *
+    FROM receiving_books
+    WHERE receiving_books.student_id = 
+    (SELECT students.id
+    FROM students
+    WHERE students.average_score > 4)
+    """
 
