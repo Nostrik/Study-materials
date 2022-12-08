@@ -208,33 +208,37 @@ if __name__ == "__main__":
     # task 2.3
     date_mounth = 12
     all_book_uniq_id_from_receive_table = """
-    SELECT count(*)
-    FROM
-    (SELECT book_id
-    FROM receiving_books
-    where date_of_issue > 12
-    GROUP by book_id)
+    SELECT student_id, AVG(book_id) as Average_books
+        FROM receiving_books
+    WHERE strftime('%m%Y', date_of_issue) = strftime('%m%Y', date('now')) 
+    GROUP BY student_id;
     """
-    all_book_from_book_table = """
-    SELECT count(*)
-    FROM books
-    """
-    books_where_date = session.query(ReceivingBook).filter(ReceivingBook.date_of_issue > date_mounth).\
-        group_by(ReceivingBook.book_id).all()
-    print(books_where_date)
-    print(len(books_where_date))
-    all_books = session.query(Book).all()
-    print(len(all_books))
-    avg_books = len(all_books) / len(books_where_date)
-    print(avg_books)
 
     # task 2.4
     sql_req = """
     SELECT *
-    FROM receiving_books
-    WHERE receiving_books.student_id = 
-    (SELECT students.id
-    FROM students
-    WHERE students.average_score > 4)
+    SELECT COUNT(r.date_of_issue) as RAZ, a.name, a.surname, b.name 
+    FROM books b INNER JOIN authors a
+    ON b.author_id = a.id
+        INNER JOIN receiving_books r
+        ON r.book_id=b.id
+            INNER JOIN students s
+            ON s.id = r.student_id
+    WHERE s.average_score>4.0
+    GROUP BY b.id
+    ORDER BY RAZ DESC
+    LIMIT 1;
+    """
+
+    # task 2.5
+    sql_req2 = """
+    SELECT COUNT(r.date_of_issue) as RAZ, s.name, s.surname
+    FROM receiving_books r
+        INNER JOIN students s
+        ON s.id = r.student_id
+    WHERE strftime('%Y', date_of_issue) = strftime('%Y', date('now')) 
+    GROUP BY r.student_id
+    ORDER BY RAZ DESC
+    LIMIT 10;
     """
 
