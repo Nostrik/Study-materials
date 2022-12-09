@@ -1,6 +1,9 @@
 import logging
 from datetime import datetime
-from models import Base, engine, session, Book, ReceivingBook, insert_data, Author
+
+from sqlalchemy import func
+
+from models import Base, engine, session, Book, ReceivingBook, insert_data, Author, Student
 from sqlalchemy.exc import NoResultFound, MultipleResultsFound, InvalidRequestError
 from flask import Flask, jsonify, abort, request
 
@@ -68,6 +71,50 @@ def return_book_to_the_library():
     except NoResultFound:
         return 'student_id и book_id не найдено', 404
     return 'Книга успешно возвращена', 201
+
+
+@app.route('/books/author_count', methods=['GET'])
+def func_name():
+    """Получите количество оставшихся в библиотеке книг по автору"""
+    author_id = request.args.get('author_id')
+    author_query = session.query(Author).filter(Author.id != author_id).all()
+    ...
+
+
+@app.route('/books/no_read', methods=['GET'])
+def func_name():
+    """Получите список книг, которые студент не читал, при этом другие книги этого автора студент уже брал"""
+    student_id = request.args.get('student_id')
+    get_book_id = session.query(ReceivingBook).filter(ReceivingBook.student_id == student_id).all()
+    book_id_from_receive = 0
+    for g_query in get_book_id:
+        book_id_from_receive = g_query.book_id
+    all_book_without_author = session.query(Author).filter(
+        Author.id != (session.query(Author.id).join(Book).filter(Book.id == book_id_from_receive)
+                      .one_or_none())[0]).all()
+    ...
+
+
+@app.route('/books/avg', methods=['GET'])
+def func_name():
+    """Получите среднее количество книг, которые студенты брали в этом месяце"""
+    ...
+
+
+@app.route('/books/popular', methods=['GET'])
+def func_name():
+    """Получите самую популярную книгу среди студентов, у которых средний балл больше 4.0"""
+    most_popular_book = session.query(Book.name, Author.name, Author.surname,
+                                      func.count(ReceivingBook.date_of_issue)).join(Author) \
+        .join(ReceivingBook).join(Student).filter(Student.average_score > 4.0) \
+        .order_by(ReceivingBook.date_of_issue.desc()).limit(1)
+    ...
+
+
+@app.route('/books/top', methods=['GET'])
+def func_name():
+    """Получите ТОП-10 самых читающих студентов в этом году"""
+    ...
 
 
 if __name__ == "__main__":

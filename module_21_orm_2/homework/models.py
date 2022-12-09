@@ -214,21 +214,26 @@ if __name__ == "__main__":
     GROUP BY student_id;
     """
 
+
     # task 2.4
     sql_req = """
-    SELECT *
     SELECT COUNT(r.date_of_issue) as RAZ, a.name, a.surname, b.name 
-    FROM books b INNER JOIN authors a
-    ON b.author_id = a.id
-        INNER JOIN receiving_books r
-        ON r.book_id=b.id
-            INNER JOIN students s
-            ON s.id = r.student_id
+        FROM books b INNER JOIN authors a
+        ON b.author_id = a.id
+            INNER JOIN receiving_books r
+            ON r.book_id=b.id
+                INNER JOIN students s
+                ON s.id = r.student_id
     WHERE s.average_score>4.0
     GROUP BY b.id
     ORDER BY RAZ DESC
     LIMIT 1;
     """
+    most_popular_book = session.query(Book.name, Author.name, Author.surname, func.count(ReceivingBook.date_of_issue)).join(Author)\
+        .join(ReceivingBook).join(Student).filter(Student.average_score > 4.0)\
+        .order_by(ReceivingBook.date_of_issue.desc()).limit(1)
+    print('=' * 100)
+    print(most_popular_book)
 
     # task 2.5
     sql_req2 = """
@@ -241,4 +246,8 @@ if __name__ == "__main__":
     ORDER BY RAZ DESC
     LIMIT 10;
     """
+    print('=' * 100)
+    top_10_students = session.query(ReceivingBook.date_of_issue, Student.name, Student.surname).join(Student)\
+        .filter()
+    print(top_10_students)
 

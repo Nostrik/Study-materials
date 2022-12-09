@@ -8,7 +8,7 @@ from sqlalchemy.ext.declarative import declarative_base
 
 from datetime import datetime, date
 
-engine = create_engine('sqlite:///lesson3.db', echo=True)
+engine = create_engine('sqlite:///lesson3.db', echo=False)
 Session = sessionmaker(bind=engine)
 session = Session()
 Base = declarative_base()
@@ -165,6 +165,7 @@ if __name__ == '__main__':
         .filter(Book.author_id == Author.id) \
         .group_by(Author.id).order_by(func.sum(Book.count).desc()) \
         .all()
+    print(count_books_by_authors)
 
     # использование joinedload - альтернатива lazy = 'joined' для объекта Query
     # Получаем книги со связанными авторами - жадная загрузка
