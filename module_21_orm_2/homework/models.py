@@ -2,7 +2,7 @@ import logging
 from sqlalchemy import Table, create_engine, MetaData, Column, Integer, String, Date, Float, Boolean, DateTime, \
     UniqueConstraint, Index, Text, ForeignKey, func
 from sqlalchemy.orm import sessionmaker, mapper, declarative_base, relationship, backref, joinedload
-from sqlalchemy.ext.hybrid import hybrid_property
+from sqlalchemy.ext.hybrid import hybrid_property, hybrid_method
 from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy import create_engine
 from sqlalchemy.exc import NoResultFound
@@ -126,6 +126,10 @@ class ReceivingBook(Base):
     def count_date_with_book(self):
         return self.date_of_return - self.date_of_return
 
+    @hybrid_method
+    def is_debtors(self, compare_date):
+        return self.date_of_issue < compare_date
+
     def to_json(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
@@ -178,7 +182,7 @@ if __name__ == "__main__":
     # task 2.1
     input_author_id = 1
     author_query = session.query(Author).filter(Author.id != 1).all()
-    # pprint(author_query)
+    pprint(author_query)
     for a_query in author_query:
         # print(a_query)
         ...
@@ -213,7 +217,6 @@ if __name__ == "__main__":
     WHERE strftime('%m%Y', date_of_issue) = strftime('%m%Y', date('now')) 
     GROUP BY student_id;
     """
-
 
     # task 2.4
     sql_req = """

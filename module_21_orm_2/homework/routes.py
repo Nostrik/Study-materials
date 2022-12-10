@@ -73,16 +73,20 @@ def return_book_to_the_library():
     return 'Книга успешно возвращена', 201
 
 
-@app.route('/books/author_count', methods=['GET'])
-def func_name():
+@app.route('/books/count_by_author', methods=['GET'])
+def get_books_by_author():
     """Получите количество оставшихся в библиотеке книг по автору"""
     author_id = request.args.get('author_id')
     author_query = session.query(Author).filter(Author.id != author_id).all()
-    ...
+    logger.debug(author_query)
+    books_list = []
+    for a in author_query:
+        books_list.append(a)
+    return jsonify(books_list=books_list), 200
 
 
 @app.route('/books/no_read', methods=['GET'])
-def func_name():
+def func_name1():
     """Получите список книг, которые студент не читал, при этом другие книги этого автора студент уже брал"""
     student_id = request.args.get('student_id')
     get_book_id = session.query(ReceivingBook).filter(ReceivingBook.student_id == student_id).all()
@@ -96,13 +100,13 @@ def func_name():
 
 
 @app.route('/books/avg', methods=['GET'])
-def func_name():
+def func_name2():
     """Получите среднее количество книг, которые студенты брали в этом месяце"""
     ...
 
 
 @app.route('/books/popular', methods=['GET'])
-def func_name():
+def func_name3():
     """Получите самую популярную книгу среди студентов, у которых средний балл больше 4.0"""
     most_popular_book = session.query(Book.name, Author.name, Author.surname,
                                       func.count(ReceivingBook.date_of_issue)).join(Author) \
@@ -112,9 +116,10 @@ def func_name():
 
 
 @app.route('/books/top', methods=['GET'])
-def func_name():
+def func_name4():
     """Получите ТОП-10 самых читающих студентов в этом году"""
-    ...
+    top_10_students = session.query(ReceivingBook.date_of_issue, Student.name, Student.surname).join(Student) \
+        .filter()
 
 
 if __name__ == "__main__":
