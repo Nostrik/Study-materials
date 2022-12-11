@@ -206,6 +206,11 @@ if __name__ == "__main__":
     FROM receiving_books
     WHERE student_id = 3)
     """
+    b = """
+    SELECT book_id
+    FROM receiving_books
+    WHERE student_id = 3
+    """
     # res = session.query(Author.id).join(Book).filter(Book.id == book_id_from_receive).one_or_none()
     # print(res[0])
     all_book_without_author = session.query(Author).filter(Author.id != (session.query(Author.id).join(Book).filter(Book.id == book_id_from_receive).one_or_none())[0]).all()
