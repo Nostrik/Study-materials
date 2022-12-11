@@ -9,12 +9,12 @@ from sqlalchemy.exc import NoResultFound
 from datetime import date, datetime
 from pprint import pprint
 
-engine = create_engine('sqlite:///homework.db', echo=False, connect_args={"check_same_thread": False})
+engine = create_engine('sqlite:///homework.db', echo=True, connect_args={"check_same_thread": False})
 Base = declarative_base()
 Session = sessionmaker(bind=engine)
 session = Session()
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger("[models]")
+# logging.basicConfig(level=logging.INFO)
+# logger = logging.getLogger("[models]")
 
 
 class Author(Base):
@@ -180,11 +180,15 @@ if __name__ == "__main__":
         insert_data()
 
     # task 2.1
+    sql_2_1 = """
+    SELECT sum(books.count)
+    FROM books
+    WHERE books.author_id = 1
+    """
     input_author_id = 1
-    author_query = session.query(Author).filter(Author.id != 1).all()
-    pprint(author_query)
-    for a_query in author_query:
-        print(a_query)
+    quantity_books_by_author = session.query(func.sum(Book.count)).filter(Book.author_id != 1).scalar()
+    # print('quantity_books_by_author')
+    # print(quantity_books_by_author)
 
     # task 2.2
     input_student_id = 3
@@ -207,6 +211,8 @@ if __name__ == "__main__":
     all_book_without_author = session.query(Author).filter(Author.id != (session.query(Author.id).join(Book).filter(Book.id == book_id_from_receive).one_or_none())[0]).all()
     for one_author in all_book_without_author:
         print(one_author)
+    print(all_book_without_author)
+    print('task 2.2')
 
     # task 2.3
     date_mounth = 12

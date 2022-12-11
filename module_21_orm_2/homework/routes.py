@@ -77,15 +77,11 @@ def return_book_to_the_library():
 def get_books_by_author():
     """Получите количество оставшихся в библиотеке книг по автору"""
     author_id = request.args.get('author_id')
-    author_query = session.query(Author).filter(Author.id != author_id).all()
-    logger.debug(author_query)
-    books_list = []
-    for a in author_query:
-        books_list.append(a)
-    return jsonify(books_list=books_list), 200
+    quantity_books_by_author = session.query(func.sum(Book.count)).filter(Book.author_id != author_id).scalar()
+    return jsonify(books_count=quantity_books_by_author), 200
 
 
-@app.route('/books/no_read', methods=['GET'])
+@app.route('/books/no_read', methods=['GET'])  # not work
 def func_name1():
     """Получите список книг, которые студент не читал, при этом другие книги этого автора студент уже брал"""
     student_id = request.args.get('student_id')
@@ -93,10 +89,10 @@ def func_name1():
     book_id_from_receive = 0
     for g_query in get_book_id:
         book_id_from_receive = g_query.book_id
-    all_book_without_author = session.query(Author).filter(
-        Author.id != (session.query(Author.id).join(Book).filter(Book.id == book_id_from_receive)
-                      .one_or_none())[0]).all()
-    ...
+    all_book_without_author = session.query(Author).filter(Author.id != (session.query(Author.id).join(Book)
+                                                                         .filter(Book.id == book_id_from_receive)
+                                                                         .one_or_none())[0]).all()
+    return jsonify(books_list=all_book_without_author), 200
 
 
 @app.route('/books/avg', methods=['GET'])
@@ -105,14 +101,14 @@ def func_name2():
     ...
 
 
-@app.route('/books/popular', methods=['GET'])
+@app.route('/books/popular', methods=['GET'])  # not work
 def func_name3():
     """Получите самую популярную книгу среди студентов, у которых средний балл больше 4.0"""
     most_popular_book = session.query(Book.name, Author.name, Author.surname,
                                       func.count(ReceivingBook.date_of_issue)).join(Author) \
         .join(ReceivingBook).join(Student).filter(Student.average_score > 4.0) \
         .order_by(ReceivingBook.date_of_issue.desc()).limit(1)
-    ...
+    return jsonify(books_list=most_popular_book), 200
 
 
 @app.route('/books/top', methods=['GET'])
