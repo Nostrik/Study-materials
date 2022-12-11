@@ -184,8 +184,7 @@ if __name__ == "__main__":
     author_query = session.query(Author).filter(Author.id != 1).all()
     pprint(author_query)
     for a_query in author_query:
-        # print(a_query)
-        ...
+        print(a_query)
 
     # task 2.2
     input_student_id = 3
