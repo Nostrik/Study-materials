@@ -13,7 +13,7 @@ engine = create_engine('sqlite:///homework.db', echo=False, connect_args={"check
 Base = declarative_base()
 Session = sessionmaker(bind=engine)
 session = Session()
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger("[models]")
 
 
@@ -193,29 +193,23 @@ if __name__ == "__main__":
     quantity_books_by_author = session.query(func.sum(Book.count)).filter(Book.author_id != 1).scalar()
     # print('quantity_books_by_author')
     # print(quantity_books_by_author)
+    print('=' * 100)
 
     # task 2.2
     input_student_id = 3
-    d = """
-    SELECT books.name
-    FROM books
-    WHERE books.author_id = 
-    (SELECT books.author_id
-    FROM receiving_books
-    JOIN books
-    ON receiving_books.book_id = books.id
-    WHERE receiving_books.student_id = 3) AND books.id !=
-    (SELECT receiving_books.book_id
-    FROM receiving_books
-    WHERE receiving_books.student_id = 3)
-    """
-    print('=' * 100)
     print('task 2.2')
-    book_id_with_student = session.query(ReceivingBook.book_id).filter(ReceivingBook.student_id == 3).subquery()
+    read_books = session.query(Book.id, Book.author_id).join(ReceivingBook)\
+        .filter(ReceivingBook.student_id == input_student_id).all()
+    authors_list = [i[1] for i in read_books]
+    books_list = [i[0] for i in read_books]
 
-    print(book_id_with_student)
-
+    not_read_books = session.query(Book) \
+        .filter(Book.author_id.in_(authors_list)) \
+        .filter(Book.id.not_in(books_list)).all()
+    res = [i for i in not_read_books]
+    print(res)
     print('=' * 100)
+
 
     # task 2.3
     print('task 2.3')

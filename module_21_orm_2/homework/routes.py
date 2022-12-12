@@ -9,7 +9,7 @@ from flask import Flask, jsonify, abort, request
 
 app = Flask(__name__)
 logging.basicConfig(level=logging.DEBUG)
-logger = logging.getLogger("[routes]")
+route_logger = logging.getLogger("[routes]")
 
 
 @app.before_request
@@ -25,7 +25,7 @@ def hello_world():
 @app.route('/books', methods=['GET'])
 def get_all_books():
     books = session.query(Book).all()
-    logger.debug(books)
+    route_logger.debug(books)
     book_list = []
     for book in books:
         book_list.append(book.to_json())
@@ -50,7 +50,7 @@ def give_book_to_student():
         book_id=id_book,
         student_id=id_student
     )
-    logger.debug(new_receiving_book)
+    route_logger.debug(new_receiving_book)
     session.add(new_receiving_book)
     session.commit()
     return 'Книга успешно выдана', 201
@@ -61,7 +61,7 @@ def return_book_to_the_library():
     id_book = request.form.get('book_id')
     id_student = request.form.get('student_id', type=str)
     return_date = datetime.now()
-    logger.debug(return_date)
+    route_logger.debug(return_date)
     from sqlalchemy import update
     try:
         query = update(ReceivingBook).where(ReceivingBook.book_id == id_book)\
@@ -73,26 +73,33 @@ def return_book_to_the_library():
     return 'Книга успешно возвращена', 201
 
 
-@app.route('/books/count_by_author', methods=['GET'])
-def get_books_by_author():
+@app.route('/books/<int:author_id>/count_by_author', methods=['GET'])
+def get_books_by_author(author_id: int):
     """Получите количество оставшихся в библиотеке книг по автору"""
-    author_id = request.args.get('author_id')
+    # author_id = request.args.get('author_id')
+    route_logger.debug(author_id)
     quantity_books_by_author = session.query(func.sum(Book.count)).filter(Book.author_id != author_id).scalar()
     return jsonify(books_count=quantity_books_by_author), 200
 
 
-@app.route('/books/no_read', methods=['GET'])  # not work
-def func_name1():
+@app.route('/books/<int:student_id>/no_read', methods=['GET'])
+def not_read_books(student_id: int):
     """Получите список книг, которые студент не читал, при этом другие книги этого автора студент уже брал"""
-    student_id = request.args.get('student_id')
-    get_book_id = session.query(ReceivingBook).filter(ReceivingBook.student_id == student_id).all()
-    book_id_from_receive = 0
-    for g_query in get_book_id:
-        book_id_from_receive = g_query.book_id
-    all_book_without_author = session.query(Author).filter(Author.id != (session.query(Author.id).join(Book)
-                                                                         .filter(Book.id == book_id_from_receive)
-                                                                         .one_or_none())[0]).all()
-    return jsonify(books_list=all_book_without_author), 200
+    route_logger.debug(student_id)
+    read_books = session.query(Book.id, Book.author_id).join(ReceivingBook) \
+        .filter(ReceivingBook.student_id == student_id).all()
+    authors_list = [i[1] for i in read_books]
+    books_list = [i[0] for i in read_books]
+
+    route_logger.debug(authors_list)
+    route_logger.debug(books_list)
+
+    not_read_books = session.query(Book) \
+        .filter(Book.author_id.in_(authors_list)) \
+        .filter(Book.id.not_in(books_list)).all()
+    res = [i.to_json() for i in not_read_books]
+    route_logger.debug(res)
+    return jsonify(books_list=res), 200
 
 
 @app.route('/books/avg', methods=['GET'])
@@ -101,14 +108,15 @@ def func_name2():
     ...
 
 
-@app.route('/books/popular', methods=['GET'])  # not work
-def func_name3():
+@app.route('/books/popular', methods=['GET'])
+def popular_book():
     """Получите самую популярную книгу среди студентов, у которых средний балл больше 4.0"""
     most_popular_book = session.query(Book.name, Author.name, Author.surname,
                                       func.count(ReceivingBook.date_of_issue)).join(Author) \
         .join(ReceivingBook).join(Student).filter(Student.average_score > 4.0) \
-        .order_by(ReceivingBook.date_of_issue.desc()).limit(1)
-    return jsonify(books_list=most_popular_book), 200
+        .order_by(ReceivingBook.date_of_issue.desc()).limit(1).one_or_none()
+    route_logger.debug(most_popular_book)
+    return jsonify(books_list=[i for i in most_popular_book]), 200
 
 
 @app.route('/books/top', methods=['GET'])
