@@ -6,15 +6,15 @@ from sqlalchemy.ext.hybrid import hybrid_property, hybrid_method
 from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy import create_engine
 from sqlalchemy.exc import NoResultFound
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 from pprint import pprint
 
-engine = create_engine('sqlite:///homework.db', echo=True, connect_args={"check_same_thread": False})
+engine = create_engine('sqlite:///homework.db', echo=False, connect_args={"check_same_thread": False})
 Base = declarative_base()
 Session = sessionmaker(bind=engine)
 session = Session()
-# logging.basicConfig(level=logging.INFO)
-# logger = logging.getLogger("[models]")
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger("[models]")
 
 
 class Author(Base):
@@ -130,6 +130,10 @@ class ReceivingBook(Base):
     def is_debtors(self, compare_date):
         return self.date_of_issue < compare_date
 
+    @hybrid_method
+    def is_month(self, current_month: str):
+        return current_month < self.date_of_issue
+
     def to_json(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
@@ -192,53 +196,41 @@ if __name__ == "__main__":
 
     # task 2.2
     input_student_id = 3
-    get_book_id = session.query(ReceivingBook).filter(ReceivingBook.student_id == input_student_id).all()
-    book_id_from_receive = 0
-    for g_query in get_book_id:
-        book_id_from_receive = g_query.book_id
-    a = """
-    SELECT authors.name as author_name
-    FROM authors
-    JOIN books
-    ON authors.id = books.author_id
-    WHERE books.id != (
-    SELECT book_id
-    FROM receiving_books
-    WHERE student_id = 3)
-    """
-    b = """
-    SELECT book_id
-    FROM receiving_books
-    WHERE student_id = 3
-    """
-    c = """
-    SELECT books.name,
-    books.id
+    d = """
+    SELECT books.name
     FROM books
-    WHERE books.author_id =
+    WHERE books.author_id = 
     (SELECT books.author_id
-    FROM books
-    WHERE books.id = 
-    (select book_id
     FROM receiving_books
-    WHERE receiving_books.student_id = 3))
+    JOIN books
+    ON receiving_books.book_id = books.id
+    WHERE receiving_books.student_id = 3) AND books.id !=
+    (SELECT receiving_books.book_id
+    FROM receiving_books
+    WHERE receiving_books.student_id = 3)
     """
-    # res = session.query(Author.id).join(Book).filter(Book.id == book_id_from_receive).one_or_none()
-    # print(res[0])
-    all_book_without_author = session.query(Author).filter(Author.id != (session.query(Author.id).join(Book).filter(Book.id == book_id_from_receive).one_or_none())[0]).all()
-    for one_author in all_book_without_author:
-        print(one_author)
-    print(all_book_without_author)
+    print('=' * 100)
     print('task 2.2')
+    book_id_with_student = session.query(ReceivingBook.book_id).filter(ReceivingBook.student_id == 3).subquery()
+
+    print(book_id_with_student)
+
+    print('=' * 100)
 
     # task 2.3
-    date_mounth = 12
+    print('task 2.3')
     all_book_uniq_id_from_receive_table = """
     SELECT student_id, AVG(book_id) as Average_books
         FROM receiving_books
     WHERE strftime('%m%Y', date_of_issue) = strftime('%m%Y', date('now')) 
     GROUP BY student_id;
     """
+    current_month = datetime.now()
+    current_month_1 = current_month.month + 1
+    sql_2_3 = session.query(ReceivingBook, func.avg(ReceivingBook.book_id))\
+        .filter(ReceivingBook.is_month(current_month)).group_by(ReceivingBook.student_id).all()
+    print(sql_2_3)
+    print('=' * 100)
 
     # task 2.4
     sql_req = """
@@ -254,6 +246,7 @@ if __name__ == "__main__":
     ORDER BY RAZ DESC
     LIMIT 1;
     """
+    print('task 2.4')
     most_popular_book = session.query(Book.name, Author.name, Author.surname, func.count(ReceivingBook.date_of_issue)).join(Author)\
         .join(ReceivingBook).join(Student).filter(Student.average_score > 4.0)\
         .order_by(ReceivingBook.date_of_issue.desc()).limit(1)
@@ -272,7 +265,8 @@ if __name__ == "__main__":
     LIMIT 10;
     """
     print('=' * 100)
-    top_10_students = session.query(ReceivingBook.date_of_issue, Student.name, Student.surname).join(Student)\
-        .filter()
+    top_10_students = session.query(func.count(ReceivingBook.date_of_issue), Student.name, Student.surname).join(Student)\
+        .filter(ReceivingBook.date_of_issue == 12).group_by(ReceivingBook.student_id)\
+        .order_by(func.count(ReceivingBook.date_of_issue).desc()).limit(10)
     print(top_10_students)
 
