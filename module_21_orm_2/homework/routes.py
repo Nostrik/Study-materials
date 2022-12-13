@@ -144,9 +144,10 @@ def import_csv():
     if request.method == 'POST':
         if 'file' not in request.files:
             route_logger.debug('NO FILE')
-        file_form = request.files['file']
+        # file_form = request.files['students.csv']
     csv_file = 'file_form'
-    route_logger.debug(request.files)
+    for req_file in request.files:
+        route_logger.debug(req_file)
     with open(csv_file, newline='') as csvfile:
         reader = csv.DictReader(csvfile)
         for row in reader:
