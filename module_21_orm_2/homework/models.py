@@ -210,7 +210,6 @@ if __name__ == "__main__":
     print(res)
     print('=' * 100)
 
-
     # task 2.3
     print('task 2.3')
     all_book_uniq_id_from_receive_table = """
@@ -222,7 +221,7 @@ if __name__ == "__main__":
     current_month = datetime.now()
     current_month_1 = current_month.month + 1
     sql_2_3 = session.query(ReceivingBook, func.avg(ReceivingBook.book_id))\
-        .filter(ReceivingBook.is_month(current_month)).group_by(ReceivingBook.student_id).all()
+        .filter(ReceivingBook.date_of_issue).group_by(ReceivingBook.student_id).all()
     print(sql_2_3)
     print('=' * 100)
 

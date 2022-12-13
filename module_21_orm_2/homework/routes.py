@@ -1,13 +1,16 @@
 import logging
-from datetime import datetime
-
+import csv
+from datetime import datetime, date
 from sqlalchemy import func
-
 from models import Base, engine, session, Book, ReceivingBook, insert_data, Author, Student
 from sqlalchemy.exc import NoResultFound, MultipleResultsFound, InvalidRequestError
-from flask import Flask, jsonify, abort, request
+from flask import Flask, jsonify, abort, request, flash
 
+
+UPLOAD_FOLDER = '/files'
 app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+ALLOWED_EXTENSIONS = {'csv'}
 logging.basicConfig(level=logging.DEBUG)
 route_logger = logging.getLogger("[routes]")
 
@@ -66,7 +69,6 @@ def return_book_to_the_library():
     try:
         query = update(ReceivingBook).where(ReceivingBook.book_id == id_book)\
             .values(date_of_finish=return_date)
-        # query2 = ReceivingBook.update().values(date_of_finish=return_date).where(ReceivingBook.book_id == id_book)
         session.execute(query)
     except NoResultFound:
         return 'student_id и book_id не найдено', 404
@@ -103,9 +105,14 @@ def not_read_books(student_id: int):
 
 
 @app.route('/books/avg', methods=['GET'])
-def func_name2():
+def all_book_in_month():
     """Получите среднее количество книг, которые студенты брали в этом месяце"""
-    ...
+    current_month = f'{date.today():%m%Y}'
+    route_logger.debug(current_month)
+    books_in_month = session.query(ReceivingBook, func.avg(ReceivingBook.book_id)) \
+        .filter(func.strftime(ReceivingBook.date_of_issue, '%m%Y') == current_month).group_by(ReceivingBook.student_id).all()
+    route_logger.debug(books_in_month)
+    return jsonify(data=[i for i in books_in_month]), 200
 
 
 @app.route('/books/popular', methods=['GET'])
@@ -120,10 +127,31 @@ def popular_book():
 
 
 @app.route('/books/top', methods=['GET'])
-def func_name4():
+def top_10_students_year():
     """Получите ТОП-10 самых читающих студентов в этом году"""
-    top_10_students = session.query(ReceivingBook.date_of_issue, Student.name, Student.surname).join(Student) \
-        .filter()
+    current_year = f'{date.today():%Y}'
+    top_10_students = session.query(func.count(ReceivingBook.date_of_issue), Student.name, Student.surname).join(
+        Student) \
+        .filter(func.strftime(ReceivingBook.date_of_issue, '%Y') == current_year).group_by(ReceivingBook.student_id) \
+        .order_by(func.count(ReceivingBook.date_of_issue).desc()).limit(10)
+
+    route_logger.debug(top_10_students)
+    return jsonify(data=[i for i in top_10_students]), 200
+
+
+@app.route('/students/insert_csv', methods=['POST'])
+def import_csv():
+    if request.method == 'POST':
+        if 'file' not in request.files:
+            route_logger.debug('NO FILE')
+        file_form = request.files['file']
+    csv_file = 'file_form'
+    route_logger.debug(request.files)
+    with open(csv_file, newline='') as csvfile:
+        reader = csv.DictReader(csvfile)
+        for row in reader:
+            print(row['name'], row['surname'], row['phone'], row['email'], row['average_score'], row['scolarship'])
+    return {'key': 'value'}
 
 
 if __name__ == "__main__":
