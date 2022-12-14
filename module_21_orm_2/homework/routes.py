@@ -1,16 +1,18 @@
 import logging
 import csv
+import os
 from datetime import datetime, date
 from sqlalchemy import func
 from models import Base, engine, session, Book, ReceivingBook, insert_data, Author, Student
 from sqlalchemy.exc import NoResultFound, MultipleResultsFound, InvalidRequestError
-from flask import Flask, jsonify, abort, request, flash
+from flask import Flask, jsonify, abort, request, flash, redirect
+from werkzeug.utils import secure_filename
 
 
-UPLOAD_FOLDER = '/files'
+UPLOAD_FOLDER = 'C:/Users/Maksik/PycharmProjects/python_advanced/module_21_orm_2/homework/files'
+ALLOWED_EXTENSIONS = {'txt', 'csv'}
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-ALLOWED_EXTENSIONS = {'csv'}
 logging.basicConfig(level=logging.DEBUG)
 route_logger = logging.getLogger("[routes]")
 
@@ -139,20 +141,51 @@ def top_10_students_year():
     return jsonify(data=[i for i in top_10_students]), 200
 
 
-@app.route('/students/insert_csv', methods=['POST'])
-def import_csv():
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
+@app.route('/students/insert_csv', methods=['GET', 'POST'])
+def upload_file():
     if request.method == 'POST':
         if 'file' not in request.files:
-            route_logger.debug('NO FILE')
-        # file_form = request.files['students.csv']
-    csv_file = 'file_form'
-    for req_file in request.files:
-        route_logger.debug(req_file)
-    with open(csv_file, newline='') as csvfile:
+            flash('No file part')
+            return redirect(request.url)
+        file = request.files['file']
+        if file.filename == '':
+            flash('No selected file')
+            return redirect(request.url)
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            return '<h4>file saved successful</h4>', 200
+    return '''
+    <!doctype html>
+    <title>Upload new File</title>
+    <h1>Upload new File</h1>
+    <form method=post enctype=multipart/form-data>
+      <input type=file name=file>
+      <input type=submit value=Upload>
+    </form>
+    '''
+
+
+@app.route('/import', methods=['GET'])
+def import_data_from_csv():
+    file_path = 'files/students.csv'
+    results = []
+    with open(file_path, newline='') as csvfile:
         reader = csv.DictReader(csvfile)
-        for row in reader:
-            print(row['name'], row['surname'], row['phone'], row['email'], row['average_score'], row['scolarship'])
-    return {'key': 'value'}
+        results = [row for row in reader]
+    for dic in results:
+        if dic['scholarship'] == '1':
+            dic['scholarship'] = True
+        elif dic['scholarship'] == '0':
+            dic['scholarship'] = False
+    session.bulk_insert_mappings(Student, results)
+    session.commit()
+    return '<h4>import successful</h4>', 200
 
 
 if __name__ == "__main__":
