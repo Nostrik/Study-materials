@@ -1,7 +1,7 @@
 FROM python:3.7
 
 RUN apt-get update && apt-get install -y python3-dev supervisor nginx \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/* # удалаем индексы репозиториев, которые получили командой apt-get update
 
 COPY requirements.txt /app/
 RUN pip install -r /app/requirements.txt
