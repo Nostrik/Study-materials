@@ -5,6 +5,8 @@ RUN apt-get update && apt-get install -y python3-dev supervisor nginx \
 
 COPY requirements.txt /app/
 RUN pip install -r /app/requirements.txt
+RUN apt-get -y update
+RUN apt-get -y install nano
 
 COPY src/ /app/
 COPY nginx.conf /etc/nginx/nginx.conf
