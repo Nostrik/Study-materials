@@ -11,7 +11,6 @@ COPY src/ /app/
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY uwsgi.ini /etc/uwsgi/uwsgi.ini
 COPY supervisord.ini /etc/supervisor/conf.d/supervisord.ini
-COPY static/ /static/
 COPY ./static /usr/share/nginx/html/static
 
 WORKDIR /app
