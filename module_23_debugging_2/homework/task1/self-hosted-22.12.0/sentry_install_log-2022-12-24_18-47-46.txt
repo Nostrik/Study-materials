@@ -1,0 +1,2 @@
+bash: /home/nostrik/snap/pycharm-community/python_advanced/python_advanced/module_23_debugging_2/homework/task1/.env: No such file or directory
+bash: parse-cli.sh: No such file or directory

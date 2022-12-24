@@ -1,0 +1,5 @@
+▶ Checking minimum requirements ...
+Found Docker version 20.10.21
+Found Docker Compose version 2.12.2
+WARN: Recommended minimum RAM available to Docker is 7800 MB, found 5932 MB
+FAIL: The CPU your machine is running on does not support the SSE 4.2 instruction set, which is required for one of the services Sentry uses (Clickhouse). See https://github.com/getsentry/self-hosted/issues/340 for more info.

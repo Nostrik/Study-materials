@@ -1,0 +1,73 @@
+▶ Parsing command line ...
+
+▶ Detecting Docker platform
+Detected Docker platform is linux/amd64
+
+▶ Initializing Docker Compose ...
+
+▶ Setting up error handling ...
+
+Hey, so ... we would love to automatically find out about issues with your
+Sentry instance so that we can improve the product. Turns out there is an app
+for that, called Sentry. Would you be willing to let us automatically send data
+about your instance upstream to Sentry for development and debugging purposes?
+
+  y / yes / 1
+  n / no / 0
+
+(Btw, we send this to our own self-hosted Sentry instance, not to Sentry SaaS,
+so that we can be in this together.)
+
+Here's the info we may collect:
+
+  - OS username
+  - IP address
+  - install log
+  - runtime errors
+  - performance data
+
+Thirty (30) day retention. No marketing. Privacy policy at sentry.io/privacy.
+
+y or n? 
+Thank you. To avoid this prompt in the future, use one of these flags:
+
+  --report-self-hosted-issues
+  --no-report-self-hosted-issues
+
+or set the REPORT_SELF_HOSTED_ISSUES environment variable:
+
+  REPORT_SELF_HOSTED_ISSUES=1 to send data
+  REPORT_SELF_HOSTED_ISSUES=0 to not send data
+
+latest: Pulling from getsentry/sentry-cli
+c7ed990a2339: Pulling fs layer
+18d3cc651798: Pulling fs layer
+3e6a010ae3c1: Pulling fs layer
+4e81a4699a2d: Pulling fs layer
+2adc3acefefa: Pulling fs layer
+4e81a4699a2d: Waiting
+2adc3acefefa: Waiting
+18d3cc651798: Verifying Checksum
+18d3cc651798: Download complete
+3e6a010ae3c1: Verifying Checksum
+c7ed990a2339: Download complete
+c7ed990a2339: Pull complete
+18d3cc651798: Pull complete
+3e6a010ae3c1: Pull complete
+2adc3acefefa: Verifying Checksum
+2adc3acefefa: Download complete
+4e81a4699a2d: Download complete
+4e81a4699a2d: Pull complete
+2adc3acefefa: Pull complete
+Digest: sha256:0a1b14044737c32498dd9031e90c74d49eea618a0559a3277e83951908bb8113
+Status: Downloaded newer image for getsentry/sentry-cli:latest
+docker.io/getsentry/sentry-cli:latest
+
+▶ Checking for latest commit ... 
+skipped
+
+▶ Checking minimum requirements ...
+Found Docker version 20.10.21
+Found Docker Compose version 2.12.2
+WARN: Recommended minimum RAM available to Docker is 7800 MB, found 5932 MB
+FAIL: The CPU your machine is running on does not support the SSE 4.2 instruction set, which is required for one of the services Sentry uses (Clickhouse). See https://github.com/getsentry/self-hosted/issues/340 for more info.

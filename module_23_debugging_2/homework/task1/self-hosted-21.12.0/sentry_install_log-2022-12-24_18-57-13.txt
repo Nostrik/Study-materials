@@ -1,0 +1,18 @@
+▶ Parsing command line ...
+
+▶ Checking for latest commit ... 
+skipped
+
+▶ Setting up error handling ...
+
+▶ Checking minimum requirements ...
+Unable to find image 'busybox:latest' locally
+latest: Pulling from library/busybox
+2123501b93d4: Pulling fs layer
+2123501b93d4: Verifying Checksum
+2123501b93d4: Download complete
+2123501b93d4: Pull complete
+Digest: sha256:05a79c7279f71f86a2a0d05eb72fcb56ea36139150f0a75cd87e80a4272e4e39
+Status: Downloaded newer image for busybox:latest
+WARN: Recommended minimum RAM available to Docker is 7800 MB, found 5932 MB
+FAIL: The CPU your machine is running on does not support the SSE 4.2 instruction set, which is required for one of the services Sentry uses (Clickhouse). See https://git.io/JvLDt for more info.
