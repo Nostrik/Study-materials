@@ -1,0 +1,6 @@
+./install/_lib.sh: line 31: /home/nostrik/PycharmProjects/python_advanced/module_23_debugging_2/homework/task1/self-hosted-22.12.0/.env: No such file or directory
+▶ Parsing command line ...
+
+▶ Detecting Docker platform
+template: :1:2: executing "" at <.Architecture>: reflect: indirection through nil pointer to embedded struct field Info
+FAIL: Unsupported docker architecture .
