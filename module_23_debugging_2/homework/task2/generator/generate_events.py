@@ -4,14 +4,14 @@ import threading
 
 import requests
 
-endpoints = ('one', 'two', 'three', 'four', 'error')
+endpoints = ('test_one', 'test_two')
 
 
 def run():
     while True:
         try:
             target = random.choice(endpoints)
-            requests.get("http://app:5000/%s" % target, timeout=1)
+            requests.get("http://app:5000/%s" % target, timeout=3)
 
         except:
             pass
