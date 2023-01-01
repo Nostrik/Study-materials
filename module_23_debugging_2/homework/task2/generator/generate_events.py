@@ -4,7 +4,7 @@ import threading
 
 import requests
 
-endpoints = ('test_one', 'test_two')
+endpoints = ('one', 'two')
 
 
 def run():
