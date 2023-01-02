@@ -9,9 +9,6 @@ metrics = PrometheusMetrics(app)
 
 
 @app.route('/one')
-@metrics.counter("counter_collection", "Number of invocations per connection.", labels={
-        "status": lambda resp: resp.status_code
-    })
 def one_route():
     time.sleep(random.random() * 0.2)
     return 'ok', 200
