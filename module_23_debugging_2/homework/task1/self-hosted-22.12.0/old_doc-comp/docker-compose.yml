@@ -16,13 +16,13 @@ x-healthcheck-defaults: &healthcheck_defaults
   start_period: 10s
 x-sentry-defaults: &sentry_defaults
   <<: *restart_policy
-  image: "$SENTRY_IMAGE"
+  image: sentry-self-hosted-local
   # Set the platform to build for linux/arm64 when needed on Apple silicon Macs.
-#  platform: ${DOCKER_PLATFORM:-}
-#  build:
-#    context: ./sentry
-#    args:
-#      - SENTRY_IMAGE
+  platform: ${DOCKER_PLATFORM:-}
+  build:
+    context: ./sentry
+    args:
+      - SENTRY_IMAGE
   depends_on:
     redis:
       <<: *depends_on-healthy

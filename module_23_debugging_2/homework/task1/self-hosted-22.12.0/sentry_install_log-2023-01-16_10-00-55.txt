@@ -1,0 +1,59 @@
+./install/_lib.sh: line 31: /home/nostrik/PycharmProjects/python_advanced/module_23_debugging_2/homework/task1/self-hosted-22.12.0/.env: No such file or directory
+▶ Parsing command line ...
+
+▶ Detecting Docker platform
+Detected Docker platform is linux/amd64
+
+▶ Initializing Docker Compose ...
+
+▶ Setting up error handling ...
+
+Hey, so ... we would love to automatically find out about issues with your
+Sentry instance so that we can improve the product. Turns out there is an app
+for that, called Sentry. Would you be willing to let us automatically send data
+about your instance upstream to Sentry for development and debugging purposes?
+
+  y / yes / 1
+  n / no / 0
+
+(Btw, we send this to our own self-hosted Sentry instance, not to Sentry SaaS,
+so that we can be in this together.)
+
+Here's the info we may collect:
+
+  - OS username
+  - IP address
+  - install log
+  - runtime errors
+  - performance data
+
+Thirty (30) day retention. No marketing. Privacy policy at sentry.io/privacy.
+
+y or n? 
+Understood. To avoid this prompt in the future, use one of these flags:
+
+  --report-self-hosted-issues
+  --no-report-self-hosted-issues
+
+or set the REPORT_SELF_HOSTED_ISSUES environment variable:
+
+  REPORT_SELF_HOSTED_ISSUES=1 to send data
+  REPORT_SELF_HOSTED_ISSUES=0 to not send data
+
+
+▶ Checking for latest commit ... 
+skipped
+
+▶ Checking minimum requirements ...
+Found Docker version 20.10.22
+Found Docker Compose version 2.14.1
+WARN: Recommended minimum RAM available to Docker is 7800 MB, found 5753 MB
+
+▶ Turning things off ...
+Couldn't find env file: /home/nostrik/PycharmProjects/python_advanced/module_23_debugging_2/homework/task1/self-hosted-22.12.0/.env
+Unable to find image 'sentry-self-hosted-jq-local:latest' locally
+Unable to find image 'sentry-self-hosted-jq-local:latest' locally
+docker: Error response from daemon: pull access denied for sentry-self-hosted-jq-local, repository does not exist or may require 'docker login': denied: requested access to the resource is denied.
+See 'docker run --help'.
+docker: Error response from daemon: pull access denied for sentry-self-hosted-jq-local, repository does not exist or may require 'docker login': denied: requested access to the resource is denied.
+See 'docker run --help'.
