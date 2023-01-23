@@ -1,0 +1,2 @@
+2023-01-23 09:18:24.000000000 +0000 gunicorn.access: {"source":"stdout","log":"2023-01-23 09:18:24 [7] [INFO] 172.23.0.1 - - [23/Jan/2023:09:18:24 +0000] \"GET /one HTTP/1.1\" 201 3 \"-\" \"Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/109.0\"","container_id":"a91065d64a79d6100110579c5caf2788184b03e815b7d92cd17a7e0003c6d0ab","container_name":"/task1-fluentd-article_app_1"}
+
