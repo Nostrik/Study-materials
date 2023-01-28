@@ -3,6 +3,7 @@ from pathlib import Path
 
 import aiohttp
 import aiofiles
+import time
 
 URL = 'https://cataas.com/cat'
 CATS_WE_WANT = 10
@@ -22,6 +23,14 @@ async def write_to_disk(content: bytes, id: int):
     file_path = "{}/{}.png".format(OUT_PATH, id)
     async with aiofiles.open(file_path, mode='wb') as f:
         await f.write(content)
+
+
+def blocking_io(conent: bytes, id_c):
+    print(f"start blocking_io at {time.strftime('%X')}")
+    file_path = "{}/{}.png".format(OUT_PATH, id_c)
+    with open(file_path, mode='wb') as file:
+        file.write(conent)
+    print(f"blocking_io complete at {time.strftime('%X')}")
 
 
 async def get_all_cats():
