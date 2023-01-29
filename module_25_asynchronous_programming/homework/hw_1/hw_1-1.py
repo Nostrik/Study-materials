@@ -7,7 +7,7 @@ import time
 
 URL = 'https://cataas.com/cat'
 CATS_WE_WANT = 10
-OUT_PATH = Path(__file__).parent / 'cats'
+OUT_PATH = Path(__file__).parent / 'cats2'
 OUT_PATH.mkdir(exist_ok=True, parents=True)
 OUT_PATH = OUT_PATH.absolute()
 
@@ -20,12 +20,21 @@ async def get_cat(client: aiohttp.ClientSession, idx: int) -> bytes:
         await write_to_disk(result, idx)
 
 
-async def write_to_disk(content: bytes, id: int):
-    file_path = "{}/{}.png".format(OUT_PATH, id)
-    async with aiofiles.open(file_path, mode='wb') as f:
-        await f.write(content)
+@logger.catch
+def blocking_io(content: bytes, id_b):
+    file_path = "{}/{}.png".format(OUT_PATH, id_b)
+    with open(file_path, mode='wb') as file:
+        file.write(content)
 
 
+@logger.catch
+async def write_to_disk(content: bytes, id_w: int):
+    await asyncio.gather(
+        asyncio.to_thread(blocking_io, content, id_w)
+    )
+
+
+@logger.catch
 async def get_all_cats():
 
     async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(15)) as client:
@@ -37,6 +46,21 @@ def main():
     res = asyncio.run(get_all_cats())
     # print(len(res))
     logger.info(len(res))
+
+
+# import threading
+#
+# def download_image(url):
+#     # code to download and save the image
+#
+# threads = []
+# for url in urls:
+#     t = threading.Thread(target=download_image, args=(url,))
+#     threads.append(t)
+#     t.start()
+#
+# for t in threads:
+#     t.join()
 
 
 if __name__ == '__main__':
