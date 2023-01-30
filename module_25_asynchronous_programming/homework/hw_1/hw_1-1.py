@@ -14,7 +14,6 @@ OUT_PATH = OUT_PATH.absolute()
 
 async def get_cat(client: aiohttp.ClientSession, idx: int) -> bytes:
     async with client.get(URL) as response:
-        # print(response.status)
         logger.debug(response.status)
         result = await response.read()
         await write_to_disk(result, idx)
@@ -44,23 +43,7 @@ async def get_all_cats():
 
 def main():
     res = asyncio.run(get_all_cats())
-    # print(len(res))
     logger.info(len(res))
-
-
-# import threading
-#
-# def download_image(url):
-#     # code to download and save the image
-#
-# threads = []
-# for url in urls:
-#     t = threading.Thread(target=download_image, args=(url,))
-#     threads.append(t)
-#     t.start()
-#
-# for t in threads:
-#     t.join()
 
 
 if __name__ == '__main__':
