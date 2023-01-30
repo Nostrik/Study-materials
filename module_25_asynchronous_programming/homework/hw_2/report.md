@@ -1,8 +1,8 @@
 ### Report on the download time of cats on threads, processes and asynchrony:
 
 
-| Quantity | Threads | Process | Async  |
-|----------|---------|---------|--------|
-| 10       | none    | none    | none   |
-| 50       | none    | none    | none   |
-| 100      | none    | none    | none   |
+| Quantity | Thread | Process | Async  | With blocking Open |
+|----------|--------|---------|--------|--------------------|
+| 10       | 4 sec  | 3 sec   | 3 sec  | 3 sec              |
+| 50       | 19 sec | 10 sec  | 10 sec | 11 sec             |
+| 100      | 40 sec | 32 sec  | 15s    | 15 sec             |

@@ -6,7 +6,7 @@ import requests
 from threading import Thread
 
 URL = 'https://cataas.com/cat'
-CATS_WE_WANT = 10
+CATS_WE_WANT = 100
 OUT_PATH = Path(__file__).parent / 'cats3'
 OUT_PATH.mkdir(exist_ok=True, parents=True)
 OUT_PATH = OUT_PATH.absolute()
@@ -16,9 +16,9 @@ OUT_PATH = OUT_PATH.absolute()
 def download_and_save_img(num):
     response = requests.get(URL, stream=True)
     if response.status_code == 200:
-        logger.debug(response.status_code)
+        logger.debug(f'status {response.status_code} for {num}')
         file_path = "{}/{}.png".format(OUT_PATH, num)
-        logger.debug(file_path)
+        # logger.debug(file_path)
         with open(file_path, 'wb') as out_file:
             shutil.copyfileobj(response.raw, out_file)
         del response

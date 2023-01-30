@@ -6,7 +6,7 @@ import aiofiles
 import time
 
 URL = 'https://cataas.com/cat'
-CATS_WE_WANT = 10
+CATS_WE_WANT = 100
 OUT_PATH = Path(__file__).parent / 'cats2'
 OUT_PATH.mkdir(exist_ok=True, parents=True)
 OUT_PATH = OUT_PATH.absolute()
@@ -14,7 +14,7 @@ OUT_PATH = OUT_PATH.absolute()
 
 async def get_cat(client: aiohttp.ClientSession, idx: int) -> bytes:
     async with client.get(URL) as response:
-        logger.debug(response.status)
+        logger.debug(f'status {response.status} for {idx}')
         result = await response.read()
         await write_to_disk(result, idx)
 
@@ -41,6 +41,7 @@ async def get_all_cats():
         return await asyncio.gather(*tasks)
 
 
+@logger.catch
 def main():
     res = asyncio.run(get_all_cats())
     logger.info(len(res))
