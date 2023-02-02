@@ -1,83 +1,107 @@
 from loguru import logger
 from bs4 import BeautifulSoup
+from urllib.parse import urlparse, urljoin
+import colorama
 import aiohttp
 import asyncio
 import aiofiles
 import requests
 import time
+import sys
 
 HEADERS = ''
 URL = 'https://www.geeksforgeeks.org/'
 reqs = requests.get(URL)
 soup = BeautifulSoup(reqs.text, 'html.parser')
-urls = []
+INTERNAL_URLS = set()
+EXTERNAL_URLS = set()
 TOTAL_URL_CNT = 0
 TEST_URL = 'http://localhost:63342/python_advanced/module_25_asynchronous_programming/homework/hw_3/html_test/' \
            'index.html?_ijt=gavpvjmv983e68o8mtio0os865&_ij_reload'
+colorama.init()
 
-# https://waksoft.susu.ru/2021/04/14/kak-s-pomoshhyu-v-python-izvlech-vse-ssylki-na-veb-sajty/
-
-# async def get_html(url: str):
-#     async with aiohttp.ClientSession() as session:
-#         async with session.get(url, headers=HEADERS) as response:
-#             return await response.text()
+GREEN = colorama.Fore.GREEN
+GRAY = colorama.Fore.LIGHTBLACK_EX
+RESET = colorama.Fore.RESET
+YELLOW = colorama.Fore.YELLOW
 
 
-# import aiohttp
-# import lxml.html
-#
-# async def fetch_and_parse_links():
-#     async with aiohttp.ClientSession() as session:
-#         response = await session.get('https://www.example.com')
-#         html = await response.text()
-#         root = lxml.html.fromstring(html)
-#         links = root.xpath('//a/@href')
-#         return links
+def is_valid(url: str):
+    parsed = urlparse(url)
+    return bool(parsed.netloc) and bool(parsed.scheme)
 
 
 @logger.catch
-async def get_links_on_page(url):
-    request = requests.get(url)
-    soup = BeautifulSoup(request.text, 'html.parser')
-    for link in soup.find_all('a'):
-        current_url = link.get('href')
-        logger.debug(current_url)
-        global TOTAL_URL_CNT
-        TOTAL_URL_CNT += 1
-        # await write_to_file(link.get('href'))
-    if "https://" in current_url:
-        await get_links_on_page(current_url)
-
-
-@logger.catch
-async def fetch_and_parse_links(url):
+async def get_all_links_on_page(url):
     async with aiohttp.ClientSession() as session:
+        urls = set()
+        domain_name = urlparse(url).netloc
         response = await session.get(url)
+        # html = response.content
         html = await response.text()
         soup = BeautifulSoup(html, 'html.parser')
-        for link in soup.find_all('a'):
-            logger.debug(link.get('href'))
+        for link in soup.findAll('a'):
+            href = link.attrs.get('href')
+            if href == "" or href is None:
+                continue
+            href = urljoin(url, href)
+            parsed_href = urlparse(href)
+            href = parsed_href.scheme + "://" + parsed_href.netloc + parsed_href.path
+            if not is_valid(href):
+                continue
+            if href in INTERNAL_URLS:
+                continue
+            if domain_name not in href:
+                if href not in EXTERNAL_URLS:
+                    # print(f"{GRAY}[!] Внешняя ссылка: {href}{RESET}")
+                    logger.debug(f"{GRAY}[!] Внешняя ссылка: {href}{RESET}")
+                    EXTERNAL_URLS.add(href)
+            # print(f"{GREEN}[*] Внутреннея ссылка: {href}{RESET}")
+            logger.debug(f"{GREEN}[*] Внутреннея ссылка: {href}{RESET}")
+            urls.add(href)
             global TOTAL_URL_CNT
             TOTAL_URL_CNT += 1
+            INTERNAL_URLS.add(href)
+        return urls
 
 
-async def write_to_file(link: str):
+async def write_to_file():
     async with aiofiles.open('result.txt', mode='a') as file:
-        global TOTAL_URL_CNT
-        TOTAL_URL_CNT += 1
-        await file.write(link + '\n')
+        for i_link in INTERNAL_URLS:
+            await file.write(i_link + '\n')
+        for i_link in EXTERNAL_URLS:
+            await file.write(i_link + '\n')
+
+
+@logger.catch
+def crawl(url, max_urls=30):
+    logger.info(f"{YELLOW}[*] Проверено: {url}{RESET}")
+    links = asyncio.run(get_all_links_on_page(url))
+    if links is not None:
+        for link in links:
+            if TOTAL_URL_CNT > max_urls:
+                break
+            crawl(link, max_urls=max_urls)
+            # await crawl(link, max_urls=max_urls)
 
 
 def main():
     asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
-    res = asyncio.run(get_links_on_page(URL))
-    # res2 = asyncio.run(fetch_and_parse_links(URL))
+    # res = asyncio.run(get_links_on_page(URL))
+    # one_page_res = asyncio.run(get_all_links_on_page(URL))
+    # try:
+    #     res2 = asyncio.run(crawl(URL))
+    # except:
+    #     pass
+    asyncio.run(crawl(URL))
+    asyncio.run(write_to_file())
 
 
 if __name__ == "__main__":
     start_time = time.strftime('%X')
     logger.info(f"started crawler at {start_time}")
     main()
+    # loop.run_until_complete(task)
     logger.info(f"was started at {start_time}")
     logger.info(f"finished crawler at {time.strftime('%X')}")
     logger.debug(f'total urls - {TOTAL_URL_CNT}')
