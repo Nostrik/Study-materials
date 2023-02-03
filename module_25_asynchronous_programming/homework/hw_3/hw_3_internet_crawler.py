@@ -25,6 +25,8 @@ GRAY = colorama.Fore.LIGHTBLACK_EX
 RESET = colorama.Fore.RESET
 YELLOW = colorama.Fore.YELLOW
 
+# https://medium.com/python-pandemonium/asyncio-coroutine-patterns-beyond-await-a6121486656f
+
 
 def is_valid(url: str):
     parsed = urlparse(url)
@@ -39,6 +41,7 @@ async def get_all_links_on_page(url):
         response = await session.get(url)
         # html = response.content
         html = await response.text()
+        # a = response.content
         soup = BeautifulSoup(html, 'html.parser')
         for link in soup.findAll('a'):
             href = link.attrs.get('href')
@@ -62,6 +65,7 @@ async def get_all_links_on_page(url):
             global TOTAL_URL_CNT
             TOTAL_URL_CNT += 1
             INTERNAL_URLS.add(href)
+            # time.sleep(0.2)
         return urls
 
 
@@ -74,25 +78,19 @@ async def write_to_file():
 
 
 @logger.catch
-def crawl(url, max_urls=30):
+def crawl(url, max_urls=5000):
     logger.info(f"{YELLOW}[*] Проверено: {url}{RESET}")
     links = asyncio.run(get_all_links_on_page(url))
     if links is not None:
         for link in links:
             if TOTAL_URL_CNT > max_urls:
                 break
-            crawl(link, max_urls=max_urls)
-            # await crawl(link, max_urls=max_urls)
+            asyncio.create_task(crawl(link, max_urls=max_urls))
 
 
+@logger.catch
 def main():
     asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
-    # res = asyncio.run(get_links_on_page(URL))
-    # one_page_res = asyncio.run(get_all_links_on_page(URL))
-    # try:
-    #     res2 = asyncio.run(crawl(URL))
-    # except:
-    #     pass
     asyncio.run(crawl(URL))
     asyncio.run(write_to_file())
 
@@ -101,7 +99,6 @@ if __name__ == "__main__":
     start_time = time.strftime('%X')
     logger.info(f"started crawler at {start_time}")
     main()
-    # loop.run_until_complete(task)
     logger.info(f"was started at {start_time}")
     logger.info(f"finished crawler at {time.strftime('%X')}")
     logger.debug(f'total urls - {TOTAL_URL_CNT}')

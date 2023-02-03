@@ -92,7 +92,7 @@ if __name__ == "__main__":
     url = args.url
     max_urls = args.max_urls
     """
-    url = 'https://alumnus.susu.ru'
+    url = 'https://www.geeksforgeeks.org/'
     max_urls = 500
 
     crawl(url, max_urls=max_urls)
