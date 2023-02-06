@@ -35,7 +35,6 @@ async def say_hello(
     return {'message': f'{message}, {user}'}
 
 
-
 class Author(BaseModel):
     name: str
     born_year: int = Field(..., lt=2015)
