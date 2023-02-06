@@ -64,3 +64,13 @@ async def post_book(
                    + publisher_message
                    + f" I definitely will read {book.title}!"
     }
+
+
+@app.post('/author')
+@app.post('/author/{}')
+async def post_author(
+    author: Author
+):
+    return {
+        'message': f'{author.name}, {author.born_year}'
+    }
