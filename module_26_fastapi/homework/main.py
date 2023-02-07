@@ -20,3 +20,11 @@ async def shutdown():
 async def shutdown():
     await session.close()
     await engine.dispose()
+
+
+@app.post('/recipe/', response_model=schemas.RecipeOut)
+async def recipes(recipe: schemas.RecipeIn) -> models.Recipe:
+    new_recipe = models.Recipe(**recipe.dict())
+    async with session.begin():
+        session.add(new_recipe)
+    return new_recipe
