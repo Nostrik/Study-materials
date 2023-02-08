@@ -28,3 +28,9 @@ async def recipes(recipe: schemas.RecipeIn) -> models.Recipe:
     async with session.begin():
         session.add(new_recipe)
     return new_recipe
+
+
+@app.get('/recipe/', response_model=List[schemas.RecipeOut])
+async def recipes() -> List[models.Recipe]:
+    res = await session.execute(select(models.Recipe))
+    return res.scalars().all()
