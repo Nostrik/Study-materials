@@ -11,3 +11,11 @@ class Recipe(Base):
     ingredient_list = Column(String, index=True)
     description = Column(String, index=True)
     number_of_views = Column(Integer, index=True)
+
+    def __str__(self):
+        info = f'{self.id} | {self.dish_name} | {self.cooking_time}\n' \
+               f'{self.ingredient_list} | {self.number_of_views}'
+        return info
+
+    def increment_views(self):
+        self.number_of_views += 1
