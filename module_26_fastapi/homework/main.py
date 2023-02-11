@@ -36,9 +36,10 @@ async def recipes() -> List[models.Recipe]:
 
 
 @app.get('/recipe/{idx}',  response_model=schemas.RecipeOut)
-async def detail_recipe(idx: int):
-    res = await session.execute(select(models.Recipe).filter(models.Recipe.id == idx))
-    recipe = res.scalars().one()
-    recipe.number_of_views += 1
-    session.commit()
+async def detail_recipe(idx: int) -> schemas.RecipeOut:
+    async with session.begin():
+        res = await session.execute(select(models.Recipe).filter(models.Recipe.id == idx))
+        recipe = res.scalars().one()
+        if res:
+            recipe.number_of_views += 1
     return recipe
