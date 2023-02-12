@@ -6,6 +6,7 @@ from loguru import logger
 import models
 import schemas
 from database import engine, session
+from fastapi.testclient import TestClient
 
 app = FastAPI()
 
@@ -20,6 +21,11 @@ async def shutdown():
 async def shutdown():
     await session.close()
     await engine.dispose()
+
+
+@app.get("/")
+async def read_main():
+    return {"msg": "Hello World"}
 
 
 @app.post('/recipe/', response_model=schemas.RecipeOut)
@@ -45,3 +51,18 @@ async def detail_recipe(idx: int) -> schemas.RecipeOut:
         if res:
             recipe.number_of_views += 1
     return recipe
+
+
+client = TestClient(app)
+
+
+def test_read_main():
+    response = client.get("/")
+    logger.debug(response)
+    assert response.status_code == 200
+    assert response.json() == {"msg": "Hello World"}
+
+
+def test_get_all_recipes():
+    response = client.get('/recipe/')
+    assert response.status_code == 200
