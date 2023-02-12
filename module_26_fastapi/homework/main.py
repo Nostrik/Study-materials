@@ -1,10 +1,11 @@
 from typing import List
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI
 from sqlalchemy.future import select
+from sqlalchemy import func
 from loguru import logger
 import models
 import schemas
-from database import engine, session, async_session
+from database import engine, session
 
 app = FastAPI()
 
@@ -31,7 +32,8 @@ async def recipes(recipe: schemas.RecipeIn) -> models.Recipe:
 
 @app.get('/recipe/', response_model=List[schemas.RecipeOut])
 async def recipes() -> List[models.Recipe]:
-    res = await session.execute(select(models.Recipe).order_by(models.Recipe.number_of_views))
+    async with session.begin():
+        res = await session.execute(select(models.Recipe).order_by(models.Recipe.number_of_views.desc()))
     return res.scalars().all()
 
 
