@@ -1,29 +1,23 @@
 from typing import List
 from fastapi import FastAPI
 from sqlalchemy.future import select
-from sqlalchemy import func
-from loguru import logger
-# import models
-from . import models
+from models import Base, Recipe
 import schemas
-from . import database
-# from database. import engine, session
-from . import *
-from fastapi.testclient import TestClient
+from database import engine, session
 
 app = FastAPI()
 
 
 @app.on_event("startup")
 async def shutdown():
-    async with database.engine.begin() as conn:
-        await conn.run_sync(models.Base.metadata.create_all)
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
 
 
 @app.on_event("shutdown")
 async def shutdown():
-    await database.session.close()
-    await database.engine.dispose()
+    await session.close()
+    await engine.dispose()
 
 
 @app.get("/")
@@ -32,24 +26,24 @@ async def read_main():
 
 
 @app.post('/recipe/', response_model=schemas.RecipeOut)
-async def recipes(recipe: schemas.RecipeIn) -> models.Recipe:
-    new_recipe = models.Recipe(**recipe.dict())
-    async with database.session.begin():
-        database.session.add(new_recipe)
+async def recipes(recipe: schemas.RecipeIn) -> Recipe:
+    new_recipe = Recipe(**recipe.dict())
+    async with session.begin():
+        session.add(new_recipe)
     return new_recipe
 
 
 @app.get('/recipe/', response_model=List[schemas.RecipeOut])
-async def recipes() -> List[models.Recipe]:
-    async with database.session.begin():
-        res = await database.session.execute(select(models.Recipe).order_by(models.Recipe.number_of_views.desc()))
+async def recipes() -> List[Recipe]:
+    async with session.begin():
+        res = await session.execute(select(Recipe).order_by(Recipe.number_of_views.desc()))
     return res.scalars().all()
 
 
 @app.get('/recipe/{idx}',  response_model=schemas.RecipeOut)
 async def detail_recipe(idx: int) -> schemas.RecipeOut:
-    async with database.session.begin():
-        res = await database.session.execute(select(models.Recipe).filter(models.Recipe.id == idx))
+    async with session.begin():
+        res = await session.execute(select(Recipe).filter(Recipe.id == idx))
         recipe = res.scalars().one()
         if res:
             recipe.number_of_views += 1
