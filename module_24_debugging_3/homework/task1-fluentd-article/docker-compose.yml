@@ -9,7 +9,7 @@ services:
     links:
       - fluentd
     volumes:
-      - ./app/flask_app.py:/var/server/app.py
+      - ./app/flask_app.py:/var/server/flask_app.py
     logging:
       driver: "fluentd"
       options:
