@@ -2,6 +2,8 @@ FROM python:3-alpine
 
 ADD requirements.txt /tmp/requirements.txt
 
+RUN pip install --upgrade pip
+
 RUN pip install -r /tmp/requirements.txt
 
 ADD flask_app.py /var/server/flask_app.py
