@@ -1,12 +1,11 @@
 from flask import Flask, Response
-from sqlalchemy import Column, Integer, String, Float, \
-    create_engine, Sequence, Identity, ForeignKey, delete
-from sqlalchemy.orm import sessionmaker, declarative_base, relationship
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from models import objects, Base
 
 
 app = Flask(__name__)
 engine = create_engine('postgresql+psycopg2://admin:admin@localhost')
-Base = declarative_base()
 Session = sessionmaker(bind=engine)
 session = Session()
 
@@ -14,6 +13,14 @@ session = Session()
 @app.route("/")
 def index():
     return Response("Test PASS"), 200
+
+
+@app.before_request
+def before_request():
+    Base.metadata.drop_all(engine)
+    Base.metadata.create_all(engine)
+    session.bulk_save_objects(objects)
+    session.commit()
 
 
 if __name__ == "__main__":
