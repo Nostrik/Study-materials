@@ -1,7 +1,9 @@
-from flask import Flask, Response
+from flask import Flask, Response, request
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from models import objects, Base
+from models import objects, Base, User, Coffee
+from sqlalchemy.dialects.postgresql import insert
+from loguru import logger
 
 
 app = Flask(__name__)
@@ -12,6 +14,7 @@ session = Session()
 
 @app.route("/")
 def index():
+    logger.debug('Test pass logger')
     return Response("Test PASS"), 200
 
 
@@ -21,6 +24,16 @@ def before_request():
     Base.metadata.create_all(engine)
     session.bulk_save_objects(objects)
     session.commit()
+
+
+# @app.route("/users", methods=['POST'])
+# def add_user():
+#     new_user_name = request.form.get("user_name")
+#     new_user_address = request.form.get("user_address")
+#     insert_query = insert(User).values(
+#         name=new_user_name,
+#         address=new_user_address
+#     )
 
 
 if __name__ == "__main__":
