@@ -19,7 +19,7 @@ def index():
 
 
 @app.before_request
-def before_request():
+def before_request_func():
     Base.metadata.drop_all(engine)
     Base.metadata.create_all(engine)
     session.bulk_save_objects(objects)
@@ -37,4 +37,4 @@ def before_request():
 
 
 if __name__ == "__main__":
-    app.run(debug=True, host='0.0.0.0')
+    app.run(debug=True)
