@@ -7,7 +7,7 @@ from loguru import logger
 
 
 app = Flask(__name__)
-engine = create_engine('postgresql+psycopg2://admin:admin@localhost')
+engine = create_engine('postgresql+psycopg2://admin:admin@postgres')
 Session = sessionmaker(bind=engine)
 session = Session()
 
