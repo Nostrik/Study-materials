@@ -1,3 +1,5 @@
+import json
+
 from flask import Flask, Response, request, jsonify
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -52,11 +54,11 @@ def add_user():
     logger.debug(f"user_name is {new_user_name} | user_address is {new_user_address}")
     insert_query = insert(User).values(
         name=new_user_name,
-        address=dict(new_user_address)
+        address=json.dumps(new_user_address)
     )
     session.execute(insert_query)
     session.commit()
-    return '', 200
+    return 'user added successful', 200
 
 
 if __name__ == "__main__":
