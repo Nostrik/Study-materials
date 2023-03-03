@@ -1,8 +1,8 @@
 from sqlalchemy import Column, Integer, String, Boolean, JSON, ARRAY, ForeignKey
 from sqlalchemy.orm import declarative_base, relationship
 from typing import Dict, Any
-# from .data_fake_request import start_download
-from ..data_app.app import start_download
+from data_fake_request import start_download
+# from ..data_app.app import start_download
 Base = declarative_base()
 
 
