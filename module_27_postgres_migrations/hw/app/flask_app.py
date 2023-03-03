@@ -61,5 +61,12 @@ def add_user():
     return 'user added successful', 200
 
 
+@app.route("/coffee_search_full", methods=['GET'])
+def full_text_search():
+    coffee_name_search = request.args.get('search_coffee')
+    logger.debug(f"search coffee name is {coffee_name_search}")
+    query = session.query()
+
+
 if __name__ == "__main__":
     app.run(debug=True)
