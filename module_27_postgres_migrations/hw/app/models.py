@@ -1,7 +1,9 @@
+import sys
 from sqlalchemy import Column, Integer, String, Boolean, JSON, ARRAY, ForeignKey
 from sqlalchemy.orm import declarative_base, relationship
 from typing import Dict, Any
-from data_fake_request import start_download
+sys.path.append('/home/nostrik/snap/pycharm-community/python_advanced/python_advanced/module_27_postgres_migrations/hw/app/data_fake_request.py')
+import data_fake_request
 # from ..data_app.app import start_download
 Base = declarative_base()
 
@@ -301,6 +303,6 @@ class User(Base):
 #     Coffee(title='American Delight', notes='structured, velvety, clementine, toast, carbon'),
 # ]
 
-user_obj_list, coffee_obj_list = start_download()
+user_obj_list, coffee_obj_list = data_fake_request.start_download()
 user_objects = [User(name=user_obj_list[i]['first_name'], address=user_obj_list[i]['address']) for i in range(0, 10)]
 coffee_objects = [Coffee(title=coffee_obj_list[i]['blend_name'], notes=coffee_obj_list[i]['notes']) for i in range(0, 10)]
