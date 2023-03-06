@@ -10,6 +10,8 @@ ADD flask_app.py /var/server/flask_app.py
 
 ADD models.py /var/server/models.py
 
+ADD data_fake_request.py /var/server/data_fake_request.py
+
 WORKDIR /var/server
 
 #CMD gunicorn --workers=2 flask_app:app

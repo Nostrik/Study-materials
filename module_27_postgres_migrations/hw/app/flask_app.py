@@ -3,7 +3,7 @@ import json
 from flask import Flask, Response, request, jsonify
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from models import Base, User, Coffee, user_obj_list, coffee_obj_list
+from models import Base, User, Coffee, user_obj_list, coffee_obj_list, objects
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.dialects.postgresql import JSON
 from sqlalchemy.sql.expression import cast
@@ -22,14 +22,12 @@ def index():
     return Response("Test PASS"), 200
 
 
-@app.before_request
-def before_request_func():
-    Base.metadata.drop_all(engine)
-    Base.metadata.create_all(engine)
-    session.bulk_save_objects(user_obj_list)
-    session.commit()
-    session.bulk_save_objects(coffee_obj_list)
-    session.commit()
+# @app.before_request
+# def before_request_func():
+#     Base.metadata.drop_all(engine)
+#     Base.metadata.create_all(engine)
+#     session.bulk_save_objects(objects)
+#     session.commit()
 
 
 @app.route('/users', methods=['GET'])
