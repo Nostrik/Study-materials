@@ -65,7 +65,7 @@ def add_user():
 def full_text_search():
     coffee_name_search = request.args.get('search_coffee')
     logger.debug(f"search coffee name is {coffee_name_search}")
-    query = session.query()
+    query = session.query(Coffee.c.text.mach(coffee_name_search))
 
 
 if __name__ == "__main__":
