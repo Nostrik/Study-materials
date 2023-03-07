@@ -74,10 +74,5 @@ def full_text_search():
     return jsonify(coffee_list)
 
 
-@app.route("unic_coffee", methods=['GET'])
-def unic_elem_of_coffee_notes():
-    ...
-
-
 if __name__ == "__main__":
     app.run(debug=True)
