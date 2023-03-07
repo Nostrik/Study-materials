@@ -63,12 +63,15 @@ def add_user():
 
 @app.route("/coffee_search_full", methods=['GET'])
 def full_text_search():
-    coffee_name_search = request.args.get('search_coffee')
-    logger.debug(f"search coffee name is {coffee_name_search}")
-    query = session.query(Coffee.c.text.mach(coffee_name_search))
-    logger.debug(f'query is {query}')
-    res = session.execute(query)
-    logger.debug(f'res is {res}')
+    if len(request.args):
+        coffee_name_search = request.args.get('search_coffee')
+        logger.debug(f"search coffee name is {coffee_name_search}")
+        query = session.query(Coffee).filter(Coffee.title.match(coffee_name_search)).all()
+        logger.debug(f'query is {query}')
+    else:
+        query = session.query(Coffee).all()
+    coffee_list = [coffee.to_json() for coffee in query]
+    return jsonify(coffee_list)
 
 
 if __name__ == "__main__":
