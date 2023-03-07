@@ -4,9 +4,9 @@ from flask import Flask, Response, request, jsonify
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from models import Base, User, Coffee, user_obj_list, coffee_obj_list, objects
-from sqlalchemy.dialects.postgresql import insert
+from sqlalchemy.dialects.postgresql import insert, TSVECTOR
 from sqlalchemy.dialects.postgresql import JSON
-from sqlalchemy.sql.expression import cast
+from sqlalchemy.sql.expression import cast, select
 from loguru import logger
 
 
@@ -66,6 +66,9 @@ def full_text_search():
     coffee_name_search = request.args.get('search_coffee')
     logger.debug(f"search coffee name is {coffee_name_search}")
     query = session.query(Coffee.c.text.mach(coffee_name_search))
+    logger.debug(f'query is {query}')
+    res = session.execute(query)
+    logger.debug(f'res is {res}')
 
 
 if __name__ == "__main__":
