@@ -1,5 +1,5 @@
 import json
-
+from pprint import pprint
 from flask import Flask, Response, request, jsonify
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -22,12 +22,13 @@ def index():
     return Response("Test PASS"), 200
 
 
-# @app.before_request
-# def before_request_func():
-#     Base.metadata.drop_all(engine)
-#     Base.metadata.create_all(engine)
-#     session.bulk_save_objects(objects)
-#     session.commit()
+@app.before_request
+def before_request_func():
+    Base.metadata.drop_all(engine)
+    Base.metadata.create_all(engine)
+    session.bulk_save_objects(objects)
+    session.commit()
+    logger.info('database has been updated')
 
 
 @app.route('/users', methods=['GET'])
