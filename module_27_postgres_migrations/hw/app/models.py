@@ -45,7 +45,7 @@ user_obj_list, coffee_obj_list = start_download()
 objects = []
 for i in range(10):
     row = User(name=user_obj_list[i]['first_name'], address=user_obj_list[i]['address'])
-               # coffee_id=random.choice(coffee_obj_list))
+               # coffee_id=random.randint(1, 10))
     objects.append(row)
 for i in range(10):
     notes_list = []

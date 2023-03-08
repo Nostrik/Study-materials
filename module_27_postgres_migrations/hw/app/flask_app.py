@@ -1,12 +1,9 @@
 import json
-from pprint import pprint
 from flask import Flask, Response, request, jsonify
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from models import Base, User, Coffee, user_obj_list, coffee_obj_list, objects
-from sqlalchemy.dialects.postgresql import insert, TSVECTOR
-from sqlalchemy.dialects.postgresql import JSON
-from sqlalchemy.sql.expression import cast, select
+from sqlalchemy.dialects.postgresql import insert
 from loguru import logger
 
 
@@ -21,14 +18,14 @@ def index():
     logger.debug('Test pass logger')
     return Response("Test PASS"), 200
 
-
-@app.before_request
-def before_request_func():
-    Base.metadata.drop_all(engine)
-    Base.metadata.create_all(engine)
-    session.bulk_save_objects(objects)
-    session.commit()
-    logger.info('database has been updated')
+#
+# @app.before_request
+# def before_request_func():
+#     Base.metadata.drop_all(engine)
+#     Base.metadata.create_all(engine)
+#     session.bulk_save_objects(objects)
+#     session.commit()
+#     logger.info('database has been updated')
 
 
 @app.route('/users', methods=['GET'])
@@ -73,6 +70,18 @@ def full_text_search():
         query = session.query(Coffee).all()
     coffee_list = [coffee.to_json() for coffee in query]
     return jsonify(coffee_list)
+
+
+@app.route("/coffee_note_unic", methods=['GET'])
+def coffee_unic_from_notes():
+    query = session.query(Coffee).all()
+    all_notes_from_bd = []
+    for q in query:
+        note_lst = q.notes
+        for note in note_lst:
+            all_notes_from_bd.append(note.strip())
+    result_lst = list(set(all_notes_from_bd))
+    return result_lst
 
 
 if __name__ == "__main__":
