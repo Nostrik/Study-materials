@@ -11,6 +11,7 @@ app = Flask(__name__)
 engine = create_engine('postgresql+psycopg2://admin:admin@postgres', echo=False)
 Session = sessionmaker(bind=engine)
 session = Session()
+# https://github.com/TamtamHero/fw-fanctrl
 
 
 @app.route("/")
