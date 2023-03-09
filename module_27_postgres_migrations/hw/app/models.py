@@ -1,3 +1,4 @@
+import random
 from sqlalchemy import Column, Integer, String, Boolean, JSON, ARRAY, ForeignKey
 from sqlalchemy.orm import declarative_base, relationship
 from typing import Dict, Any
@@ -44,10 +45,12 @@ user_obj_list, coffee_obj_list = start_download()
 objects = []
 for i in range(10):
     row = User(name=user_obj_list[i]['first_name'], address=user_obj_list[i]['address'])
+               # coffee_id=random.randint(1, 10))
     objects.append(row)
 for i in range(10):
     notes_list = []
     for i_note in coffee_obj_list[i]['notes'].split(','):
         notes_list.append(i_note)
-    row = Coffee(title=coffee_obj_list[i]['blend_name'], notes=notes_list)
+    row = Coffee(title=coffee_obj_list[i]['blend_name'], origin=coffee_obj_list[i]['origin'],
+                 intensifier=coffee_obj_list[i]['intensifier'], notes=notes_list)
     objects.append(row)

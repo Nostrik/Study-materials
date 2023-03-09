@@ -9,31 +9,35 @@ from pprint import pprint
 URL_USER = 'https://random-data-api.com/api/v2/users'
 URL_COFFEE = 'https://random-data-api.com/api/coffee/random_coffee'
 WANT_QUANTITY = 10
+LOG_LEVEL = 'INFO'
+TIMEOUT_ASYNCIO = 20
 # logger.add(sys.stderr, format="{time} | {level} | {message}", level="INFO")
 
 
 async def get_fake_user_data(client: aiohttp.ClientSession, idx: int) -> Any:
     async with client.get(URL_USER) as user:
         result = await user.json()
-        # logger.debug(result)
+        if LOG_LEVEL == 'DEBUG':
+            logger.debug(result)
         return result
 
 
 async def get_fake_coffee_data(client: aiohttp.ClientSession, idx: int) -> Any:
     async with client.get(URL_COFFEE) as user:
         result = await user.json()
-        # logger.debug(result)
+        if LOG_LEVEL == 'DEBUG':
+            logger.debug(result)
         return result
 
 
 async def get_all_fake_users():
-    async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(10)) as client:
+    async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(TIMEOUT_ASYNCIO)) as client:
         tasks = [get_fake_user_data(client, i) for i in range(WANT_QUANTITY)]
         return await asyncio.gather(*tasks)
 
 
 async def get_all_fake_coffee():
-    async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(10)) as client:
+    async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(TIMEOUT_ASYNCIO)) as client:
         tasks = [get_fake_coffee_data(client, i) for i in range(WANT_QUANTITY)]
         return await asyncio.gather(*tasks)
 
