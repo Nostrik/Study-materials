@@ -27,3 +27,5 @@ def add_cors(response: Response):
 
 if __name__ == '__main__':
     app.run(port=8080, debug=True)
+
+# fetch('http://127.0.0.1:8080', {method: 'GET'}).then(resp => resp.text()).then(console.log())
