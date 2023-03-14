@@ -21,6 +21,7 @@ def post_handler():
 @app.after_request
 def add_cors(response: Response):
     response.headers['Access-Control-Allow-Origin'] = '*'
+    # response.headers['Access-Control-Allow-Methods'] = ['GET', 'POST']
     return response
 
 
