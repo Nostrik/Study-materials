@@ -6,7 +6,6 @@ app = Flask(__name__)
 
 @app.route('/', methods=['GET'])
 def get_handler():
-    # print(request.headers)\
     logger.debug(request.headers)
     return jsonify({"Hello": "User"})
 
@@ -20,10 +19,9 @@ def post_handler():
 
 @app.after_request
 def add_cors(response: Response):
-    # response.headers['Access-Control-Allow-Origin'] = '*'
-    # response.headers['Access-Control-Allow-Methods'] = 'POST', 'GET'
-    response.headers.add('Access-Control-Allow-Origin', '*')
+    response.headers.add('Access-Control-Allow-Origin', 'https://www.google.com')
     response.headers.add('Access-Control-Allow-Methods', 'GET,POST')
+    response.headers.add('Access-Control-Allow-Headers', 'X-My-Fancy-Header')
     return response
 
 
