@@ -38,4 +38,19 @@ class Parking(db.Model):
 class ClientParking(db.Model):
     __tablename__ = 'client_parking'
 
-    ...
+    id = db.Column(db.Integer, primary_key=True)
+    client_id = db.Column(db.Integer)
+    parking_id = db.Column(db.Integer)
+    time_in = db.Column(db.DateTime)
+    time_out = db.Column(db.DateTime)
+
+    client = db.relationship("Client", backref="parking")
+    parking = db.relationship("Parking", backref="client")
+
+    def __repr__(self):
+        return f"Client_Parking {self.id}, client_id {self.client_id}, parking_id {self.parking_id}" \
+               f"time in {self.time_in}, time_out {self.time_out}"
+
+    def to_json(self) -> Dict[str, Any]:
+        return {c.name: getattr(self, c.name) for c in
+                self.__table__.columns}
