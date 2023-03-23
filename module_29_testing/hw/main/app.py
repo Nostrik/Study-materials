@@ -14,9 +14,9 @@ def create_app():
 
     from .models import Client, Parking, ClientParking
 
-    @app.before_request
-    def before_request_func():
-        db.create_all()
+    # @app.before_request
+    # def before_request_func():
+    #     db.create_all()
 
     @app.teardown_appcontext
     def shutdown_session(exception=None):
@@ -57,7 +57,7 @@ def create_app():
         db.session.commit()
         return '', 200
 
-    @app.route("parkings", methods=['POST'])
+    @app.route("/parkings", methods=['POST'])
     def create_new_parking_zone():
         """Create new parking zone"""
         address = request.form.get('address', type=str)
@@ -76,7 +76,9 @@ def create_app():
     @app.route("/client_parkings", methods=['POST'])
     def parking_entrance():
         """Parking entrance"""
-        check_parking = db.session.query(Parking).filter(Parking.address).all()
+        parking_address = request.form.get('address')
+        check_parking: Parking = db.session.query(Parking).all()
         logger.debug(check_parking)
+
 
     return app

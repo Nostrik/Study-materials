@@ -44,8 +44,8 @@ class ClientParking(db.Model):
     time_in = db.Column(db.DateTime)
     time_out = db.Column(db.DateTime)
 
-    client = db.relationship("Client", backref="parking")
-    parking = db.relationship("Parking", backref="client")
+    client = db.relationship("Client", backref="parkings")
+    parking = db.relationship("Parking", backref="clients")
 
     def __repr__(self):
         return f"Client_Parking {self.id}, client_id {self.client_id}, parking_id {self.parking_id}" \
