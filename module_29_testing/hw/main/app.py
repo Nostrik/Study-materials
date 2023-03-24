@@ -55,30 +55,34 @@ def create_app():
         )
         db.session.add(new_client)
         db.session.commit()
-        return '', 200
+        return 'successful', 200
 
     @app.route("/parkings", methods=['POST'])
     def create_new_parking_zone():
         """Create new parking zone"""
         address = request.form.get('address', type=str)
+        opened = request.form.get('opened', type=bool)
         count_places = request.form.get('count_places', type=int)
         count_available_places = request.form.get('count_available_places', type=int)
 
         new_parking_zone = Parking(
             address=address,
+            opened=opened,
             count_places=count_places,
             count_available_places=count_available_places
         )
         db.session.add(new_parking_zone)
         db.session.commit()
-        return '', 200
+        return 'successful', 200
 
     @app.route("/client_parkings", methods=['POST'])
     def parking_entrance():
         """Parking entrance"""
         parking_address = request.form.get('address')
-        check_parking: Parking = db.session.query(Parking).all()
-        logger.debug(check_parking)
+        logger.debug(f'parking_address is - {parking_address}')
+        check_parking = db.session.query(Parking).filter(Parking.address == parking_address).all()
+        logger.debug(check_parking.address)
 
+        return 'test', 201
 
     return app

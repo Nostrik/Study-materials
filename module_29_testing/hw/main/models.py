@@ -28,7 +28,9 @@ class Parking(db.Model):
     count_available_places = db.Column(db.Integer, nullable=False)
 
     def __repr__(self):
-        return f"Parking {self.id}, address {self.address}"
+        return f"Parking {self.id}, address {self.address}, " \
+               f"opened {self.opened}, cnt_places {self.count_places}," \
+               f"cnt_available_places {self.count_available_places}"
 
     def to_json(self) -> Dict[str, Any]:
         return {c.name: getattr(self, c.name) for c in
@@ -44,8 +46,8 @@ class ClientParking(db.Model):
     time_in = db.Column(db.DateTime)
     time_out = db.Column(db.DateTime)
 
-    client = db.relationship("Client", backref="parkings")
-    parking = db.relationship("Parking", backref="clients")
+    # client = db.relationship("Client", backref="parkings")
+    # parking = db.relationship("Parking", backref="clients")
 
     def __repr__(self):
         return f"Client_Parking {self.id}, client_id {self.client_id}, parking_id {self.parking_id}" \
