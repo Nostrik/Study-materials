@@ -29,7 +29,7 @@ class Parking(db.Model):
 
     def __repr__(self):
         return f"Parking {self.id}, address {self.address}, " \
-               f"opened {self.opened}, cnt_places {self.count_places}," \
+               f"opened {self.opened}, cnt_places {self.count_places}, " \
                f"cnt_available_places {self.count_available_places}"
 
     def to_json(self) -> Dict[str, Any]:

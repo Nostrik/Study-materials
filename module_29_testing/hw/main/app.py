@@ -14,9 +14,9 @@ def create_app():
 
     from .models import Client, Parking, ClientParking
 
-    # @app.before_request
-    # def before_request_func():
-    #     db.create_all()
+    @app.before_request
+    def before_request_func():
+        db.create_all()
 
     @app.teardown_appcontext
     def shutdown_session(exception=None):
@@ -81,7 +81,9 @@ def create_app():
         parking_address = request.form.get('address')
         logger.debug(f'parking_address is - {parking_address}')
         check_parking = db.session.query(Parking).filter(Parking.address == parking_address).all()
-        logger.debug(check_parking.address)
+        logger.debug(check_parking[0])
+        for el in check_parking:
+            print(el.to_json())
 
         return 'test', 201
 
