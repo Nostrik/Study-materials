@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from typing import List
 from loguru import logger
+from datetime import datetime
 
 db = SQLAlchemy()
 
@@ -78,13 +79,43 @@ def create_app():
     @app.route("/client_parkings", methods=['POST'])
     def parking_entrance():
         """Parking entrance"""
-        parking_address = request.form.get('address')
-        logger.debug(f'parking_address is - {parking_address}')
-        check_parking = db.session.query(Parking).filter(Parking.address == parking_address).all()
-        logger.debug(check_parking[0])
-        for el in check_parking:
-            print(el.to_json())
+        client_id = request.form.get('client_id', type=int)
+        parking_id = request.form.get('parking_id', type=int)
+        logger.debug(f'client_id - {client_id}, parking_id - {parking_id}')
+        time_in = datetime.now()
+        current_parking: Parking = db.session.query(Parking).get(parking_id)
+        count_available_places = current_parking.count_available_places
+        parking_status = current_parking.opened
 
-        return 'test', 201
+        if count_available_places <= 0 or not parking_status:
+            return 'This parking is not available', 400
+
+        new_client_parking = ClientParking(
+            client_id=client_id,
+            parking_id=parking_id,
+            time_in=time_in
+        )
+
+        current_parking.count_available_places -= 1
+        db.session.add(new_client_parking)
+        db.session.commit()
+
+        return '', 201
+
+    @app.route("/client_parkings", methods=['DELETE'])
+    def exit_from_the_parking_lot():
+        client_id = request.form.get('client_id')
+        parking_id = request.form.get('parking_id')
+        logger.debug(f'client_id - {client_id}, parking_id - {parking_id}')
+        time_out = datetime.now()
+        current_parking: Parking = db.session.query(Parking).get(parking_id)
+        current_client: Client = db.session.query(Parking).get(client_id)
+
+        if current_client.credit_card:
+            current_client_parking: ClientParking = db.session.query(ClientParking).get(client_id)
+            current_client_parking.time_out = time_out
+            current_parking.count_available_places += 1
+            return '', 201
+        return 'credit card not linked', 500
 
     return app
