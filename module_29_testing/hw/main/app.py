@@ -56,7 +56,7 @@ def create_app():
         )
         db.session.add(new_client)
         db.session.commit()
-        return 'successful', 200
+        return 'successful', 201
 
     @app.route("/parkings", methods=['POST'])
     def create_new_parking_zone():
@@ -74,7 +74,7 @@ def create_app():
         )
         db.session.add(new_parking_zone)
         db.session.commit()
-        return 'successful', 200
+        return 'successful', 201
 
     @app.route("/client_parkings", methods=['POST'])
     def parking_entrance():
