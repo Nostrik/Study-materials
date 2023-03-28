@@ -34,7 +34,9 @@ def test_create_new_parking_zone(client) -> None:
 
 
 def test_parking_entrance(client, db) -> None:
-    a = db.session.query(Parking).get(1)
     test_cur_parking_data = {"parking_id": 1}
+    parking_zone_data = {"address": "test_address", "opened": True,
+                         "count_places": 10, "count_available_places": 10}
+    response1 = client.post("/parkings", data=parking_zone_data)
     response = client.post("/client_parkings", data=test_cur_parking_data)
     assert response.status_code == 201
