@@ -1,6 +1,7 @@
 import json
 import pytest
 from ..main.models import Client, Parking, ClientParking
+from loguru import logger
 
 
 def test_get_all_clients(client) -> None:
@@ -33,10 +34,16 @@ def test_create_new_parking_zone(client) -> None:
     assert response.status_code == 201
 
 
-def test_parking_entrance(client, db) -> None:
-    test_cur_parking_data = {"parking_id": 1}
-    parking_zone_data = {"address": "test_address", "opened": True,
-                         "count_places": 10, "count_available_places": 10}
-    response1 = client.post("/parkings", data=parking_zone_data)
-    response = client.post("/client_parkings", data=test_cur_parking_data)
-    assert response.status_code == 201
+def test_parking_entrance(client) -> None:
+    parking_zone_data = {"address": "test_address", "opened": False,
+                         "count_places": 10, "count_available_places": 0}
+    client.post("/parkings", data=parking_zone_data)
+    parking_data = {"parking_id": 2, "client_id": 2}
+    response = client.post("/client_parkings", data=parking_data)
+    assert response.status_code == 400
+    assert response.text == 'This parking is not available'
+
+
+def test_exit_from_the_parking_lot(client) -> None:
+    parking_data = {"client_id": 1, "parking_id": 1}
+
