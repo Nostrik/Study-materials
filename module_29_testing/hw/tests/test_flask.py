@@ -34,6 +34,7 @@ def test_create_new_parking_zone(client) -> None:
     assert response.status_code == 201
 
 
+@pytest.mark.parking
 def test_parking_entrance(client) -> None:
     parking_zone_data = {"address": "test_address", "opened": False,
                          "count_places": 10, "count_available_places": 0}
@@ -44,6 +45,7 @@ def test_parking_entrance(client) -> None:
     assert response.text == 'This parking is not available'
 
 
+@pytest.mark.parking
 def test_exit_from_the_parking_lot_no_credit_card(client) -> None:
     client_data = {"name": "test_name", "surname": "test_surname"}
     client.post("/clients", data=client_data)
@@ -53,6 +55,7 @@ def test_exit_from_the_parking_lot_no_credit_card(client) -> None:
     assert response.text == 'credit card not linked'
 
 
+@pytest.mark.parking
 def test_exit_from_the_parking_lot_time_problem(client, db) -> None:
     client_data = {"name": "test_name", "surname": "test_surname",
                    "credit_card": "9090 0808"}
@@ -71,6 +74,7 @@ def test_exit_from_the_parking_lot_time_problem(client, db) -> None:
     assert response.text == 'parking time error'
 
 
+@pytest.mark.parking
 def test_exit_from_the_parking_lot_cnt_available_places(client, db):
     client_data = {"name": "test_name", "surname": "test_surname",
                    "credit_card": "9090 0808"}
