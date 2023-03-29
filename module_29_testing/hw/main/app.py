@@ -104,18 +104,23 @@ def create_app():
 
     @app.route("/client_parkings", methods=['DELETE'])
     def exit_from_the_parking_lot():
-        client_id = request.form.get('client_id')
-        parking_id = request.form.get('parking_id')
+        client_id = request.form.get('client_id', type=int)
+        parking_id = request.form.get('parking_id', type=int)
         logger.debug(f'client_id - {client_id}, parking_id - {parking_id}')
         time_out = datetime.now()
         current_parking: Parking = db.session.query(Parking).get(parking_id)
-        current_client: Client = db.session.query(Parking).get(client_id)
+        current_client: Client = db.session.query(Client).get(client_id)
+        current_parking_note = db.session.query(ClientParking).get(parking_id)
+        time_in = current_parking_note.time_in
 
         if current_client.credit_card:
-            current_client_parking: ClientParking = db.session.query(ClientParking).get(client_id)
-            current_client_parking.time_out = time_out
-            current_parking.count_available_places += 1
-            return '', 201
+            if time_in < time_out:
+                current_client_parking: ClientParking = db.session.query(ClientParking).get(client_id)
+                current_client_parking.time_out = time_out
+                current_parking.count_available_places += 1
+                db.session.commit()
+                return '', 201
+            return 'parking time error', 500
         return 'credit card not linked', 500
 
     return app
