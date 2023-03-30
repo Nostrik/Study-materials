@@ -8,7 +8,8 @@ class Client(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), nullable=False)
     surname = db.Column(db.String(50), nullable=False)
-    credit_card = db.Column(db.String(10))
+    credit_card = db.Column(db.String(50))
+    car_number = db.Column(db.String(10))
 
     def __repr__(self):
         return f"Client {self.name}"
@@ -46,8 +47,8 @@ class ClientParking(db.Model):
     time_in = db.Column(db.DateTime)
     time_out = db.Column(db.DateTime)
 
-    # client = db.relationship("Client", backref="parkings")
-    # parking = db.relationship("Parking", backref="clients")
+    client = db.relationship("Client", backref="parkings")
+    parking = db.relationship("Parking", backref="clients")
 
     def __repr__(self):
         return f"Client_Parking {self.id}, client_id {self.client_id}, parking_id {self.parking_id}" \
