@@ -12,30 +12,31 @@ stages:
   - test
 
 
-before-script:
+before_script:
     - pip install -r requirements.txt
+    - python.exe -m pip install --upgrade pip
 
 unittest:
   stage: test
   script:
-    - pytest tests
+    - pytest hw1/tests
 
 mypy:
   stage: test
   script:
-    - mypy app/
+    - mypy hw1/app/
 
 black:
   stage: test
   script:
-    - black --diff --check app/
+    - black --diff --check hw1/app/
 
 isort:
   stage: test
   script:
-    - isort --check-only app/
+    - isort --check-only --profile black --line-length 79 hw1/app/
 
-flask8:
+flake8:
   stage: test
   script:
-    - flake8 app/
+    - flake8 hw1/app/

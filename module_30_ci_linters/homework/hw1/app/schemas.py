@@ -17,9 +17,10 @@ class RecipeOut(BaseRecipe):
     id: int
 
     def __str__(self):
-        info = f'{self.id} | {self.dish_name} | {self.cooking_time}\n' \
-               f'{self.ingredient_list} | {self.number_of_views}'
-        return info
+        return (
+            f"{self.id} | {self.dish_name} | {self.cooking_time}\n"
+            f"{self.ingredient_list} | {self.number_of_views}"
+        )
 
     class Config:
         orm_mode = True

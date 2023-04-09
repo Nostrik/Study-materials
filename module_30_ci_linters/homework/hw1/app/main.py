@@ -1,17 +1,21 @@
-from typing import List
+from typing import Any, List
+
 from fastapi import FastAPI
+from fastapi.testclient import TestClient
 from sqlalchemy.future import select
-from models import Base, Recipe
-import schemas
-from database import engine, session
+
+from . import models, schemas
+from .database import engine, session
 
 app = FastAPI()
 
+client = TestClient(app)
+
 
 @app.on_event("startup")
-async def shutdown():
+async def startup():
     async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
+        await conn.run_sync(models.Base.metadata.create_all)
 
 
 @app.on_event("shutdown")
@@ -22,29 +26,33 @@ async def shutdown():
 
 @app.get("/")
 async def read_main():
-    return {"msg": "Hello World"}
+    return "Hello World"
 
 
-@app.post('/recipe/', response_model=schemas.RecipeOut)
-async def recipes(recipe: schemas.RecipeIn) -> Recipe:
-    new_recipe = Recipe(**recipe.dict())
+@app.post("/recipe/", response_model=schemas.RecipeOut)
+async def add_recipe(recipe: schemas.RecipeIn) -> models.Recipe:
+    new_recipe = models.Recipe(**recipe.dict())
     async with session.begin():
         session.add(new_recipe)
     return new_recipe
 
 
-@app.get('/recipe/', response_model=List[schemas.RecipeOut])
-async def recipes() -> List[Recipe]:
+@app.get("/recipe/", response_model=List[schemas.RecipeOut])
+async def recipes():
     async with session.begin():
-        res = await session.execute(select(Recipe).order_by(Recipe.number_of_views.desc()))
+        res = await session.execute(
+            select(models.Recipe).order_by(models.Recipe.num_of_views.desc())
+        )
     return res.scalars().all()
 
 
-@app.get('/recipe/{idx}',  response_model=schemas.RecipeOut)
-async def detail_recipe(idx: int) -> schemas.RecipeOut:
+@app.get("/recipe/{idx}", response_model=schemas.RecipeOut)
+async def detail_recipe(idx: int):
     async with session.begin():
-        res = await session.execute(select(Recipe).filter(Recipe.id == idx))
+        res: Any = await session.execute(
+            select(models.Recipe).filter(models.Recipe.id == idx)
+        )
         recipe = res.scalars().one()
         if res:
-            recipe.number_of_views += 1
+            recipe.num_of_views += 1
     return recipe
