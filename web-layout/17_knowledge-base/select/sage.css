@@ -1,0 +1,44 @@
+.custom-select {
+    position: relative;
+    display: inline-block;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+  }
+  
+  .custom-select select {
+    display: none;
+  }
+  
+  .custom-select:after {
+    content: "\25BC";
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 10px;
+    background-color: #ccc;
+    pointer-events: none;
+  }
+  
+  .custom-select:hover:after {
+    background-color: #aaa;
+  }
+  
+  .custom-select select:focus + after {
+    background-color: #999;
+  }
+  
+  .custom-select select:focus {
+    outline: none;
+  }
+  
+  .custom-select select option {
+    font-weight: normal;
+    color: #000;
+    background-color: #fff;
+  }
+  
+  .custom-select select option:checked {
+    font-weight: bold;
+    color: #fff;
+    background-color: #000;
+  }

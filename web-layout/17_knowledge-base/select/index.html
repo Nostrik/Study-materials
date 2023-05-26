@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom select</title>
+    <link rel="stylesheet" href="choices.min.css">
+    <link rel="stylesheet" href="style.css">
+    
+</head>
+<body>
+    <select name="select">
+        <option value="0">Материал</option>
+        <option value="1">Древесина</option>
+        <option value="2">Металл</option>
+        <option value="3">Камень</option>
+        <option value="4">Пластик</option>
+        <option value="5">Композитный</option>
+        <option value="6">Гипс</option>
+    </select>
+    <script src="choices.min.js"></script>
+    <script>
+        const element = document.querySelector('select');
+        const choices = new Choices(element, {
+            searchEnabled: false
+        });
+    </script>
+</body>
+</html>

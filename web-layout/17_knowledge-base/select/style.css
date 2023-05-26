@@ -1,0 +1,67 @@
+@font-face {
+    font-family: "OpenSans-Regular";
+    font-style: normal;
+    font-weight: 400;
+    src: 
+        local('OpenSans'),
+        url("OpenSans-Regular.woff2") format("woff2"),
+        url("OpenSans-Regular.woff") format("woff");
+}
+
+body {
+    padding: 30px;
+    font-family: "OpenSans";
+    background-color: #E5E5E5;;
+}
+
+.choices {
+    width: 176px;
+    height: 39px;
+    border-radius: 10px;
+}
+
+.choices__inner {
+    width: 160px;
+    height: 29px;
+
+    font-family: 'OpenSans';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 19px;
+}
+
+.is-open .choices__inner {
+    /* background-color: red; */
+    width: 160px;
+    height: 29px;
+    border-radius: 10px;
+    border: 1px solid #CCB26E;
+}
+
+.is-open .choices__list {
+    /* background-color: aqua; */
+    /* width: 176px; */
+}
+
+.choices__list--dropdown, .choices__list[aria-expanded] {
+    width: 175px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.choices__item {
+    width: 176px;
+    border-radius: 10px;
+}
+
+
+.choices__list--dropdown .choices__item, .choices__list[aria-expanded] .choices__item {
+    padding-right: 0;
+    width: 165px;
+}
+
+.choices__list--dropdown .choices__item--selectable::after, .choices__list[aria-expanded] .choices__item--selectable::after {
+    display: none;
+}
+

@@ -1,0 +1,12 @@
+@media (max-wigth: 1024px) {
+    .form-input,
+    .form-select {
+        width: 100%;
+    }
+}
+
+@media (max-wigth: 992px) {
+    .header-nav {
+        display: none;
+    }
+}
