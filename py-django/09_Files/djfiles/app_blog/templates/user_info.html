@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Просмотр данных пользователя</title>
+</head>
+<body style="box-sizing: border-box;
+            width: 500px;
+            margin: 0 auto;
+            padding: 100px;
+            border-radius: 10px;
+            border: 2px solid #618cf0;">
+    <h2>Данные пользователя:</h2>
+        <p>Логин - {{ user.username }}</p>
+        <p>Имя - {{ user.profile.first_name }}</p>
+        <p>Фамилия - {{user.profile.last_name}}</p>
+    <a href="{% url 'user_edit' %}">Редактировать</a>
+    <br>
+    <br>
+    <a href="{% url 'home' %}"><- Вернуться на главную страницу</a>
+</body>
+</html>

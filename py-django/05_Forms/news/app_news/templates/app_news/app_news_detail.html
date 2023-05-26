@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/normalize.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <title>Подробнее</title>
+</head>
+<body>
+    <header>
+        <div class="container flex header-container">
+            <h2>Django новости</h2>
+        </div>
+    </header>
+    <section class="container">
+        <h3>{{ object.title }}</h3>
+        <p>
+            {{ object.description }}
+        </p>
+        <h4>{{ object.created_at }}</h4>
+        <h5>Комментарии:</h5>
+            <div>
+                {% for comment in comment_list %}
+                <h5>{{ comment.user_name }}</h5>
+                <p>{{ comment.text }}</p>
+                {% endfor %}
+            </div>
+        <form method="post" action="/">
+            {% csrf_token %}
+            {{ comment_form.as_p }}
+            <button class="btn-reset comment-btn">Добавить комментарий</button>
+        </form>
+    </section>
+    <footer class="container footer-container">
+        <h4>created with django framework</h4>
+    </footer>
+</body>
+</html>

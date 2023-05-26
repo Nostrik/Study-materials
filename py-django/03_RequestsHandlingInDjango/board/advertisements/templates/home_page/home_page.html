@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Главная старница</title>
+</head>
+<body>
+    <form action="." method="post" onsubmit="Спасибо">{% csrf_token %}
+<select name="" required="">
+  <option value="">Выберирте категорию</option>
+  <option value="1">{{category_1}}</option>
+  <option value="2">{{category_2}}</option>
+  <option value="3">{{category_3}}</option>
+  <option value="4">{{category_4}}</option>
+  <option value="5">{{category_5}}</option>
+  <option value="6">{{category_6}}</option>
+  <option value="7">{{category_7}}</option>
+  <option value="8">{{category_8}}</option>
+  <option value="9">{{category_9}}</option>
+</select>
+<br>
+<br>
+<select name="" required="">
+  <option value="">Выберите регион</option>
+  <option value="1">{{region_1}}</option>
+  <option value="2">{{region_2}}</option>
+  <option value="3">{{region_3}}</option>
+  <option value="4">{{region_4}}</option>
+</select>
+<br>
+<br>
+<label>
+  Название объявления <br>
+  <input type="text">
+</label>
+<br>
+<br>
+<input type="submit" value="Найти">
+</form>
+</body>
+</html>

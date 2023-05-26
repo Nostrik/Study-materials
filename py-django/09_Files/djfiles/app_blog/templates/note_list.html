@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Главная страница</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/normalize.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <header>
+        <div class="container flex header-container">
+            <h2>Django blog</h2>
+            <a href=""></a>
+            {% if request.user.is_authenticated %}
+                <h4 style="padding-right: 200px">Welcome, {{ request.user.username }}</h4>
+                <div class="header-login">
+                    <a class="header-login" href="{% url 'logout' %}">Выйти</a>
+                    <a class="header-login" href="{% url 'user_info' %}">О себе</a>
+                </div>
+            {% else %}
+                <div class="header-login">
+                    <a class="header-login" href="{% url 'login' %}">Войти</a>
+                    <a class="header-login" href="{% url 'register' %}">Регистрация</a>
+                </div>
+
+            {% endif %}
+        </div>
+    </header>
+<!--    <form action="{% url 'home' %}" class="container" method="get" style="padding-top: 20px;">-->
+<!--        {% csrf_token %}-->
+<!--        <input type="text" name="tag">-->
+<!--        <input class="btn-reset comment-btn" type="submit" value="Сортировать">-->
+<!--    </form>-->
+    <div class="container">
+         <a style="display: inline-block;
+    font-family: arial,sans-serif;
+    font-size: 11px;
+    font-weight: bold;
+    color: rgb(68,68,68);
+    text-decoration: none;
+    user-select: none;
+    padding: .2em 1.2em;
+    outline: none;
+    border: 1px solid rgba(0,0,0,.1);
+    border-radius: 2px;
+    background: rgb(245,245,245) linear-gradient(#f4f4f4, #f1f1f1);
+    transition: all .218s ease 0s; margin-top: 20px;" href="{% url 'entry_add' %}">Добавить/Создать запись</a>
+    </div>
+    <section class="container">
+        <ul class="list-reset">
+            {% for entry in object_list %}
+            <li>
+                <article>
+                    <div>
+                        <h3>{{entry.title}}</h3>
+                        <h4>{{entry.created_at}}</h4>
+                        <p>
+                            {{entry.text | truncatewords:100}}
+                        </p>
+                        <form action="{{entry.id}}">
+                            <button class="btn-reset comment-btn">Читать</button>
+                        </form>
+                    </div>
+                </article>
+            </li>
+            {% endfor %}
+        </ul>
+    </section>
+    <footer class="container footer-container">
+        <h4>created with django framework</h4>
+    </footer>
+</body>
+</html>

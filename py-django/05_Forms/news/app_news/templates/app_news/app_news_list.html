@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Главная страница</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/normalize.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <header>
+        <div class="container flex header-container">
+            <h2>Django новости</h2>
+        </div>
+    </header>
+    <section class="container">
+        <ul class="list-reset">
+            {% for news in news_list %}
+            <li>
+                <article>
+                    <div>
+                        <h3>{{news.title}}</h3>
+                        <h4>{{news.created_at}}</h4>
+                        <p>
+                            {{news.description}}
+                        </p>
+                        <form action="{{ news.id}}">
+                            <button class="btn-reset comment-btn">Подробнее</button>
+                        </form>
+                    </div>
+                </article>
+            </li>
+            {% endfor %}
+        </ul>
+    </section>
+    <footer class="container footer-container">
+        <h4>created with django framework</h4>
+    </footer>
+</body>
+</html>
